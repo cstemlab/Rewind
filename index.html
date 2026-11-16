@@ -552,9 +552,9 @@ body{--tape-w:min(960px,calc(100vw - 48px),calc((100dvh - 56px)*1.58));display:b
 /* The play glyph grows until it is just smaller than the demonstration key. Pause stays still. */
 #app .play-control #speech-listen .speech-listen-icon{transform-origin:50% 50%;transform:scale(1)}
 #app .play-control #speech-listen.recording-fresh:not([aria-pressed=true]) .speech-listen-icon{animation:recording-ready 1.15s ease-in-out infinite}
-#app .play-control #speech-listen[aria-pressed=true] .speech-listen-icon{animation:none;transform:scale(1);filter:none}
+#app .play-control #speech-listen[aria-pressed=true] .speech-listen-icon{animation:none;transform:scale(var(--listen-rest,1.12));filter:none}
 #app #speech-replay{color:var(--controlInk)}
-@keyframes recording-ready{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 transparent)}42%{transform:scale(var(--listen-peak,1.28));filter:drop-shadow(0 0 2px color-mix(in srgb,currentColor 45%,transparent))}}
+@keyframes recording-ready{0%,100%{transform:scale(var(--listen-rest,1.12));filter:drop-shadow(0 0 0 transparent)}42%{transform:scale(var(--listen-peak,1.28));filter:drop-shadow(0 0 2px color-mix(in srgb,currentColor 45%,transparent))}}
 @keyframes recording-ready-reduced{0%,100%{opacity:1}50%{opacity:.45}}
 @media(prefers-reduced-motion:reduce){
  #app .play-control #speech-listen.recording-fresh:not([aria-pressed=true]) .speech-listen-icon{animation:recording-ready-reduced 1.15s ease-in-out infinite}
@@ -2938,9 +2938,12 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     const current=parseFloat((getComputedStyle(icon).transform.match(/matrix\(([^,]+)/)||[])[1]||'1');
     if(current>1)size/=current;
     if(!(playSize>0)||!(size>0))return;
-    // Peak stays under the triangle above, and never more than twice the resting triangle.
-    const scale=Math.min(2,Math.max(1.08,playSize/size*0.9));
-    if(Number.isFinite(scale))icon.style.setProperty('--listen-peak',scale.toFixed(3));
+    // Peak stays under the triangle above. The small end stays close to it, and the ratio never exceeds 2.
+    const peak=Math.min(2,Math.max(1.16,playSize/size*0.9));
+    const rest=Math.min(peak/1.01,Math.max(1,peak/1.22));
+    if(!Number.isFinite(peak)||!Number.isFinite(rest))return;
+    icon.style.setProperty('--listen-peak',peak.toFixed(3));
+    icon.style.setProperty('--listen-rest',rest.toFixed(3));
   }
   function syncReplayAttention(){
     const button=byId('speech-listen');
