@@ -475,8 +475,7 @@ body{--tape-w:min(960px,calc(100vw - 48px),calc((100dvh - 56px)*1.58));display:b
 #app .speech-popover{position:absolute;z-index:12;width:min(270px,calc(100% - 24px));padding:16px 18px 12px;margin:0;background:var(--label);border:1px solid color-mix(in srgb,var(--ink) 15%,var(--label));border-radius:12px;box-shadow:0 5px 20px #00000019;color:var(--ink);font:12px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
 #app .speech-popover-close{position:absolute;right:5px;top:5px}
 #app .speech-popover p{margin:0 0 11px;padding-right:5px}
-#app .speech-popover-footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
-#app .speech-popover-footer span{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+#app .speech-popover-footer{display:flex;align-items:center;justify-content:flex-end;gap:12px}
 #app #speech-popover-start{background:none;color:var(--accent);font:500 12px/1.4 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;border:0;border-radius:3px;padding:3px 0}
 #app #speech-popover-start:hover{color:var(--ink);background:none}
 #app .speech-popover button:focus-visible,#app #dismiss-tip:focus-visible{outline:1.5px solid var(--accent);outline-offset:2px}
@@ -507,7 +506,6 @@ body{--tape-w:min(960px,calc(100vw - 48px),calc((100dvh - 56px)*1.58));display:b
  #app #dismiss-tip{width:10px;height:10px;min-width:10px;min-height:10px;padding:1px}
  #app #dismiss-tip svg{width:8px;height:8px}
  #app .speech-popover{width:min(230px,calc(100% - 24px));padding:13px 15px 10px;font-size:11px;line-height:1.5;border-radius:9px}
- #app .speech-popover-footer span{font-size:9px}
  #app #speech-popover-start{font-size:11px}
 }
 
@@ -768,7 +766,7 @@ SOFTWARE.
         </div>
       </section>
 <div id="speech-bar" class="speech-bar" hidden><button id="speech-summary" class="speech-summary" aria-label="練習結果詳情"><span id="speech-status-text"></span></button></div><span id="speech-announcement" class="sr-only" role="status" aria-live="polite"></span>
-<section id="speech-popover" class="speech-popover" role="dialog" aria-label="開始語音練習" aria-describedby="speech-popover-text" hidden><button id="speech-popover-close" class="speech-popover-close" aria-label="關閉語音提示" title="Close"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button><p id="speech-popover-text"></p><div class="speech-popover-footer"><span>Auto stop</span><button id="speech-popover-start">開始</button></div></section>
+<section id="speech-popover" class="speech-popover" role="dialog" aria-label="開始語音練習" aria-describedby="speech-popover-text" hidden><button id="speech-popover-close" class="speech-popover-close" aria-label="關閉語音提示" title="Close"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button><p id="speech-popover-text"></p><div class="speech-popover-footer"><button id="speech-popover-start">開始</button></div></section>
 <div class="practice-footer sr-only"><span id="play-policy"></span></div><p id="error" role="alert" hidden></p>
 <section id="drawer" class="options-surface" aria-label="Practice options" hidden>
   <header class="options-heading"><button id="options-back" class="options-back" aria-label="Back to options" title="Back"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"><path d="m14 5-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span id="options-title">Options</span></header>
@@ -799,6 +797,7 @@ SOFTWARE.
   <section id="speech-dialog" class="insert-panel speech-sheet" data-panel="speech" aria-label="Speech practice" hidden>
 <div class="speech-sheet-top"><span id="speech-provider-name">Speech · 粵語</span><button id="speech-disconnect" type="button" hidden>Disconnect</button></div>
 <p id="speech-service-note" class="speech-service-note">正在檢查連線…</p>
+<p id="speech-online-link" class="speech-footnote" hidden><a href="https://cstemlab.github.io/Rewind/" target="_blank" rel="noopener">開啟 Rewind 網頁版 ↗</a></p>
 <form id="speech-config" autocomplete="off" hidden><label for="speech-provider">Service</label><select id="speech-provider" name="provider" aria-label="Speech provider"><option value="azure">Azure Speech</option><option value="openai">OpenAI Audio · Experimental</option></select><label id="speech-region-label" for="speech-region">Region</label><input id="speech-region" name="region" type="text" spellcheck="false" autocapitalize="none" placeholder="eastasia" autocomplete="off" required maxlength="64"><label id="speech-key-label" for="speech-key">Speech key</label><input id="speech-key" name="speech-key" type="password" autocomplete="off" placeholder="Azure Speech resource key" required maxlength="1024"><button type="submit" class="speech-primary">Connect</button><p class="speech-footnote">密鑰只保留在本機服務的記憶體，關閉服務後清除。</p></form>
 <div id="speech-consent" hidden><p id="speech-disclosure" class="speech-disclosure">錄音只暫存在此頁。使用 AI 練習時，錄音與對應文字會交給所選服務處理。</p><button id="speech-start" class="speech-primary">開始錄音</button><p class="speech-footnote">每次最多 25 s。AI 回饋只供練習參考，聲調判斷仍可能有誤。</p></div>
 <div id="speech-details" hidden><div class="speech-actions"><button id="speech-replay" aria-label="回聽我的錄音" title="Listen back" hidden><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></svg></button><button id="speech-send" aria-label="傳送錄音到 Azure 評測" title="Assess with Azure" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-5 5 5-5 5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="speech-clear" aria-label="清除練習錄音和結果" title="Clear practice"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></div><p id="speech-detail-text"></p><p id="speech-recognized" class="speech-footnote"></p><p id="speech-legend" class="speech-footnote">字後淡色：辨識進度，未評分。<br>實心小標記：已通過　空心：接近，可再練。<br>無標記：未通過或未確認。詞組可能共用回饋。</p><p id="speech-cloud-note" class="speech-footnote">這是容錯練習提示，並非精確聲調診斷。</p><div class="speech-detail-actions"><button id="speech-again" class="speech-primary">再試一次</button><button id="speech-connect-from-review" class="speech-primary">Connect</button></div></div>
@@ -858,12 +857,12 @@ SOFTWARE.
 <p>選項內容較多時，只在貼紙內捲動。左上角的小箭頭回到選項目錄；右上角的 × 或 Esc 關閉。沒有自動消失的倒數計時。需要點字練習提示時，可在 Help 選 Selection tips。</p>
 <h2>錄音跟讀 · 試驗功能</h2>
 <p>播放鍵旁的圓點是錄音鍵。按一下開始，再按變成方形的同一個鍵停止；錄音時間按所選示範長度加 2 s 設定，上限為 25 s。麥克風就緒後，輕聲提示音及文字起點的閃動標記表示可以開始；倒數從提示結束後計算。停止後錄音鍵會改為處理中狀態，動畫圓點表示仍在等待回饋。預設練習目前短句；選取部分字詞後，也可以只練那一部分。切換內容、播放示範、離開頁面或按 Esc，會取消未完成的錄音或評測。</p>
-<p>還未連接雲端時，錄音只留在此頁，可在磁帶內的臨時選項回聽或清除，不會上傳，也不會顯示模擬分數。重新載入或離開此頁便會清除。</p>
+<p>尚未連接 AI 練習時，按錄音鍵會出現「輸入存取碼」提示。點一下即可開啟 Speech 並輸入分享者提供的存取碼；連接成功後返回磁帶，再按錄音鍵開始。連接本身不會啟動麥克風。本機配套版則輸入服務密鑰。</p>
 <p>分享網頁若已啟用 AI，可使用分享者提供的邀請連結，或在 ⋯ → Settings → Speech 輸入 access code，無需自己的 API key。連線只保留在這個分頁；到期後可重新連接。本機配套版本仍可在 Speech 設定自己的 OpenAI 或 Azure 服務，密鑰只保留在本機服務記憶體。</p>
 <p>已連接後，第一次按錄音鍵會在磁帶上顯示小提示，說明目前服務及傳送時機。支援即時辨識的服務會在錄音時接收音訊；最後的發音回饋在停止後才提供。確認後可按圓點開始、方形停止。若分享者提供多項服務，可在 Speech 明確選擇，再重新確認錄音傳送；程式不會自動換服務。連線前留下的錄音不會因為之後連線而自動送出。</p>
 <p>錄音時淡淡的字後色塊只表示即時辨識到該段文字，尚未判斷發音正確。系統根據實際辨識文字對應原句；沒有聽到或未能確定的位置保留原色，後面讀出的部分仍可繼續對應。它不會跟計時器逐字變色。即時辨識不可用時仍可錄音，停止後取得最後的發音回饋。</p>
 <p>最後結果直接顯示在原來文字上：清新的藍綠字與字下實心小標記表示本次字詞組已通過；空心小標記表示接近、可以再練；無標記表示未通過或未能確認。粵拼保持原色，文字沒有評測下划線。點下方的小結果摘要可以回聽或清除。摘要分開列出通過、接近、待練和未能確認的組數；懸停或輔助閱讀標籤提供細節。詞組可能共用回饋，不代表每字聲調都已獨立驗證。OpenAI Audio 沒有標準化發音分數；結果只供試驗，不是經校準的診斷。</p>
-<p>AI 功能需要可用的網路服務和有效的練習連線。尚未啟用或連線到期時，頁面會明確提示；仍可播放示範、錄音和回聽，但不會假裝已完成 AI 評測。麥克風須由你在瀏覽器允許。</p>
+<p>AI 功能需要可用的網路服務和有效的練習連線。尚未啟用或連線到期時，仍可播放示範；錄音鍵會引導你完成連接，不會默認進入只錄音的模式。麥克風須由你在瀏覽器允許。</p>
 <h2>快捷鍵</h2>
 <p><kbd>空白鍵</kbd> 播放／暫停　<kbd>R</kbd> 倒帶　<kbd>←</kbd> 上一段　<kbd>→</kbd> 下一段</p>
 <h2>載入其他練習</h2>
@@ -2448,7 +2447,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   let state='idle', generation=0, service=null, consent='', snapshot=null, result=null;
   let stream=null, context=null, source=null, processor=null, muteNode=null, chunks=[],samples=0,sampleRate=0;
   let started=0, timer=null, limitTimer=null, recording=null, recordingURL=null, requestAbort=null, recordingLimit=25;
-  let live=null,liveText='',liveState='off',consentAction=null;
+  let live=null,liveText='',liveState='off',consentAction=null,connectionFromRecord=false;
   const originalLabels=new Map();
   const local=connection.local;
   const cloudProviders=()=>!local&&service?.configured?(service.supported_providers||[]).filter(value=>['openai','gemini'].includes(value)):[];
@@ -2463,7 +2462,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     return Math.min(25,duration+2);
   }
   function announce(message){byId('speech-announcement').textContent=message;}
-  function panelError(message=''){byId('speech-panel-error').textContent=message;byId('speech-panel-error').hidden=!message;}
+  function panelError(message=''){byId('speech-panel-error').textContent=message;byId('speech-panel-error').hidden=!message;byId('speech-service-note').hidden=!!message&&byId('speech-service-note').textContent===message;}
   function paint(message){
     record.dataset.state=state;bar.dataset.state=state;
     const active=['requesting','ready','recording'].includes(state),busy=['stopping','submitting'].includes(state);
@@ -2563,15 +2562,16 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     const link=connection.getInfo(),available=local?!!service:link.available,configured=!!service?.configured;
     byId('speech-config').hidden=!available||(configured&&cloudProviders().length<2);byId('speech-service-note').hidden=false;
     byId('speech-disconnect').hidden=!configured;
-    byId('speech-consent').hidden=false;
+    byId('speech-consent').hidden=!configured;
     byId('speech-details').hidden=true;
     byId('speech-setting-state').textContent=configured?providerName():available?'Connect':'Playback only';
     byId('speech-provider-name').textContent=(configured?providerName():'Speech')+' · 粵語'+(['openai','gemini'].includes(service?.provider)?' · Experimental':'');
-    byId('speech-service-note').textContent=link.message||(!available?'AI 服務尚未啟用。可先播放練習、錄音和回聽。':configured?(service.connection_verified?'已連接 · 錄一小段試試。':'已連接 · 首次評測後確認語音服務。'):local?'可先錄音、回聽。連接服務後才會提供發音回饋。':'輸入分享者提供的 access code，即可使用 AI 練習。');
+    byId('speech-service-note').textContent=link.message||(!available?'此版本尚未設定 AI 服務。請開啟網頁版並輸入存取碼。':configured?(service.connection_verified?'已連接 · 錄一小段試試。':'已連接 · 首次評測後確認語音服務。'):local?'輸入服務密鑰，即可連接 AI 練習。':'輸入分享者提供的存取碼，即可開啟 AI 練習。');
+    byId('speech-online-link').hidden=local||available;
     const uploadNote=service?.live_transcription?.available?`錄音時會即時傳送至 ${providerName()}；停止後提供發音回饋。`:service?.provider==='azure'?'停止錄音後，這段錄音與文字會傳送至 Azure 做發音評測和字詞核對（兩次處理）。':`停止錄音後，這段錄音與文字會傳送至 ${providerName()}，提供發音回饋。`;
-    byId('speech-disclosure').textContent=configured?uploadNote+'實心圓點表示通過，空心圓點表示接近。這是試驗回饋；此頁的錄音會在離開或清除後移除。':'這次只在此頁錄音和回聽，不會上傳或評分。連接 AI 服務後仍需另行同意，舊錄音不會自動送出。';
+    byId('speech-disclosure').textContent=configured?uploadNote+'實心圓點表示通過，空心圓點表示接近。這是試驗回饋；此頁的錄音會在離開或清除後移除。':'';
     byId('speech-send').setAttribute('aria-label','傳送錄音到 '+providerName()+' 取得回饋');byId('speech-send').title='Assess with '+providerName();
-    byId('speech-start').textContent=configured?'開始跟讀':'開始本機錄音';
+    byId('speech-start').textContent='開始跟讀';
     if(service?.region)byId('speech-region').value=service.region;
     if(local&&service?.provider)byId('speech-provider').value=service.provider;syncProviderForm();if(!local&&service?.provider)byId('speech-provider').value=service.provider;
   }
@@ -2587,8 +2587,8 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     const azure=local&&byId('speech-provider').value==='azure';
     byId('speech-provider').hidden=!local&&!chooseProvider;document.querySelector('label[for="speech-provider"]').hidden=!local&&!chooseProvider;
     byId('speech-region').hidden=!azure;byId('speech-region-label').hidden=!azure;byId('speech-region').required=azure;
-    byId('speech-key-label').textContent=local?(azure?'Speech key':'API key'):'Access code';
-    byId('speech-key').placeholder=local?(azure?'Azure Speech resource key':'OpenAI API key'):'Invitation code';
+    byId('speech-key-label').textContent=local?(azure?'Speech key':'API key'):'存取碼 · Access code';
+    byId('speech-key').placeholder=local?(azure?'Azure Speech resource key':'OpenAI API key'):'分享者提供的存取碼';
     byId('speech-key').maxLength=local?1024:512;
     byId('speech-key').hidden=byId('speech-key-label').hidden=chooseProvider;byId('speech-key').required=!chooseProvider;
     byId('speech-config').querySelector('button').textContent=chooseProvider?'Use provider':'Connect';
@@ -2599,14 +2599,23 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     catch{service=null;}
     syncSettings();
   }
-  function openSettings(){closeConsent();panelError();syncSettings();rewindPanels.open('speech');}
+  function openSettings({fromRecord=false}={}){closeConsent();panelError();connectionFromRecord=fromRecord;syncSettings();rewindPanels.open('speech');const key=byId('speech-key');if(!byId('speech-config').hidden&&!key.hidden)key.focus({preventScroll:true});}
+  function openConnectionSettings(){openSettings({fromRecord:true});}
   function closeConsent(){byId('speech-popover').hidden=true;consentAction=null;record.removeAttribute('aria-expanded');}
   function positionConsent(){const box=byId('speech-popover');if(box.hidden)return;const tape=byId('cassette').getBoundingClientRect(),button=record.getBoundingClientRect(),width=box.offsetWidth;box.style.left=Math.max(10,Math.min(tape.width-width-10,button.left+button.width/2-tape.left-width/2))+'px';box.style.bottom=Math.max(8,tape.bottom-button.top+9)+'px';}
+  function openConnectionPrompt(){
+    pauseForOptions();stopAction();setFocus(true);dismissTip();consentAction=openConnectionSettings;
+    byId('speech-popover').setAttribute('aria-label','連接 AI 練習');
+    byId('speech-popover-text').textContent=local?'尚未連接 AI 練習。請先在 Speech 設定中輸入服務密鑰。':connection.getInfo().available?'尚未連接 AI 練習。輸入分享者提供的存取碼，即可開啟。':'此版本尚未設定 AI 服務。請開啟網頁版並輸入存取碼。';
+    byId('speech-popover-start').textContent=local||!connection.getInfo().available?'開啟設定':'輸入存取碼';byId('speech-popover').hidden=false;record.setAttribute('aria-expanded','true');positionConsent();byId('speech-popover-start').focus({preventScroll:true});
+  }
   function openConsent(action=startRecording){
+    if(!service?.configured){openConnectionPrompt();return;}
     pauseForOptions();stopAction();setFocus(true);dismissTip();consentAction=action;
     const existing=action===submit;
-    byId('speech-popover-text').textContent=!service?.configured?(connection.getInfo().message||'尚未連接 AI 練習。')+' 這次只錄音和回聽，不會評分。':service.live_transcription?.available&&!existing?`錄音時會即時傳送至 ${providerName()}；停止後提供發音回饋。淡色是辨識進度，並非發音分數。`:`${existing?'這段':'停止後將'}錄音與文字${existing?'將':''}傳送至 ${providerName()}，提供試驗發音回饋。`;
-    byId('speech-popover-start').textContent=existing?'傳送':service?.configured?'開始':'只錄音';byId('speech-popover').hidden=false;record.setAttribute('aria-expanded','true');positionConsent();byId('speech-popover-start').focus({preventScroll:true});
+    byId('speech-popover').setAttribute('aria-label','開始語音練習');
+    byId('speech-popover-text').textContent=service.live_transcription?.available&&!existing?`錄音時會即時傳送至 ${providerName()}；停止後提供發音回饋。淡色是辨識進度，並非發音分數。`:`${existing?'這段':'停止後將'}錄音與文字${existing?'將':''}傳送至 ${providerName()}，提供試驗發音回饋。`;
+    byId('speech-popover-start').textContent=existing?'傳送':'開始';byId('speech-popover').hidden=false;record.setAttribute('aria-expanded','true');positionConsent();byId('speech-popover-start').focus({preventScroll:true});
   }
   async function prepare(){
     if(['stopping','submitting'].includes(state))return;
@@ -2615,7 +2624,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     if(!byId('speech-popover').hidden){closeConsent();return;}
     await checkService();
     if(service?.configured&&consent!==service.provider){if(!byId('speech-popover').hidden){closeConsent();return;}openConsent();return;}
-    if(!service?.configured&&consent!=='local'){openConsent();return;}
+    if(!service?.configured){openConnectionPrompt();return;}
     await startRecording();
   }
   async function startRecording(){
@@ -2718,7 +2727,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   byId('speech-send').onclick=submit;
   byId('speech-settings').onclick=openSettings;
   byId('speech-start').onclick=prepare;
-  byId('speech-popover-start').onclick=()=>{const action=consentAction;if(!action)return;consent=service?.configured?service.provider:'local';closeConsent();action();};
+  byId('speech-popover-start').onclick=()=>{const action=consentAction;if(!action)return;if(action!==openConnectionSettings){if(!service?.configured){openConnectionPrompt();return;}consent=service.provider;}closeConsent();action();};
   byId('speech-popover-close').onclick=()=>{closeConsent();record.focus({preventScroll:true});};
   window.addEventListener('resize',positionConsent);
   document.addEventListener('pointerdown',e=>{if(!byId('speech-popover').hidden&&!byId('speech-popover').contains(e.target)&&!record.contains(e.target))closeConsent();});
@@ -2736,7 +2745,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   byId('speech-config').onsubmit=async e=>{
     e.preventDefault();panelError();const button=byId('speech-config').querySelector('button');button.disabled=true;
     const key=byId('speech-key').value.trim(),region=byId('speech-region').value.trim(),provider=byId('speech-provider').value;byId('speech-key').value='';
-    try{cancel({quiet:true});if(local)await api('/api/config',{provider,key,...(provider==='azure'?{region}:{})});else if(cloudProviders().length>1)await api('/api/session/provider',{provider});else await connection.connectAccessCode(key);consent='';await checkService();announce('已連接。按錄音鍵開始練習。');}catch(err){panelError(err.message);}finally{button.disabled=false;}
+    try{cancel({quiet:true});if(local)await api('/api/config',{provider,key,...(provider==='azure'?{region}:{})});else if(cloudProviders().length>1)await api('/api/session/provider',{provider});else await connection.connectAccessCode(key);consent='';await checkService();if(!service?.configured)throw Error(connection.getInfo().message||'尚未確認 AI 連線，請再試一次。');if(connectionFromRecord){connectionFromRecord=false;rewindPanels.close();record.focus({preventScroll:true});}announce('已連接。按錄音鍵開始練習。');}catch(err){panelError(err.message);if(!byId('speech-config').hidden&&!byId('speech-key').hidden)byId('speech-key').focus({preventScroll:true});}finally{button.disabled=false;}
   };
   byId('speech-disconnect').onclick=async()=>{cancel({quiet:true});try{await connection.disconnect();consent='';await checkService();announce('已斷開評測服務。');}catch(e){panelError(e.message);}};
   connection.subscribe(link=>{service=link.status;if(!service?.configured&&link.mode==='cloud')consent='';syncSettings();});

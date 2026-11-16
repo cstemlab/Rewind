@@ -39,7 +39,7 @@ When live recognition is available, the faint background behind characters track
 
 Jyutping stays neutral. Several characters in a word may share one judgment. The final feedback is **not a validated Cantonese tone assessment**, and a model can miss a wrong syllable or tone. No calibrated proficiency score is claimed.
 
-Without an AI connection, the record button offers recording and replay only. It explains this before recording and does not show a simulated assessment. Existing recordings are never sent automatically when you connect later.
+Without an AI connection, Record offers one action: **輸入存取碼** (Enter access code). It opens Speech with the code field focused. Successful connection returns to the cassette without starting the microphone; an invalid code stays on the form with one error message. Local companion users enter their service API key instead. Existing recordings are never sent automatically when you connect.
 
 ## Make a tape from your script
 
