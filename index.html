@@ -818,16 +818,17 @@ body.compact-tape #app .caption .token{padding:0 1px;min-width:calc(var(--zh-siz
 body.compact-tape #app .caption .reading{font-size:calc(var(--zh-size)*.5);min-height:calc(var(--zh-size)*.525);line-height:1.05}
 body.compact-tape #app .caption .han{line-height:1.12}
 body.compact-tape #app .mechanics{border-width:1px;border-radius:5px}
-/* The two play keys scale together and keep their complete hit areas above the shell edge. */
-body.compact-tape #app .player-controls{--compact-key-height:clamp(21px,7.3cqw,40px);left:13%;right:13%;top:78%;height:20%}
+/* Keys follow the cassette's short side and sit in the middle of the bottom deck. */
+body.compact-tape #app .player-controls{--compact-key-height:clamp(22px,calc(var(--tape-short, 240px) * .115),48px);left:13%;right:13%;top:74%;height:24%;display:flex;align-items:center;justify-content:center}
+body.compact-tape #app .player-controls .transport-row{width:100%;margin-top:0}
 body.compact-tape #app .transport-row{margin-top:0;gap:0}
-body.compact-tape #app .transport .icon-button,body.compact-tape #app .play-options .icon-button{width:clamp(23px,7.8cqw,44px);min-width:0;height:var(--compact-key-height);min-height:0;padding:0;border-radius:4px}
-body.compact-tape #app .transport .icon-button svg,body.compact-tape #app .play-options .icon-button svg{width:clamp(14px,4.4cqw,23px);height:clamp(14px,4.4cqw,23px)}
-body.compact-tape #app .play-button{width:clamp(26px,8.6cqw,48px);height:var(--compact-key-height);min-height:0;padding:0;border-radius:4px}
-body.compact-tape #app .play-button svg{width:clamp(16px,4.9cqw,26px);height:clamp(16px,4.9cqw,26px)}
-body.compact-tape #app #speech-record svg{width:clamp(18px,6cqw,32px);height:clamp(18px,6cqw,32px)}
-body.compact-tape #app .play-control #speech-listen{top:calc(100% + 2px);width:clamp(22px,6.5cqw,38px);min-width:0;height:clamp(14px,4.6cqw,27px);min-height:0;padding:2px}
-body.compact-tape #app .play-control #speech-listen svg{width:clamp(10px,3.2cqw,17px);height:clamp(10px,3.2cqw,17px)}
+body.compact-tape #app .transport .icon-button,body.compact-tape #app .play-options .icon-button{width:clamp(24px,calc(var(--tape-short, 240px) * .123),52px);min-width:0;height:var(--compact-key-height);min-height:0;padding:0;border-radius:4px}
+body.compact-tape #app .transport .icon-button svg,body.compact-tape #app .play-options .icon-button svg{width:clamp(14px,calc(var(--tape-short, 240px) * .07),26px);height:clamp(14px,calc(var(--tape-short, 240px) * .07),26px)}
+body.compact-tape #app .play-button{width:clamp(26px,calc(var(--tape-short, 240px) * .136),54px);height:var(--compact-key-height);min-height:0;padding:0;border-radius:4px}
+body.compact-tape #app .play-button svg{width:clamp(16px,calc(var(--tape-short, 240px) * .078),28px);height:clamp(16px,calc(var(--tape-short, 240px) * .078),28px)}
+body.compact-tape #app #speech-record svg{width:clamp(18px,calc(var(--tape-short, 240px) * .095),32px);height:clamp(18px,calc(var(--tape-short, 240px) * .095),32px)}
+body.compact-tape #app .play-control #speech-listen{top:calc(100% + 2px);width:clamp(22px,calc(var(--tape-short, 240px) * .103),38px);min-width:0;height:clamp(14px,calc(var(--tape-short, 240px) * .073),28px);min-height:0;padding:2px}
+body.compact-tape #app .play-control #speech-listen svg{width:clamp(10px,calc(var(--tape-short, 240px) * .051),18px);height:clamp(10px,calc(var(--tape-short, 240px) * .051),18px)}
 body.compact-tape #app .tape-album{font-size:12px;bottom:10%;right:54%}
 body.compact-tape #app .tape-label-bottom{font-size:8px;bottom:11%;left:45%;gap:7px}
 body.compact-tape #app #tape-counter{font-size:7px}
@@ -3235,9 +3236,13 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     body.classList.toggle('display-rotated',rotated);
     body.classList.toggle('display-active',active());
     body.classList.toggle('display-immersive',active()||(width>height&&height<=600));
-    // offsetWidth describes the cassette's physical design width, before rotation.
-    const compact=cassette.offsetWidth<=600;
+    // offsetWidth is the cassette's design width before rotation. On a phone that
+    // width becomes the long side, so the deck follows the shorter side instead.
+    const designShort=cassette.offsetHeight>0?Math.min(cassette.offsetWidth,cassette.offsetHeight):cassette.offsetWidth;
+    const landscapePhone=(rotated||(width>height&&height<=600))&&designShort<=520;
+    const compact=cassette.offsetWidth<=600||landscapePhone;
     body.classList.toggle('compact-tape',compact);
+    body.style.setProperty('--tape-short',designShort+'px');
     if(compact!==lastCompact){lastCompact=compact;window.rewindTheme?.fit();}
     paint();
     const geometry=[width,height,rotated,cassette.offsetWidth,body.style.getPropertyValue('--display-left'),body.style.getPropertyValue('--display-top')].join('|');
