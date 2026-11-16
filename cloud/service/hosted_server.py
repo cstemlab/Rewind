@@ -20,7 +20,7 @@ from assess import AssessmentError, redact, _key
 from azure_feedback import validate_wav, no_speech_result
 from openai_feedback import coach_openai_bytes, MODEL as OPENAI_MODEL
 from live_transcription import LiveManager, MODEL as LIVE_MODEL
-from creator import CreatorManager, capabilities, extract_document, MAX_FILE_BYTES
+from creator import CreatorManager, capabilities, extract_document, MAX_FILE_BYTES, select_voice, narration, PREVIEW_TEXT, preview_audio
 
 ALLOWED_ORIGIN = 'https://cstemlab.github.io'
 IDLE_TTL = 1800
@@ -28,7 +28,7 @@ ABSOLUTE_TTL = 7200
 MAX_SESSIONS = 4
 MAX_BODY = 1_200_000
 MAX_EXTRACT_BODY = 6_700_000
-CREATOR_ROUTES = {'/api/creator/' + name for name in ('extract', 'translate', 'render', 'status', 'cancel')}
+CREATOR_ROUTES = {'/api/creator/' + name for name in ('extract', 'translate', 'render', 'status', 'cancel', 'preview')}
 LIVE_ROUTES = {'/api/live/' + name for name in ('start', 'audio', 'events', 'stop', 'cancel')}
 POST_ROUTES = CREATOR_ROUTES | LIVE_ROUTES | {'/api/assess-recording', '/api/session/end', '/api/session/provider'}
 
@@ -92,13 +92,15 @@ class Runtime:
     """Immutable owner-configured provider callbacks; no visitor credentials."""
     def __init__(self, name, api_key, *, coach=coach_openai_bytes, live_factory=LiveManager,
                  creator_factory=HostedCreatorManager, model=OPENAI_MODEL,
-                 creator_capabilities=None, decorate_session=None, supports_live=None, live_model=None):
+                 creator_capabilities=None, decorate_session=None, supports_live=None, live_model=None,
+                 voice_selector=select_voice, preview_synthesizer=narration):
         if name not in ('openai', 'gemini'):
             raise ValueError('Unsupported provider.')
         self.name, self.api_key, self.model = name, _key(api_key), model
         self.coach, self.live_factory, self.creator_factory = coach, live_factory, creator_factory
         self.creator_capabilities = creator_capabilities or (lambda: capabilities(True))
         self.decorate_session = decorate_session
+        self.voice_selector, self.preview_synthesizer = voice_selector, preview_synthesizer
         self.supports_live = name == 'openai' if supports_live is None else bool(supports_live)
         self.live_model = live_model or (LIVE_MODEL if name == 'openai' else None)
 
@@ -118,6 +120,7 @@ class Visitor:
         self.assessments = RateWindow(5, 61)
         self.live_starts = RateWindow(5, 61)
         self.creator_starts = RateWindow(4, 600)
+        self.voice_previews = RateWindow(30, 60)
 
     def expires_in(self):
         now = time.monotonic()
@@ -214,6 +217,21 @@ class Visitor:
         return result
 
     def creator_request(self, route, body):
+        if route == '/api/creator/preview':
+            with self.lock:
+                self.assert_open()
+                if set(body) != {'voice', 'consent'} or body.get('consent') is not True:
+                    fail('invalid_preview', '請選擇一個聲音，再按試聽。')
+                if not isinstance(body['voice'], str):
+                    fail('invalid_voice', '請重新選擇目前服務提供的聲音。')
+                voice = self.runtime.voice_selector(body['voice'])
+                self.voice_previews.take()
+                self.app.voice_previews.take()
+                runtime = self.runtime
+            result = self.app.preview(runtime, voice)
+            with self.lock:
+                self.assert_open()
+            return result
         with self.lock:
             self.assert_open()
             if route == '/api/creator/status':
@@ -271,10 +289,34 @@ class App:
         self.assessments = RateWindow(20, 61)
         self.live_starts = RateWindow(20, 61)
         self.creator_starts = RateWindow(12, 600)
+        self.voice_previews = RateWindow(120, 60)
+        self.preview_generations = RateWindow(12, 600)
+        self.preview_lock = threading.Lock()
+        self.preview_cache = {}
         self.creator_gate = threading.BoundedSemaphore(1)
         self.assessment_gate = threading.BoundedSemaphore(2)
         self.extract_gate = threading.BoundedSemaphore(1)
         self.stopped = threading.Event()
+
+    def preview(self, runtime, voice):
+        # Fixed public sample only: never cache user scripts. Serial cache fills
+        # prevent duplicate paid calls; failure leaves no cached substitute.
+        if not self.preview_lock.acquire(blocking=False):
+            fail('creator_busy', '正在準備另一段試聽，請稍後再試。')
+        try:
+            now = time.monotonic()
+            self.preview_cache = {key: value for key, value in self.preview_cache.items() if now - value[0] < 3600}
+            key = (runtime.name, voice)
+            if key in self.preview_cache:
+                return self.preview_cache[key][1]
+            self.preview_generations.take()
+            result = preview_audio(runtime.preview_synthesizer(PREVIEW_TEXT, runtime.api_key, voice), voice)
+            if len(self.preview_cache) >= 32:
+                del self.preview_cache[min(self.preview_cache, key=lambda item: self.preview_cache[item][0])]
+            self.preview_cache[key] = (time.monotonic(), result)
+            return result
+        finally:
+            self.preview_lock.release()
 
     def prune(self):
         with self.lock:
@@ -336,7 +378,7 @@ class App:
         replacement = Visitor(self, name)
         replacement.created = visitor.created
         # A switch does not reset visitor budgets or extend absolute lifetime.
-        for attribute in ('requests', 'assessments', 'live_starts', 'creator_starts'):
+        for attribute in ('requests', 'assessments', 'live_starts', 'creator_starts', 'voice_previews'):
             setattr(replacement, attribute, getattr(visitor, attribute))
         with self.lock:
             token = next((token for token, value in self.sessions.items() if value is visitor), None)
@@ -455,7 +497,7 @@ class Handler(BaseHTTPRequestHandler):
             if self.headers.get('Transfer-Encoding'):
                 return self.send(400, {'error': 'Content-Length required.', 'code': 'invalid_request'})
             size = int(self.headers.get('Content-Length', '0'))
-            maximum = 4096 if route == '/api/session' else MAX_EXTRACT_BODY if route == '/api/creator/extract' else MAX_BODY
+            maximum = 4096 if route in ('/api/session', '/api/creator/preview') else MAX_EXTRACT_BODY if route == '/api/creator/extract' else MAX_BODY
             if not 0 < size <= maximum:
                 return self.send(413, {'error': '請求內容過大或為空。', 'code': 'body_size'})
             data = self.rfile.read(size)
@@ -506,8 +548,9 @@ def main():
             model=google.model, coach=google.coach,
             live_factory=lambda: GoogleLiveManager(google.project), supports_live=True,
             live_model=os.environ.get('REWIND_GOOGLE_LIVE_MODEL', GOOGLE_LIVE_MODEL),
-            creator_factory=lambda gate: HostedCreatorManager(gate, translator=google.translate, planner=google.plan, synthesizer=google.narrate),
-            creator_capabilities=google.capabilities, decorate_session=google.decorate_session)
+            creator_factory=lambda gate: HostedCreatorManager(gate, translator=google.translate, planner=google.plan, synthesizer=google.narrate, voice_selector=google.select_voice),
+            creator_capabilities=google.capabilities, decorate_session=google.decorate_session,
+            voice_selector=google.select_voice, preview_synthesizer=google.narrate)
     if os.environ.get('OPENAI_API_KEY', '').strip():
         runtimes['openai'] = Runtime('openai', os.environ['OPENAI_API_KEY'].strip())
     if provider_name not in runtimes:

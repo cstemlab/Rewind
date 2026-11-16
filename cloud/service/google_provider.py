@@ -21,13 +21,23 @@ from azure_feedback import validate_wav
 from openai_feedback import SYSTEM_PROMPT, normalize_openai, LANGUAGES, STATES
 
 DEFAULT_MODEL = 'gemini-3.5-flash'
-DEFAULT_VOICE = 'yue-HK-Standard-A'
+DEFAULT_VOICE = 'yue-HK-Chirp3-HD-Aoede'
+# Curated Cantonese voices from Google's supported-voices table. Request input
+# may choose only these IDs; a syntactically plausible voice is not sufficient.
+VOICES = tuple(
+    {'id': 'yue-HK-Chirp3-HD-' + name, 'label': name, 'gender': gender, 'quality': 'Chirp 3 HD'}
+    for name, gender in (('Aoede', 'female'), ('Kore', 'female'), ('Sulafat', 'female'),
+                         ('Puck', 'male'), ('Charon', 'male'), ('Fenrir', 'male'))
+) + tuple(
+    {'id': 'yue-HK-Standard-' + name, 'label': 'Standard ' + name, 'gender': gender, 'quality': 'Standard'}
+    for name, gender in (('A', 'female'), ('C', 'female'), ('B', 'male'), ('D', 'male'))
+)
 SCOPES = ('https://www.googleapis.com/auth/cloud-platform',)
 MAX_RESPONSE = 12_000_000
 PROJECT_RE = re.compile(r'[a-z][a-z0-9-]{4,61}[a-z0-9]\Z')
 LOCATION_RE = re.compile(r'(?:global|[a-z]+-[a-z]+[0-9])\Z')
 MODEL_RE = re.compile(r'gemini-[a-zA-Z0-9.-]{1,80}\Z')
-VOICE_RE = re.compile(r'yue-HK-(?:Standard-[A-D]|Chirp3-HD-[A-Za-z]+)\Z')
+VOICE_IDS = frozenset(item['id'] for item in VOICES)
 
 
 def fail(code, message):
@@ -141,7 +151,7 @@ class GoogleProvider:
         self.voice = voice or os.environ.get('REWIND_GOOGLE_VOICE', DEFAULT_VOICE)
         if not PROJECT_RE.fullmatch(self.project) or not LOCATION_RE.fullmatch(self.location):
             fail('google_config', 'Google Cloud 專案或地區設定不正確。')
-        if not MODEL_RE.fullmatch(self.model) or not VOICE_RE.fullmatch(self.voice):
+        if not MODEL_RE.fullmatch(self.model) or self.voice not in VOICE_IDS:
             fail('google_config', 'Google Cloud 模型或聲音設定不正確。')
         host = 'aiplatform.googleapis.com' if self.location == 'global' else self.location + '-aiplatform.googleapis.com'
         self.endpoint = f'https://{host}/v1/projects/{self.project}/locations/{self.location}/publishers/google/models/{self.model}:generateContent'
@@ -221,11 +231,18 @@ class GoogleProvider:
             fail('changed_draft', '練習分段與已確認稿件不同。')
         return result
 
-    def narrate(self, text, unused_key=None):
+    def select_voice(self, voice=None):
+        selected = self.voice if voice is None else voice
+        if not isinstance(selected, str) or selected not in VOICE_IDS:
+            fail('invalid_voice', '請重新選擇目前服務提供的粵語聲音。')
+        return selected
+
+    def narrate(self, text, unused_key=None, voice=None):
+        selected = self.select_voice(voice)
         if not isinstance(text, str) or not text.strip() or len(text.encode('utf-8')) > 4500:
             fail('tts_text_size', '單句較長，請在稿件中分句後再生成。')
         # Plain text, never SSML: source cannot change language, voice or endpoint.
-        payload = {'input': {'text': text}, 'voice': {'languageCode': 'yue-HK', 'name': self.voice},
+        payload = {'input': {'text': text}, 'voice': {'languageCode': 'yue-HK', 'name': selected},
                    'audioConfig': {'audioEncoding': 'LINEAR16', 'sampleRateHertz': 24000}}
         raw = self.transport('https://texttospeech.googleapis.com/v1/text:synthesize', payload, MAX_RESPONSE)
         encoded = raw.get('audioContent')
@@ -236,18 +253,23 @@ class GoogleProvider:
         except (ValueError, TypeError):
             fail('invalid_audio', 'Google 示範錄音格式不正確。')
         pcm, rate = creator.read_wav(data)
-        return {'pcm': pcm, 'rate': rate, 'transcript': None, 'input_text': text,
+        return {'pcm': pcm, 'rate': rate, 'voice': selected, 'transcript': None, 'input_text': text,
                 'text_verification': 'plain-text-tts-input-only; not-independent-transcription'}
 
     def capabilities(self):
         result = creator.capabilities(True)
         result['models'] = {'text': self.model, 'audio': 'google-cloud-text-to-speech'}
         result['voice'] = self.voice
+        result['default_voice'] = self.voice
+        result['voices'] = [dict(item) for item in VOICES]
         return result
 
     def decorate_session(self, session):
         """Call on completed creator result before returning it to a browser."""
-        session['source'].update(provider='gemini', text_model=self.model,
-                                 audio_model='google-cloud-text-to-speech', voice=self.voice,
-                                 text_verification='plain-text-tts-input-only; not-independent-transcription')
-        return session
+        # The job captured its own choice. Never overwrite it with a mutable or
+        # provider-wide default when polling, exporting or serving another user.
+        source = {**session['source'], 'voice': self.select_voice(session['source'].get('voice')),
+                  'provider': 'gemini', 'text_model': self.model,
+                  'audio_model': 'google-cloud-text-to-speech',
+                  'text_verification': 'plain-text-tts-input-only; not-independent-transcription'}
+        return {**session, 'source': source}

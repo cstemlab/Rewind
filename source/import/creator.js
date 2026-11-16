@@ -3,31 +3,91 @@
  const el=id=>document.getElementById(id),connection=RewindConnection,local=connection.local;
  let mode='faithful',view='source',service=null,job=null,ticket=0,abort=null,pendingSession=null,busy=false,returnView='source';
  let importTicket=0,importAbort=null,returnAfterConnect=false;
+ let voices=[],voiceProvider='',voiceCatalog='',previewState='idle',previewTicket=0,previewAbort=null,previewAudio=null,previewURL=null;
+ const voicePreferences=Object.create(null),voiceStorageKey='rewind.creator.voices.v1';
+ try{const saved=JSON.parse(localStorage.getItem(voiceStorageKey)||'{}');for(const [provider,voice] of Object.entries(saved))if(typeof voice==='string')voicePreferences[provider]=voice;}catch{}
  const fileHint='TXT · Word · PDF · Markdown';
  const modes={faithful:'保留原意、細節與語氣，轉成自然粵語口語。',beginner:'保留原意和重要細節，用常用詞和較短句子表達。'};
  const stages={queued:'等候處理…',translating:'轉成粵語口語…',planning:'整理粵拼與短句…',synthesizing:'製作粵語錄音…',assembling:'整理練習…'};
  function error(message=''){el('creator-error').textContent=message;el('creator-error').hidden=!message;}
  function warning(message=''){el('creator-warning').textContent=message;el('creator-warning').hidden=!message;}
- function paint(next){view=next;el('creator-panel').dataset.view=next;for(const name of ['source','draft','progress','ready'])el('creator-'+name+'-view').hidden=name!==next;el('creator-step').textContent=({source:'01 · Script',draft:'02 · Cantonese',progress:'Making your tape',ready:'03 · Ready'})[next];el('creator-reset').hidden=next==='progress';if(next!=='source')el('creator-service-note').hidden=true;}
+ function paint(next){if(next!=='draft')stopPreview();view=next;el('creator-panel').dataset.view=next;for(const name of ['source','draft','progress','ready'])el('creator-'+name+'-view').hidden=name!==next;el('creator-step').textContent=({source:'01 · Script',draft:'02 · Cantonese',progress:'Making your tape',ready:'03 · Ready'})[next];el('creator-reset').hidden=next==='progress';if(next!=='source')el('creator-service-note').hidden=true;}
  function count(){el('creator-count').textContent=Array.from(el('creator-source').value).length.toLocaleString('en')+' / 12,000';}
  const request=connection.post;
+ function canSelectVoice(){return !!(service?.configured&&service?.creator?.available&&service.creator.voice_selection===true&&voices.length);}
+ function canPreviewVoice(){return canSelectVoice()&&service.creator.voice_preview===true&&connection.getInfo().authenticated!==false;}
+ function voiceLabel(id){return voices.find(item=>item.id===id)?.label||id;}
+ function catalogLabel(item){const gender=({female:'女聲',male:'男聲'})[item.gender],quality=typeof item.quality==='string'&&/\bHD\b/.test(item.quality)?'HD':item.quality==='Standard'?'Standard':'';return item.label+(gender?' · '+gender:'')+(quality?' ('+quality+')':'');}
+ function previewNote(message){el('creator-voice-note').textContent=message;}
+ function paintPreview(message){
+   const button=el('creator-voice-preview'),active=previewState!=='idle',loading=previewState==='loading';
+   button.disabled=!active&&!canPreviewVoice();button.dataset.state=previewState;
+   button.setAttribute('aria-label',loading?'取消聲音試聽':active?'停止聲音試聽':'試聽所選聲音');button.setAttribute('aria-pressed',String(active));
+   button.title=loading?'取消試聽':active?'停止試聽':'試聽固定短句';
+   el('creator-voice-preview-label').textContent=loading?'取消':active?'停止':'試聽';
+   if(message!==undefined){previewNote(message);return;}
+   previewNote(loading?'正在準備試聽…':active?'正在試聽固定短句。':canPreviewVoice()?'試聽固定短句。':connection.getInfo().authenticated===false?'連接 AI 服務後，可試聽聲音。':canSelectVoice()?'這個服務尚未提供試聽。':service?.configured&&service?.creator?.available?'這個服務使用固定聲音，暫不支援選聲或試聽。':'連接 AI 服務後，可查看可用聲音。');
+ }
+ function stopPreview(message){
+   previewTicket++;previewAbort?.abort();previewAbort=null;
+   if(previewAudio){previewAudio.pause();previewAudio.removeAttribute('src');previewAudio.load();previewAudio=null;}
+   if(previewURL){URL.revokeObjectURL(previewURL);previewURL=null;}
+   previewState='idle';paintPreview(message);
+ }
+ function syncVoices(){
+   const creator=service?.creator,provider=service?.provider||'',available=!!(service?.configured&&creator?.available);
+   const supplied=available&&creator.voice_selection===true&&Array.isArray(creator.voices)?creator.voices:[];
+   const seen=new Set(),catalog=supplied.filter(item=>item&&typeof item.id==='string'&&item.id.length<=100&&typeof item.label==='string'&&!seen.has(item.id)&&seen.add(item.id)).map(item=>({id:item.id,label:catalogLabel(item)}));
+   const key=JSON.stringify([provider,available,creator?.voice_selection,creator?.voice_preview,creator?.default_voice,creator?.voice,catalog]);
+   if(key!==voiceCatalog){
+     const previous=provider===voiceProvider?el('creator-voice').value:'';stopPreview();voices=catalog;voiceProvider=provider;voiceCatalog=key;
+     const select=el('creator-voice');select.replaceChildren();
+     const preferred=voicePreferences[provider]||previous,chosen=catalog.some(item=>item.id===preferred)?preferred:catalog.some(item=>item.id===creator?.default_voice)?creator.default_voice:catalog[0]?.id;
+     const options=catalog.length?catalog:[{id:'',label:available&&creator?.voice?'服務預設 · '+creator.voice:'服務預設'}];
+     for(const item of options){const option=document.createElement('option');option.value=item.id;option.textContent=item.label+(catalog.length&&item.id===creator?.default_voice?' · 預設':'');select.append(option);}
+     select.value=chosen||'';select.disabled=!canSelectVoice();
+   }
+   if(!canPreviewVoice()&&previewState!=='idle')stopPreview();else paintPreview();
+ }
+ async function previewVoice(){
+   if(previewState!=='idle'){stopPreview();return;}
+   if(!canPreviewVoice()||!voices.some(item=>item.id===el('creator-voice').value))return;
+   // Share the player's existing exclusion signal so a sample cannot overlap a tape or recording.
+   pauseForOptions();stopAction();window.dispatchEvent(new Event('rewind:playrequest'));
+   const mine=++previewTicket,voice=el('creator-voice').value,provider=voiceProvider;previewAbort=new AbortController();previewState='loading';paintPreview();
+   try{
+     const result=await request('/api/creator/preview',{voice,consent:true},previewAbort.signal);
+     if(mine!==previewTicket||voice!==el('creator-voice').value||provider!==voiceProvider)return;
+     if(result.voice!==voice)throw Error('服務回傳的聲音與所選聲音不同，未播放。');
+     if(result.audio?.mime!=='audio/wav'||typeof result.audio.base64!=='string'||result.audio.base64.length>8000000)throw Error('試聽錄音格式不完整，請重試。');
+     const bytes=Uint8Array.from(atob(result.audio.base64),char=>char.charCodeAt(0));
+     previewURL=URL.createObjectURL(new Blob([bytes],{type:'audio/wav'}));
+     const sample=new Audio(previewURL);previewAudio=sample;sample.preload='auto';
+     sample.addEventListener('ended',()=>{if(mine===previewTicket)stopPreview();});
+     sample.addEventListener('error',()=>{if(mine===previewTicket)stopPreview('未能播放試聽，請重試。');});
+     await sample.play();if(mine!==previewTicket){sample.pause();return;}
+     previewAbort=null;previewState='playing';paintPreview();
+   }catch(err){if(mine!==previewTicket||err.name==='AbortError')return;stopPreview(err.message||'未能取得試聽，請重試。');}
+ }
  function connectionNote(){
    const link=connection.getInfo(),available=service?.configured&&service?.creator?.available;
    const provider=({openai:'OpenAI',gemini:'Google Gemini',azure:'Azure'})[service?.provider]||'AI 服務';
    el('creator-provider-note').textContent=`文字會交給 ${provider} 轉換；下一步可先修改。`;
    el('creator-service-note').hidden=!!available||view!=='source';
    el('creator-service-message').textContent=link.message||(!link.available?'AI 製作服務尚未啟用。你貼上的稿件會保留。':service?.configured?'這個語音服務暫未提供新練習製作。':local?'連接 OpenAI 後，即可製作新練習。':'沿用錄音時的存取碼即可。若尚未連接，在 Speech 輸入一次，就同時開啟錄音回饋和新講稿轉換。');
-   el('creator-connect').hidden=!link.available;el('creator-local-guide').hidden=link.available;return !!available;
+   el('creator-connect').hidden=!link.available;el('creator-local-guide').hidden=link.available;syncVoices();return !!available;
  }
  async function refresh(){try{service=await connection.status();}catch{service=null;}connectionNote();}
  async function cancel(show=true){const old=job;ticket++;job=null;abort?.abort();abort=null;const was=busy;busy=false;if(old&&connection.getInfo().available)request('/api/creator/cancel',{job_id:old}).catch(()=>{});if(was){paint(returnView);if(show)warning('已取消；原稿和目前練習均保留。');}}
- async function run(route,body,back){
+ async function run(route,body,back,selectedProvider){
    if(busy)return;
+   stopPreview();
    const mine=++ticket;busy=true;returnView=back;error();warning();pendingSession=null;
    abort=new AbortController();paint('progress');el('creator-progress-message').textContent='準備中…';el('creator-progress').removeAttribute('value');
    try{
      await refresh();if(mine!==ticket)return;
      if(!connectionNote()){busy=false;abort=null;paint(back);connectionNote();error(connection.getInfo().message||(local?'請先連接可製作練習的服務，再按一次製作。':'請先在 Speech 連接 AI 練習，再按一次製作。'));return;}
+     if(body.draft?.voice&&(selectedProvider!==voiceProvider||!canSelectVoice()||!voices.some(item=>item.id===body.draft.voice)))throw Error('可用聲音已變更，請重新選擇後製作。');
      // Keep the short start request alive so cancellation can dispose its eventual job ID.
      const started=await request(route,{...body,consent:true});
      if(mine!==ticket){if(started.job_id)request('/api/creator/cancel',{job_id:started.job_id}).catch(()=>{});return;}
@@ -41,9 +101,10 @@
          if(result.draft){const draft=result.draft;el('creator-draft-title').value=draft.title||el('creator-title').value;el('creator-draft').value=draft.text||'';paint('draft');}
          else if(result.session){
            pendingSession=rewindLibrary.add(result.session);
-           const wanted=el('creator-voice')?.value,used=pendingSession.source?.voice;
+           const wanted=body.draft?.voice,used=pendingSession.source?.voice;
            el('creator-ready-title').textContent=pendingSession.title;el('creator-ready-meta').textContent=`${pendingSession.sentences.length} 句 · ${pendingSession.phrases.length} 小段 · ${stamp(pendingSession.duration||0)}`;paint('ready');
-           if(wanted&&used&&used!==wanted)warning('這份示範仍使用服務預設的聲音。所選聲音要等雲端服務更新後，再生一次才會換成那一個聲音。');
+           el('creator-ready-voice').textContent=used?'聲音：'+voiceLabel(used):'聲音：服務未回報';
+           if(wanted&&used!==wanted)warning(used?'服務使用了另一個聲音：'+voiceLabel(used)+'。':'服務未回報實際聲音，無法確認所選聲音。');
          }
          else throw Error('製作結果不完整，尚未更換目前練習。');return;
        }
@@ -76,18 +137,20 @@
  el('creator-file').addEventListener('change',e=>{const file=e.target.files?.[0];e.target.value='';if(file)importFile(file);});
  for(const id of ['creator-source-view','library-panel']){const area=el(id);area.addEventListener('dragover',e=>{if(e.dataTransfer.types.includes('Files')){e.preventDefault();e.dataTransfer.dropEffect='copy';area.classList.add('file-dragging');}});area.addEventListener('dragleave',e=>{if(!area.contains(e.relatedTarget))area.classList.remove('file-dragging');});area.addEventListener('drop',e=>{area.classList.remove('file-dragging');if(!e.dataTransfer.files.length)return;e.preventDefault();if(e.dataTransfer.files.length!==1){error('請一次選擇一份講稿。');rewindPanels.open('creator');return;}const file=e.dataTransfer.files[0];if(/\.(json|rewind)$/i.test(file.name)){window.rewindOpenFile(file);return;}importFile(file);});}
  el('creator-translate').onclick=()=>{const text=el('creator-source').value.trim();if(!text){error('請先貼上或匯入講稿。');el('creator-source').focus();return;}run('/api/creator/translate',{text,title:el('creator-title').value.trim(),mode},'source');};
- el('creator-render').onclick=()=>{const text=el('creator-draft').value.trim();if(!text){error('請先填寫粵語講稿。');return;}run('/api/creator/render',{draft:{title:el('creator-draft-title').value.trim(),text,mode,voice:el('creator-voice').value}},'draft');};
+ el('creator-render').onclick=()=>{const text=el('creator-draft').value.trim();if(!text){error('請先填寫粵語講稿。');return;}const draft={title:el('creator-draft-title').value.trim(),text,mode};if(canSelectVoice()){if(!voices.some(item=>item.id===el('creator-voice').value)){error('請選擇可用聲音。');return;}draft.voice=el('creator-voice').value;}return run('/api/creator/render',{draft},'draft',voiceProvider);};
+ el('creator-voice').addEventListener('change',()=>{stopPreview();const voice=el('creator-voice').value;if(voices.some(item=>item.id===voice)){voicePreferences[voiceProvider]=voice;try{localStorage.setItem(voiceStorageKey,JSON.stringify(voicePreferences));}catch{}}});
+ el('creator-voice-preview').onclick=previewVoice;
  el('creator-edit-source').onclick=()=>{error();warning();paint('source');connectionNote();};
  el('creator-revise').onclick=()=>{pendingSession=null;paint('draft');};
  el('creator-cancel').onclick=()=>cancel();
  el('creator-reset').onclick=async()=>{await cancel(false);blankCreator();};
  el('creator-connect').onclick=()=>{returnAfterConnect=true;rewindSpeech.openSettings();};
  el('creator-use').onclick=async()=>{if(!pendingSession)return;error();const candidate=pendingSession;el('creator-use').disabled=true;try{const loaded=await loadSession(candidate,{add:true});if(loaded){pendingSession=null;setFocus(true);}else error('這份練習未能載入，原練習保持不變。');}finally{el('creator-use').disabled=false;}};
- window.addEventListener('rewind:panel',e=>{if(e.detail==='creator'){refresh();}else{if(busy)cancel(false);if(importAbort)stopImport();}});
- new MutationObserver(()=>{if(el('drawer').hidden){if(busy)cancel(false);if(importAbort)stopImport();}}).observe(el('drawer'),{attributes:true,attributeFilter:['hidden']});
- window.addEventListener('pagehide',()=>cancel(false));
+ window.addEventListener('rewind:panel',e=>{if(e.detail==='creator'){refresh();}else{stopPreview();if(busy)cancel(false);if(importAbort)stopImport();}});
+ new MutationObserver(()=>{if(el('drawer').hidden){stopPreview();if(busy)cancel(false);if(importAbort)stopImport();}}).observe(el('drawer'),{attributes:true,attributeFilter:['hidden']});
+ window.addEventListener('rewind:playrequest',()=>stopPreview());
+ window.addEventListener('pagehide',()=>{stopPreview();cancel(false);});
  connection.subscribe(link=>{service=link.status;connectionNote();if(returnAfterConnect&&service?.configured&&service?.creator?.available){returnAfterConnect=false;rewindPanels.open('creator');}});
- window.rewindCreator=Object.freeze({getState:()=>({mode,view,busy,hasDraft:!!el('creator-draft').value,hasSession:!!pendingSession,local,job}),open:()=>rewindPanels.open('creator'),importFile});
+ window.rewindCreator=Object.freeze({getState:()=>({mode,view,busy,hasDraft:!!el('creator-draft').value,hasSession:!!pendingSession,local,job,voice:el('creator-voice').value,voiceProvider,preview:previewState}),open:()=>rewindPanels.open('creator'),importFile});
  paint('source');count();connectionNote();
 })();
-

@@ -182,7 +182,7 @@ class JobTests(unittest.TestCase):
         text='我哋一齊學粵語，今日先練習簡單句子。'
         raw=reading_reply(text)
         draft={**DRAFT,'text':text};calls=[]
-        def synth(spoken,key):calls.append(spoken);return {'pcm':b'\0\0'*48000,'rate':24000}
+        def synth(spoken,key,voice):calls.append(spoken);return {'pcm':b'\0\0'*48000,'rate':24000,'voice':voice}
         with patch('creator._json_completion',return_value=raw):
             m=creator.CreatorManager(synthesizer=synth)
             start=m.start('render',{'draft':draft,'consent':True},'test-key',1)

@@ -121,9 +121,11 @@ class GoogleContracts(unittest.TestCase):
 
     def test_creator_provenance_is_google(self):
         p = self.provider()
-        result = p.decorate_session({'source': {'text_model': 'wrong', 'audio_model': 'wrong', 'voice': 'wrong'}})
+        original = {'source': {'text_model': 'wrong', 'audio_model': 'wrong', 'voice': 'yue-HK-Chirp3-HD-Kore'}}
+        result = p.decorate_session(original)
         self.assertEqual(result['source']['provider'], 'gemini')
-        self.assertEqual(result['source']['voice'], 'yue-HK-Standard-A')
+        self.assertEqual(result['source']['voice'], 'yue-HK-Chirp3-HD-Kore')
+        self.assertEqual(original['source']['text_model'], 'wrong')
         self.assertEqual(p.capabilities()['models']['text'], 'gemini-3.5-flash')
 
     def test_partial_blocked_and_tool_results_rejected(self):

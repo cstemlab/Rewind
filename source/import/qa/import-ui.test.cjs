@@ -6,12 +6,12 @@ const path=require('node:path');
 const source=fs.readFileSync(path.join(__dirname,'../creator.js'),'utf8');
 function harness(read,post=async()=>({})){
  const elements=new Map(),events={},observers=[],opened=[],loaded=[];
- const element=id=>{if(!elements.has(id))elements.set(id,{id,value:'',textContent:'',hidden:false,disabled:false,readOnly:false,dataset:{},classList:{add(){},remove(){},toggle(){}},handlers:{},addEventListener(name,cb){this.handlers[name]=cb;},setAttribute(){},removeAttribute(){},querySelectorAll(){return [];},focus(){this.focused=true;},scrollIntoView(){},contains(){return false;}});return elements.get(id);};
+ const element=id=>{if(!elements.has(id))elements.set(id,{id,value:'',textContent:'',hidden:false,disabled:false,readOnly:false,dataset:{},classList:{add(){},remove(){},toggle(){}},handlers:{},addEventListener(name,cb){this.handlers[name]=cb;},append(){},replaceChildren(){},setAttribute(){},removeAttribute(){},querySelectorAll(){return [];},focus(){this.focused=true;},scrollIntoView(){},contains(){return false;}});return elements.get(id);};
  const window={addEventListener(name,cb){(events[name]??=[]).push(cb);}};
  const emit=(name,detail)=>{for(const cb of events[name]||[])cb({detail});};
  let status={configured:false};
  const connection={local:false,post,status:async()=>status,getInfo:()=>({available:true,status}),subscribe(cb){this.notify=s=>{status=s;cb({status:s});};}};
- const ctx={document:{getElementById:element},window,RewindConnection:connection,RewindFileImport:{read},AbortController,MutationObserver:class{constructor(cb){observers.push(cb);}observe(){}},rewindPanels:{open(name){opened.push(name);emit('rewind:panel',name);}},rewindSpeech:{openSettings(){emit('rewind:panel','speech');}},setTimeout,clearTimeout,stamp:()=>'',rewindLibrary:{add:s=>s},loadSession:async s=>{loaded.push(s);return true;},setFocus(){}};
+ const ctx={document:{getElementById:element,createElement:()=>({})},window,RewindConnection:connection,RewindFileImport:{read},AbortController,MutationObserver:class{constructor(cb){observers.push(cb);}observe(){}},rewindPanels:{open(name){opened.push(name);emit('rewind:panel',name);}},rewindSpeech:{openSettings(){emit('rewind:panel','speech');}},setTimeout,clearTimeout,stamp:()=>'',rewindLibrary:{add:s=>s},loadSession:async s=>{loaded.push(s);return true;},setFocus(){}};
  vm.runInNewContext(source,ctx);
  return {element,emit,observers,opened,loaded,api:window.rewindCreator,connection};
 }

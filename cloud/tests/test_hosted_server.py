@@ -305,7 +305,7 @@ class HostedHTTPTests(unittest.TestCase):
     def test_google_metadata_decoration_without_openai_label(self):
         from google_provider import GoogleProvider
         google = GoogleProvider(project='mock-project', transport=lambda *_: {})
-        session = {'source': {'text_model': 'openai', 'audio_model': 'openai', 'voice': 'alloy'}}
+        session = {'source': {'text_model': 'openai', 'audio_model': 'openai', 'voice': 'yue-HK-Chirp3-HD-Aoede'}}
         result = google.decorate_session(session)
         self.assertEqual(result['source']['provider'], 'gemini')
         self.assertNotIn('openai', json.dumps(result))
