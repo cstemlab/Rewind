@@ -29,7 +29,7 @@ Click a character to hear from there, or drag across words to hear just that ran
 
 ## Practise with your voice
 
-Press **Record**. A small on-tape notice explains the active service and when audio will be sent. Allow microphone access, read the current phrase or selected words, then press again to stop. Each recording is limited to 25 seconds.
+Press **Record**. A small on-tape notice explains the active service and when audio will be sent. Allow microphone access, read the current phrase or selected words, then press again to stop. The recording window follows the selected example’s duration plus two seconds, up to 25 seconds. A soft ready cue and blinking text marker indicate when to begin; the cue respects mute. Stop immediately ends capture. Animated status dots and an inactive recording button indicate processing, so repeated clicks cannot cancel the result. Press Escape or navigate away to cancel deliberately.
 
 When live recognition is available, the faint background behind characters tracks words the service appears to have heard. **This is provisional recognition, not a pronunciation verdict.** After you stop, an audio model evaluates the clip directly and returns experimental practice feedback:
 

@@ -374,6 +374,16 @@ body{--tape-w:min(960px,calc(100vw - 48px),calc((100dvh - 56px)*1.58));display:b
 
 /* One record key; temporary feedback stays on the lower printed label. */
 #app #speech-record{color:var(--recordInk,#f18b77);background:none;box-shadow:none}
+/* Rewind recording-state feedback: no geometry changes. */
+#app #speech-record svg{pointer-events:none}
+#app #speech-record[data-state="submitting"] svg{animation:rewind-checking 1.2s linear infinite}
+@keyframes rewind-checking{to{transform:rotate(360deg)}}
+#app .speech-bar:is([data-state="requesting"],[data-state="recording"],[data-state="stopping"],[data-state="submitting"]) #speech-status-text:after{content:"···";display:inline-block;inline-size:1.2em;margin-inline-start:.3em;overflow:hidden;vertical-align:baseline;clip-path:inset(0 100% 0 0);animation:rewind-speech-dots 1.2s steps(3,end) infinite}
+@keyframes rewind-speech-dots{to{clip-path:inset(0 0 0 0)}}
+#app .speech-ready-caret{position:absolute;left:-.16em;top:50%;width:2px;height:.65em;transform:translateY(-50%);border-radius:2px;background:var(--recordInk,#f18b77);pointer-events:none;animation:rewind-ready-caret .8s ease-in-out infinite;z-index:2}
+@keyframes rewind-ready-caret{50%{opacity:.2}}
+@media(prefers-reduced-motion:reduce){#app #speech-record[data-state="submitting"] svg{animation:none}#app .speech-bar #speech-status-text:after{animation:none;clip-path:none}#app .speech-ready-caret{animation:none}}
+/* End recording-state feedback. */
 #app #speech-record:hover{color:var(--recordInk,#f18b77);background:none}
 #app #speech-record circle:last-child{fill:var(--recordInk,#f18b77)}
 #app #speech-record[data-state="recording"],#app #speech-record[data-state="requesting"]{color:var(--recordInk,#f18b77)}
@@ -758,7 +768,7 @@ SOFTWARE.
         </div>
       </section>
 <div id="speech-bar" class="speech-bar" hidden><button id="speech-summary" class="speech-summary" aria-label="練習結果詳情"><span id="speech-status-text"></span></button></div><span id="speech-announcement" class="sr-only" role="status" aria-live="polite"></span>
-<section id="speech-popover" class="speech-popover" role="dialog" aria-label="開始語音練習" aria-describedby="speech-popover-text" hidden><button id="speech-popover-close" class="speech-popover-close" aria-label="關閉語音提示" title="Close"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button><p id="speech-popover-text"></p><div class="speech-popover-footer"><span>25 s max</span><button id="speech-popover-start">開始</button></div></section>
+<section id="speech-popover" class="speech-popover" role="dialog" aria-label="開始語音練習" aria-describedby="speech-popover-text" hidden><button id="speech-popover-close" class="speech-popover-close" aria-label="關閉語音提示" title="Close"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button><p id="speech-popover-text"></p><div class="speech-popover-footer"><span>Auto stop</span><button id="speech-popover-start">開始</button></div></section>
 <div class="practice-footer sr-only"><span id="play-policy"></span></div><p id="error" role="alert" hidden></p>
 <section id="drawer" class="options-surface" aria-label="Practice options" hidden>
   <header class="options-heading"><button id="options-back" class="options-back" aria-label="Back to options" title="Back"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"><path d="m14 5-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span id="options-title">Options</span></header>
@@ -847,7 +857,7 @@ SOFTWARE.
 <p>Skin 可分別調整塑料材質、外殼顏色、貼紙顏色、圖案及三種印刷色。Matte 隱藏內部結構，Smoked 和 Clear 顯示不同程度的帶輪、導帶和支架。Presets 保留 24 款完整設計。調整後點 × 返回練習，卡帶比例與帶輪位置保持不變。Settings 可調整音量、語速、字體、按鍵音效及循環間隔。點選數值後返回；拖動滑桿時可先調整，放開後返回。鍵盤可用方向鍵調整滑桿，再按 Enter 完成。</p>
 <p>選項內容較多時，只在貼紙內捲動。左上角的小箭頭回到選項目錄；右上角的 × 或 Esc 關閉。沒有自動消失的倒數計時。需要點字練習提示時，可在 Help 選 Selection tips。</p>
 <h2>錄音跟讀 · 試驗功能</h2>
-<p>播放鍵旁的圓點是錄音鍵。按一下開始，再按變成方形的同一個鍵停止；每次最多 25 s。預設練習目前短句；選取部分字詞後，也可以只練那一部分。切換內容、播放示範、離開頁面或按 Esc，會取消未完成的錄音或評測。</p>
+<p>播放鍵旁的圓點是錄音鍵。按一下開始，再按變成方形的同一個鍵停止；錄音時間按所選示範長度加 2 s 設定，上限為 25 s。麥克風就緒後，輕聲提示音及文字起點的閃動標記表示可以開始；倒數從提示結束後計算。停止後錄音鍵會改為處理中狀態，動畫圓點表示仍在等待回饋。預設練習目前短句；選取部分字詞後，也可以只練那一部分。切換內容、播放示範、離開頁面或按 Esc，會取消未完成的錄音或評測。</p>
 <p>還未連接雲端時，錄音只留在此頁，可在磁帶內的臨時選項回聽或清除，不會上傳，也不會顯示模擬分數。重新載入或離開此頁便會清除。</p>
 <p>分享網頁若已啟用 AI，可使用分享者提供的邀請連結，或在 ⋯ → Settings → Speech 輸入 access code，無需自己的 API key。連線只保留在這個分頁；到期後可重新連接。本機配套版本仍可在 Speech 設定自己的 OpenAI 或 Azure 服務，密鑰只保留在本機服務記憶體。</p>
 <p>已連接後，第一次按錄音鍵會在磁帶上顯示小提示，說明目前服務及傳送時機。支援即時辨識的服務會在錄音時接收音訊；最後的發音回饋在停止後才提供。確認後可按圓點開始、方形停止。若分享者提供多項服務，可在 Speech 明確選擇，再重新確認錄音傳送；程式不會自動換服務。連線前留下的錄音不會因為之後連線而自動送出。</p>
@@ -2433,31 +2443,80 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   const record=byId('speech-record'), bar=byId('speech-bar'), replay=new Audio();
   const recordSVG='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="12" cy="12" r="4.4"/></svg>';
   const stopSVG='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>';
+  const checkingSVG='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 1 9 9M12 21a9 9 0 0 1-9-9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+  let paintedIcon='',readyMarker=null,cueTimer=null,cueResolve=null,cueOscillator=null,cueGain=null;
   let state='idle', generation=0, service=null, consent='', snapshot=null, result=null;
   let stream=null, context=null, source=null, processor=null, muteNode=null, chunks=[],samples=0,sampleRate=0;
-  let started=0, timer=null, limitTimer=null, recording=null, recordingURL=null, requestAbort=null;
+  let started=0, timer=null, limitTimer=null, recording=null, recordingURL=null, requestAbort=null, recordingLimit=25;
   let live=null,liveText='',liveState='off',consentAction=null;
   const originalLabels=new Map();
   const local=connection.local;
   const cloudProviders=()=>!local&&service?.configured?(service.supported_providers||[]).filter(value=>['openai','gemini'].includes(value)):[];
   const names={pass:'已通過',close:'接近，再練一次',retry:'需要重練',uncertain:'未能確認',omitted:'未能匹配'};
-  const seconds=()=>Math.min(25,(performance.now()-started)/1000);
+  const seconds=()=>Math.min(recordingLimit,(performance.now()-started)/1000);
+  const remaining=()=>Math.max(0,Math.ceil(recordingLimit-seconds()));
+  function recordingWindow(text,bounds,playbackRate=1){
+    const timed=bounds&&Number.isFinite(bounds.start)&&Number.isFinite(bounds.end)&&bounds.start>=0&&bounds.end>bounds.start;
+    const letters=Array.from(text).filter(c=>/[\p{L}\p{N}]/u.test(c)).length;
+    const speed=Number.isFinite(playbackRate)&&playbackRate>0?playbackRate:1;
+    const duration=timed?(bounds.end-bounds.start)/speed:Math.max(1,letters/3);
+    return Math.min(25,duration+2);
+  }
   function announce(message){byId('speech-announcement').textContent=message;}
   function panelError(message=''){byId('speech-panel-error').textContent=message;byId('speech-panel-error').hidden=!message;}
   function paint(message){
-    record.dataset.state=state;
-    const active=['requesting','recording','submitting'].includes(state);
-    record.innerHTML=active?stopSVG:recordSVG;
-    const label=state==='recording'?'停止錄音':state==='requesting'?'取消等候麥克風':state==='submitting'?'取消等候評測':'錄音練習';
+    record.dataset.state=state;bar.dataset.state=state;
+    const active=['requesting','ready','recording'].includes(state),busy=['stopping','submitting'].includes(state);
+    record.disabled=busy;record.setAttribute('aria-busy',String(busy));
+    // Preserve the pointer target between down/up; the 200 ms timer only changes text.
+    const nextIcon=busy?checkingSVG:active?stopSVG:recordSVG;
+    if(nextIcon!==paintedIcon){record.innerHTML=nextIcon;paintedIcon=nextIcon;}
+    const label=state==='recording'?'停止錄音':state==='ready'?'取消準備':state==='requesting'?'取消等候麥克風':busy?'錄音已停止，正在處理':'錄音練習';
     record.setAttribute('aria-label',label);record.title=label;record.setAttribute('aria-pressed',String(active));
     bar.hidden=state==='idle';byId('cassette').classList.toggle('speech-status',!bar.hidden);
     byId('speech-replay').hidden=!recording||['recording','requesting'].includes(state);
     byId('speech-replay').disabled=state==='submitting';
     byId('speech-send').hidden=!recording||!service?.configured||!['review','error'].includes(state);
-    byId('speech-summary').disabled=!recording;
+    byId('speech-summary').disabled=!recording||busy;
     if(message!==undefined)byId('speech-status-text').textContent=message;
   }
+  function clearReadyMarker(){readyMarker?.remove();readyMarker=null;}
+  function clearReadyCue({marker=true}={}){
+    clearTimeout(cueTimer);cueTimer=null;
+    if(cueOscillator){try{cueOscillator.stop();}catch{}try{cueOscillator.disconnect();}catch{}}
+    try{cueGain?.disconnect();}catch{}
+    cueOscillator=cueGain=null;
+    const resolve=cueResolve;cueResolve=null;resolve?.(false);
+    if(marker)clearReadyMarker();
+  }
+  function readyCue(ticket){
+    clearReadyCue();
+    const first=snapshot?.unitSpans.find(span=>span.spoken);
+    const han=tokenNodes.find(entry=>entry.index===first?.unit)?.element.querySelector('.han');
+    if(han){readyMarker=document.createElement('span');readyMarker.className='speech-ready-caret';readyMarker.setAttribute('aria-hidden','true');han.append(readyMarker);}
+    state='ready';paint('Ready');announce('準備好，提示音後開始跟讀。');
+    // The capture callback ignores this stage; neither beep nor settle gap is sent.
+    try{
+      if(soundEnabled&&!muted&&volume>0&&!audio.muted){
+        const now=context.currentTime;cueOscillator=context.createOscillator();cueGain=context.createGain();
+        cueOscillator.type='sine';cueOscillator.frequency.value=660;
+        cueGain.gain.setValueAtTime(0,now);cueGain.gain.linearRampToValueAtTime(Math.min(1,volume)*.055,now+.008);cueGain.gain.linearRampToValueAtTime(0,now+.08);
+        cueOscillator.connect(cueGain);cueGain.connect(context.destination);cueOscillator.start(now);cueOscillator.stop(now+.08);
+      }
+    }catch{/* A blocked audio effect must not prevent microphone practice. */}
+    return new Promise(resolve=>{
+      cueResolve=resolve;
+      cueTimer=setTimeout(()=>{
+        if(cueResolve!==resolve)return;
+        const complete=cueResolve;cueResolve=null;
+        const valid=stillCurrent(ticket)&&state==='ready';
+        clearReadyCue({marker:!valid});complete?.(valid);
+      },130);
+    });
+  }
+
   function releaseCapture(){
+    clearReadyCue();
     clearInterval(timer);clearTimeout(limitTimer);timer=limitTimer=null;
     if(processor){processor.onaudioprocess=null;try{processor.disconnect();}catch{}}
     try{source?.disconnect();muteNode?.disconnect();}catch{}
@@ -2473,6 +2532,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   function endLive(){live?.cancel();live=null;liveState='off';clearLive();}
   function paintLive(text,ticket){
     if(!stillCurrent(ticket)||!['recording','submitting'].includes(state))return;
+    if(text.trim())clearReadyMarker();
     clearLive();liveText=text;const matched=new Set(RewindLiveProgress.align(snapshot.text,text).matched),chars=Array.from(snapshot.text);
     for(const span of snapshot.unitSpans){if(!span.spoken)continue;const positions=[];for(let i=span.start;i<span.end;i++)if(/[\p{L}\p{N}]/u.test(chars[i]))positions.push(i);
       if(!positions.length||!positions.every(i=>matched.has(i)))continue;
@@ -2493,7 +2553,9 @@ loadSession(defaultSession);requestAnimationFrame(frame);
       unitSpans.push({unit:i,start,end:map.length,spoken:session.units[i].spoken});
     }
     if(!text.trim()||Array.from(text).length>200)throw Error('請選較短的一段，或選取想練習的字詞。');
-    return {text,map,unitSpans,session,grain,index,from,to};
+    // Freeze the exact currently playable range and speed; later changes cannot shift this attempt's deadline.
+    let bounds=null;try{const candidate=playbackBounds();if(candidate?.from===from&&candidate?.to===to)bounds=candidate;}catch{}
+    return {text,map,unitSpans,session,grain,index,from,to,recordingLimit:recordingWindow(text,bounds,rate)};
   }
   function stillCurrent(ticket){return ticket===generation&&snapshot&&snapshot.session===session&&snapshot.grain===grain&&snapshot.index===index;}
   const api=connection.post;
@@ -2547,7 +2609,8 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     byId('speech-popover-start').textContent=existing?'傳送':service?.configured?'開始':'只錄音';byId('speech-popover').hidden=false;record.setAttribute('aria-expanded','true');positionConsent();byId('speech-popover-start').focus({preventScroll:true});
   }
   async function prepare(){
-    if(['requesting','submitting'].includes(state)){cancel();return;}
+    if(['stopping','submitting'].includes(state))return;
+    if(['requesting','ready'].includes(state)){cancel();return;}
     if(state==='recording'){finishRecording();return;}
     if(!byId('speech-popover').hidden){closeConsent();return;}
     await checkService();
@@ -2557,10 +2620,10 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   }
   async function startRecording(){
     cancel({quiet:true});const ticket=generation;
-    try{snapshot=captureReference();}catch(e){state='error';paint(e.message);announce(e.message);return;}
+    try{snapshot=captureReference();recordingLimit=snapshot.recordingLimit;}catch(e){state='error';paint(e.message);announce(e.message);return;}
     pauseForOptions();stopAction();setFocus(true);dismissTip();panelError();
     if(!navigator.mediaDevices?.getUserMedia){state='error';paint('此瀏覽器未能使用麥克風。');announce('請用 Chrome、Edge 或 Safari 開啟 Rewind 網頁。');return;}
-    state='requesting';paint('等待麥克風…');announce(service?.configured&&consent===service.provider?'請允許麥克風。停止後會送到 '+providerName()+' 取得回饋。':'請允許麥克風。這次只在本機錄音。');
+    state='requesting';paint('等待麥克風');announce(service?.configured&&consent===service.provider?'請允許麥克風。停止後會送到 '+providerName()+' 取得回饋。':'請允許麥克風。這次只在本機錄音。');
     try{
       const AudioContextClass=window.AudioContext||window.webkitAudioContext;
       context=new AudioContextClass();await context.resume();if(!stillCurrent(ticket))return;
@@ -2568,15 +2631,16 @@ loadSession(defaultSession);requestAnimationFrame(frame);
       if(!stillCurrent(ticket)){acquired.getTracks().forEach(t=>t.stop());return;}
       stream=acquired;sampleRate=context.sampleRate;source=context.createMediaStreamSource(stream);
       processor=context.createScriptProcessor(4096,1,1);muteNode=context.createGain();muteNode.gain.value=0;
-      processor.onaudioprocess=e=>{if(state!=='recording'||!stillCurrent(ticket))return;const channel=e.inputBuffer.getChannelData(0),remaining=Math.max(0,Math.floor(sampleRate*25)-samples);if(!remaining)return;const block=new Float32Array(channel.subarray(0,Math.min(channel.length,remaining)));chunks.push(block);samples+=block.length;live?.push(block);};
+      processor.onaudioprocess=e=>{if(state!=='recording'||!stillCurrent(ticket))return;const channel=e.inputBuffer.getChannelData(0),remaining=Math.max(0,Math.floor(sampleRate*recordingLimit)-samples);if(!remaining)return;const block=new Float32Array(channel.subarray(0,Math.min(channel.length,remaining)));chunks.push(block);samples+=block.length;live?.push(block);};
       source.connect(processor);processor.connect(muteNode);muteNode.connect(context.destination);
-      stream.getTracks().forEach(t=>t.onended=()=>{if(state==='recording'){finishRecording();announce('麥克風已停止。可以回聽或重新錄音。');}});
-      started=performance.now();state='recording';paint('Listening · 0:00');announce('正在錄音。再按錄音鍵停止。');
+      stream.getTracks().forEach(t=>t.onended=()=>{if(state==='recording'){finishRecording();announce('麥克風已停止。可以回聽或重新錄音。');}else if(state==='ready'){cancel({quiet:true});announce('麥克風已停止，請重新開始。');}});
+      const ready=await readyCue(ticket);if(!ready||!stillCurrent(ticket))return;
+      started=performance.now();state='recording';paint('Listening · '+stamp(Math.ceil(recordingLimit))+' left');announce('正在錄音。再按錄音鍵停止。');
       if(service?.configured&&['openai','gemini'].includes(service.provider)&&consent===service.provider&&service.live_transcription?.available){
         liveState='connecting';live=RewindLiveClient.create({provider:service.provider,inputRate:sampleRate,onTranscript:text=>paintLive(text,ticket),onState:(next,error)=>{if(!stillCurrent(ticket))return;liveState=next;if(next==='unavailable'){clearLive();announce(service?.configured?'即時辨識暫未能使用。錄音繼續，停止後會嘗試取得發音回饋。':(error?.message||'AI 連線已中斷。')+' 這段錄音仍可回聽。');}}});
       }
-      timer=setInterval(()=>paint('Listening · '+stamp(seconds())),200);
-      limitTimer=setTimeout(()=>{if(stillCurrent(ticket)&&state==='recording')finishRecording();},25000);
+      timer=setInterval(()=>paint('Listening · '+stamp(remaining())+' left'),200);
+      limitTimer=setTimeout(()=>{if(stillCurrent(ticket)&&state==='recording')finishRecording();},recordingLimit*1000);
     }catch(e){
       if(ticket!==generation)return;releaseCapture();endLive();state='error';const message=e.name==='NotAllowedError'?'麥克風未獲允許。可在瀏覽器設定開啟後重試。':e.name==='NotFoundError'?'找不到麥克風。':'未能開始錄音，請再試一次。';paint(message);announce(message);
     }
@@ -2593,7 +2657,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   }
   function finishRecording(){
     if(state!=='recording')return;
-    releaseCapture();const wav=pcmWav(chunks,sampleRate);chunks=[];samples=0;
+    releaseCapture();state='stopping';paint('已停止 · 準備回饋');const wav=pcmWav(chunks,sampleRate);chunks=[];samples=0;
     if(wav.duration<.35||wav.rms<.0003){endLive();state='error';paint('未聽清楚，請再錄一次。');announce('未聽清楚，不會進行最後的發音評測。');return;}
     live?.finish();
     recording=wav;recordingURL=URL.createObjectURL(new Blob([wav.buffer],{type:'audio/wav'}));replay.src=recordingURL;state='review';paint('Recorded · '+wav.duration.toFixed(1)+' s');
@@ -2631,7 +2695,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     if(!recording||!snapshot||!['review','error'].includes(state))return;
     if(!service?.configured){openSettings();return;}
     if(consent!==service.provider){openConsent(submit);return;}
-    const ticket=generation,expectedProvider=service.provider;replay.pause();clearFeedback();setFocus(true);state='submitting';paint('Checking…');announce('正在評測。錄音與講稿會傳送到 '+providerName()+'。');
+    const ticket=generation,expectedProvider=service.provider;replay.pause();clearFeedback();setFocus(true);state='submitting';paint('已停止 · 評測中');announce('錄音已停止，麥克風已關閉。正在由 '+providerName()+' 提供發音回饋。');
     requestAbort=new AbortController();const controller=requestAbort,timeout=setTimeout(()=>controller.abort(),100000);
     try{
       const bytes=new Uint8Array(recording.buffer);let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));
@@ -2677,13 +2741,13 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   byId('speech-disconnect').onclick=async()=>{cancel({quiet:true});try{await connection.disconnect();consent='';await checkService();announce('已斷開評測服務。');}catch(e){panelError(e.message);}};
   connection.subscribe(link=>{service=link.status;if(!service?.configured&&link.mode==='cloud')consent='';syncSettings();});
   window.addEventListener('rewind:cuechange',()=>cancel({quiet:true}));
-  window.addEventListener('rewind:playrequest',()=>{replay.pause();if(['requesting','recording','submitting'].includes(state))cancel({quiet:true});});
-  window.addEventListener('rewind:panel',()=>{closeConsent();dismissTip();replay.pause();if(['requesting','recording','submitting'].includes(state))cancel({quiet:true});});
-  byId('caption').addEventListener('pointerdown',()=>{if(['requesting','recording','submitting'].includes(state))cancel({quiet:true});},true);
+  window.addEventListener('rewind:playrequest',()=>{replay.pause();if(['requesting','ready','recording','submitting'].includes(state))cancel({quiet:true});});
+  window.addEventListener('rewind:panel',()=>{closeConsent();dismissTip();replay.pause();if(['requesting','ready','recording','submitting'].includes(state))cancel({quiet:true});});
+  byId('caption').addEventListener('pointerdown',()=>{if(['requesting','ready','recording','submitting'].includes(state))cancel({quiet:true});},true);
   document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(!byId('speech-popover').hidden){e.preventDefault();e.stopImmediatePropagation();closeConsent();record.focus({preventScroll:true});return;}if(byId('drawer').hidden&&state!=='idle'){e.preventDefault();e.stopImmediatePropagation();cancel();}},true);
   window.addEventListener('pagehide',()=>cancel({quiet:true}));
-  document.addEventListener('visibilitychange',()=>{if(document.hidden&&['requesting','recording'].includes(state))cancel({quiet:true});});
-  window.rewindSpeech=Object.freeze({getState:()=>({state,configured:!!service?.configured,connectionVerified:!!service?.connection_verified,reference:snapshot?.text||'',hasRecording:!!recording,duration:recording?.duration||0,hasResult:!!result,generation,liveState,liveText,live:live?.getState()||null}),clear:cancel,openSettings,pcmWav,alignTranscript:RewindLiveProgress.align});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&['requesting','ready','recording'].includes(state))cancel({quiet:true});});
+  window.rewindSpeech=Object.freeze({getState:()=>({state,configured:!!service?.configured,connectionVerified:!!service?.connection_verified,reference:snapshot?.text||'',hasRecording:!!recording,duration:recording?.duration||0,recordingLimitSeconds:recordingLimit,hasResult:!!result,generation,liveState,liveText,live:live?.getState()||null}),clear:cancel,openSettings,pcmWav,alignTranscript:RewindLiveProgress.align});
   paint('');checkService();
 })();
 
