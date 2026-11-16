@@ -8,7 +8,7 @@ The included IN-SMART Cantonese practice has Traditional Chinese, Jyutping above
 
 ## Start practising
 
-Open the link in your browser. The included practice works without an AI connection. To use AI features, open **⋯ → Settings → Speech**, enter the private tester phrase supplied by the organiser in **Access code**, then press **Connect**. An invitation link can connect the same way.
+Open the link in your browser. The included practice works without an AI connection. To use AI features, open **⋯ → Settings → Speech → AI 回饋**, enter the private tester phrase supplied by the organiser in **Access code**, then press **Connect**. An invitation link can connect the same way.
 
 The hosted preview uses **Google Gemini**, with API costs covered by the organiser. Testers do not need a Google Cloud account or an API key. The connection is kept in the current browser tab; if it expires, reconnect with the tester phrase. Please keep the phrase private.
 
@@ -29,9 +29,11 @@ Click a character to hear from there, or drag across words to hear just that ran
 
 ## Practise with your voice
 
-Press **Record**. A small on-tape notice explains the active service and when audio will be sent. Allow microphone access, read the current phrase or selected words, then press again to stop. The recording window follows the selected example’s duration plus two seconds, up to 25 seconds. A soft ready cue and blinking text marker indicate when to begin; the cue respects mute. Stop immediately ends capture. Animated status dots and an inactive recording button indicate processing, so repeated clicks cannot cancel the result. Press Escape or navigate away to cancel deliberately.
+The first press of Record offers **AI 回饋** (AI feedback) or **只錄音對照** (record and compare). Rewind remembers this choice in the current browser; change it under **Settings → Speech**. AI mode opens the access-code field when disconnected (a service API key in the local companion). Record-and-compare mode works without AI and never uploads that attempt, even if a service is connected. Connecting alone never starts the microphone.
 
-When live recognition is available, the faint background behind characters tracks words the service appears to have heard. **This is provisional recognition, not a pronunciation verdict.** After you stop, an audio model evaluates the clip directly and returns experimental practice feedback:
+In AI mode, a small on-tape notice explains the active service and when audio will be sent. Allow microphone access, read the current phrase or selected words, then press again to stop. The recording window follows the selected example’s duration plus two seconds, up to 25 seconds. A soft ready cue and blinking text marker indicate when to begin; the cue respects mute. Stop immediately ends capture. Animated status dots and an inactive recording button indicate processing, so repeated clicks cannot cancel the result. Press Escape or navigate away to cancel deliberately.
+
+After the ready cue, a gentle highlight moves through the written characters at the demonstration’s pace and selected playback speed. It is a **rhythm guide, not speech recognition or a pronunciation verdict**. It does not wait for you or change the result if you fall behind. The guide ends before the two-second recording buffer (within the 25-second limit). Generated sessions may have estimated word timings. In AI mode, the clip is sent only after you stop, and the audio model returns experimental practice feedback:
 
 - **Teal text with a small filled round marker:** passed this attempt.
 - **A hollow round marker:** close; worth practising again.
@@ -39,7 +41,7 @@ When live recognition is available, the faint background behind characters track
 
 Jyutping stays neutral. Several characters in a word may share one judgment. The final feedback is **not a validated Cantonese tone assessment**, and a model can miss a wrong syllable or tone. No calibrated proficiency score is claimed.
 
-Without an AI connection, Record offers one action: **輸入存取碼** (Enter access code). It opens Speech with the code field focused. Successful connection returns to the cassette without starting the microphone; an invalid code stays on the form with one error message. Local companion users enter their service API key instead. Existing recordings are never sent automatically when you connect.
+After recording, **我的錄音** (My recording) appears on the cassette. Use it to play or pause your own voice; use the existing **Rewind** key to replay the demonstration. The two never play together, and same-phrase Rewind preserves your clip. This also works while AI feedback is pending. A new attempt, different phrase/range, session change or page close clears the previous clip.
 
 ## Make a tape from your script
 
@@ -61,7 +63,7 @@ Cancelled or failed creation leaves the draft and current tape intact. Review th
 
 - Ordinary playback and importing a prepared `.rewind.json` do not send the practice to an AI service.
 - TXT files are read in the browser. DOCX and PDF files go to the Rewind backend for text extraction. Pressing the conversion or narration button sends the relevant text to the displayed AI service.
-- Voice practice sends audio according to the on-tape notice: during recording for enabled live recognition, and after stopping for final feedback.
+- AI practice sends the recorded clip after stopping for final feedback. The rhythm guide runs locally; recording-comparison mode does not send audio.
 - Learner recordings are temporary in the current page and are cleared when you leave or clear the attempt. They are **not included** in exported practice files. Clearing the page does not undo audio already sent for processing.
 - Provider credentials stay on the backend. The public HTML contains no API key or tester phrase; only the temporary session token is stored in the current tab.
 
