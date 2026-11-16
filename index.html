@@ -554,7 +554,7 @@ body{--tape-w:min(960px,calc(100vw - 48px),calc((100dvh - 56px)*1.58));display:b
 #app .play-control #speech-listen.recording-fresh:not([aria-pressed=true]) .speech-listen-icon{animation:recording-ready 1.15s ease-in-out infinite}
 #app .play-control #speech-listen[aria-pressed=true] .speech-listen-icon{animation:none;transform:scale(1);filter:none}
 #app #speech-replay{color:var(--controlInk)}
-@keyframes recording-ready{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 transparent)}42%{transform:scale(var(--listen-peak,1.28));filter:drop-shadow(0 0 3px color-mix(in srgb,currentColor 50%,transparent))}}
+@keyframes recording-ready{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 transparent)}42%{transform:scale(var(--listen-peak,1.28));filter:drop-shadow(0 0 2px color-mix(in srgb,currentColor 45%,transparent))}}
 @keyframes recording-ready-reduced{0%,100%{opacity:1}50%{opacity:.45}}
 @media(prefers-reduced-motion:reduce){
  #app .play-control #speech-listen.recording-fresh:not([aria-pressed=true]) .speech-listen-icon{animation:recording-ready-reduced 1.15s ease-in-out infinite}
@@ -2930,11 +2930,17 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   record.addEventListener('click',prepare);
   byId('speech-clear').onclick=()=>{cancel();rewindPanels.close();};
   function fitPulse(button){
-    const play=byId('play'),icon=button.querySelector('.speech-listen-icon'),svg=icon?.querySelector('svg');
-    if(!play||!icon)return;
-    const playBox=play.getBoundingClientRect(),size=Math.max(svg?.offsetWidth||icon.offsetWidth,svg?.offsetHeight||icon.offsetHeight,1);
-    const limit=Math.min(playBox.width,playBox.height)*0.88;
-    icon.style.setProperty('--listen-peak',Math.max(1.08,limit/size).toFixed(3));
+    const playSvg=byId('play')?.querySelector('svg'),icon=button.querySelector('.speech-listen-icon'),svg=icon?.querySelector('svg');
+    if(!playSvg||!icon||!svg)return;
+    const span=el=>{const r=el.getBoundingClientRect();return Math.max(r.width,r.height);};
+    const playSize=span(playSvg);
+    let size=span(svg);
+    const current=parseFloat((getComputedStyle(icon).transform.match(/matrix\(([^,]+)/)||[])[1]||'1');
+    if(current>1)size/=current;
+    if(!(playSize>0)||!(size>0))return;
+    // Peak stays under the triangle above, and never more than twice the resting triangle.
+    const scale=Math.min(2,Math.max(1.08,playSize/size*0.9));
+    if(Number.isFinite(scale))icon.style.setProperty('--listen-peak',scale.toFixed(3));
   }
   function syncReplayAttention(){
     const button=byId('speech-listen');
