@@ -56,8 +56,21 @@ class FeedbackTests(unittest.TestCase):
         self.assertEqual(result['groups'][0]['reason'], 'different_or_unmatched_words')
 
     def test_low_score_requires_retry_despite_text_match(self):
-        result = build_feedback('聽', pa([('聽',73,'None')]), asr('聽'))
+        result = build_feedback('聽', pa([('聽',59,'None')]), asr('聽'))
         self.assertEqual(result['groups'][0]['state'], 'retry')
+
+    def test_close_requires_correct_word_and_middle_score(self):
+        for score, expected in [(59,'retry'),(60,'close'),(79,'close'),(80,'pass')]:
+            with self.subTest(score=score):
+                result=build_feedback('聽',pa([('聽',score,'None')]),asr('聽'))
+                self.assertEqual(result['groups'][0]['state'],expected)
+
+    def test_middle_score_wrong_word_or_explicit_error_is_not_close(self):
+        cases=[(asr('明'),'None','retry'),(asr('聽'),'Mispronunciation','retry'),(None,'None','uncertain')]
+        for recognition,error,expected in cases:
+            with self.subTest(error=error,recognition=recognition):
+                result=build_feedback('聽',pa([('聽',73,error)]),recognition)
+                self.assertEqual(result['groups'][0]['state'],expected)
 
     def test_omissions_do_not_block_later_words(self):
         result = build_feedback('我買書再睇', pa([('我',100,'None'),('買',0,'Omission'),('書',0,'Omission'),('再睇',91,'None')]), asr('我再睇'))

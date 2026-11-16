@@ -16,6 +16,19 @@ def model_reply(groups=None,language='cantonese',heard='聽日'):
 
 
 class OpenAIValidationTests(unittest.TestCase):
+    def test_close_is_separate_from_pass_without_invented_score(self):
+        group={'text':'聽日','start':0,'end':2,'state':'close','reason':'聽得清楚，可以再自然一點。'}
+        result=module.normalize_openai(model_reply(groups=[group]),'聽日')
+        self.assertEqual(result['groups'][0]['state'],'close')
+        self.assertIsNone(result['groups'][0]['score'])
+
+    def test_non_cantonese_or_unknown_cannot_be_marked_close(self):
+        group={'text':'聽日','start':0,'end':2,'state':'close','reason':''}
+        for language,expected in [('mandarin','retry'),('english','retry'),('other','retry'),('unknown','uncertain')]:
+            with self.subTest(language=language):
+                result=module.normalize_openai(model_reply(groups=[group],language=language),'聽日')
+                self.assertEqual(result['groups'][0]['state'],expected)
+
     def test_valid_direct_audio_coaching_has_no_numeric_score(self):
         result=module.normalize_openai(model_reply(),'聽日')
         self.assertEqual(result['provider'],'openai')

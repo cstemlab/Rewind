@@ -8,4 +8,8 @@
 
 The app uses TLS verification, the fixed official OpenAI websocket URL, no redirect following and no debug trace. Secrets remain in the local process and are not embedded in the frontend.
 
-Published source includes runtime modules and licenses; optional upstream test fixtures, command-line launcher, pip local-source metadata and wheel archive are omitted.
+## Document extraction added in r11
+
+`pypdf==6.21.4` is copied from the installed Codex bundled Python runtime package on 2026-11-16. Its package metadata identifies the official pure-Python pypdf project and BSD-3-Clause license. Source is unchanged; cache files and local installation URL metadata are excluded. Runtime packaging retains `vendor/pypdf/` and `vendor/pypdf-6.21.4.dist-info/licenses/LICENSE`, `METADATA` and `WHEEL`. The optional command-line entry points and installer bookkeeping are not required.
+
+The application configures an 8 MB Flate decoding bound and runs extraction in a short-lived, timeout-limited process. No source document or extracted text is written to disk by that process. No optional cryptography dependency is added: encrypted PDFs are rejected with a clear message.

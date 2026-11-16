@@ -368,8 +368,8 @@ body{--tape-w:min(960px,calc(100vw - 48px),calc((100dvh - 56px)*1.58));display:b
 @media(prefers-reduced-motion:reduce){#app .options-surface{transition:none}}
 
 /* One record key; temporary feedback stays on the lower printed label. */
-#app #speech-record{color:var(--controlInk);background:none;box-shadow:none}
-#app #speech-record:hover{color:var(--controlInk);background:none}
+#app #speech-record{color:var(--recordInk,#f18b77);background:none;box-shadow:none}
+#app #speech-record:hover{color:var(--recordInk,#f18b77);background:none}
 #app #speech-record circle:last-child{fill:var(--recordInk,#f18b77)}
 #app #speech-record[data-state="recording"],#app #speech-record[data-state="requesting"]{color:var(--recordInk,#f18b77)}
 #app #speech-record[data-state="submitting"]{color:var(--controlInk);opacity:.65}
@@ -449,7 +449,7 @@ body{--tape-w:min(960px,calc(100vw - 48px),calc((100dvh - 56px)*1.58));display:b
 #app .transport-row #speech-record{grid-column:5;grid-row:1}
 #app .transport-row #next{grid-column:6;grid-row:1}
 #app .transport-row #through{grid-column:7;grid-row:1}
-#app #speech-record svg{width:23px;height:23px}
+#app #speech-record svg{width:26px;height:26px}
 #app #practice-tip{position:absolute;left:auto;right:9%;top:58.25%;bottom:auto;width:auto;max-width:75%;z-index:8;display:flex;gap:8px;padding:2px 5px 2px 8px;border:1px solid color-mix(in srgb,var(--ink) 11%,var(--label));border-radius:5px;background:var(--label);box-shadow:0 2px 6px #0000000c;color:var(--muted);font:10px/1.2 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;white-space:nowrap}
 #app #dismiss-tip,#app .speech-popover-close{display:grid;place-items:center;width:16px;height:16px;min-width:16px;min-height:16px;padding:3px;background:none;color:var(--muted);border:0;border-radius:3px}
 #app #dismiss-tip svg,#app .speech-popover-close svg{display:block;width:10px;height:10px}
@@ -487,13 +487,215 @@ body{--tape-w:min(960px,calc(100vw - 48px),calc((100dvh - 56px)*1.58));display:b
  #app .caption .token .reading{min-height:10.5px;line-height:1.05}
  #app .mechanics{top:32%;height:26%}
  #app .transport-row{gap:0}
- #app #speech-record svg{width:19px;height:19px}
+ #app #speech-record svg{width:22px;height:22px}
 #app #practice-tip{top:58.25%;font-size:9px;line-height:10px;padding:1px 4px 1px 6px;gap:6px;border-radius:4px}
  #app #dismiss-tip{width:10px;height:10px;min-width:10px;min-height:10px;padding:1px}
  #app #dismiss-tip svg{width:8px;height:8px}
  #app .speech-popover{width:min(230px,calc(100% - 24px));padding:13px 15px 10px;font-size:11px;line-height:1.5;border-radius:9px}
  #app .speech-popover-footer span{font-size:9px}
  #app #speech-popover-start{font-size:11px}
+}
+
+/* A draft on the same paper label; it never changes the cassette's footprint. */
+#app .creator-sheet{padding:0 7px 12px;scrollbar-gutter:stable}
+.creator-heading,.creator-title-row,.creator-source-meta,.creator-action-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.creator-heading{font-size:10px;letter-spacing:.055em;color:var(--muted);margin:0 0 12px}
+.creator-view{display:flex;flex-direction:column;gap:9px}
+.creator-sheet [hidden]{display:none!important}
+#app .creator-sheet input:not([type=file]),#app .creator-sheet textarea{font-family:inherit;color:var(--ink);background:color-mix(in srgb,var(--label) 96%,var(--ink));border:1px solid color-mix(in srgb,var(--ink) 14%,transparent);box-shadow:none;border-radius:5px;padding:9px 11px;font-size:14px;line-height:1.65;min-width:0;width:100%;outline-offset:1px}
+#app .creator-sheet input:not([type=file]){padding:5px 0;border-width:0 0 1px;border-radius:0;background:none;font-weight:550}
+#app .creator-title-row input{flex:1}
+#app .creator-sheet textarea{min-height:94px;resize:vertical}
+.creator-source-meta{font-size:10px;color:var(--muted)}
+#creator-file-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%}
+.creator-file-button{display:grid;place-items:center;width:28px;height:28px;padding:3px;flex:none;color:var(--muted)}
+.creator-file-button svg{width:20px;height:20px}
+.creator-text-button{font:inherit;font-size:11px;color:var(--muted);background:none;padding:4px 2px;border:0;white-space:nowrap}
+.creator-text-button:hover,.creator-file-button:hover{color:var(--accent);background:none}
+.creator-modes{display:flex;width:max-content;border-radius:7px;background:color-mix(in srgb,var(--ink) 6%,var(--label));padding:3px;gap:3px}
+.creator-modes button{border-radius:5px;padding:5px 16px;font-size:12px;color:var(--muted)}
+.creator-modes button[aria-pressed=true]{background:var(--label);color:var(--ink);box-shadow:0 1px 2px #00000012}
+.creator-note{font-size:11px;line-height:1.55;color:var(--muted);margin:0;font-weight:400}
+.creator-action-row{margin-top:3px;align-items:center}
+.creator-action-row .creator-note{max-width:65%}
+.creator-primary{font:inherit;font-size:12px;line-height:1.4;white-space:nowrap;border-radius:6px;padding:8px 14px;background:var(--accent);color:var(--accentInk,#fff);font-weight:550;flex-shrink:0}
+.creator-primary:disabled{opacity:.45}
+.creator-progress-view,.creator-ready-view{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:170px;gap:10px;text-align:center;padding:12px 16px}
+.creator-progress-view p{font-size:13px;margin:0;max-width:100%;overflow-wrap:anywhere}
+.creator-progress-view progress{width:min(260px,80%);height:3px;accent-color:var(--accent)}
+.creator-spinner{width:24px;height:24px;border:2px solid color-mix(in srgb,var(--ink) 12%,transparent);border-top-color:var(--accent);border-radius:50%;animation:creator-spin 1s linear infinite}
+@keyframes creator-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.creator-spinner{animation:none;border-style:dotted}}
+.creator-ready-symbol svg{width:30px;height:30px;color:var(--accent)}
+.creator-ready-view h3{font-size:18px;font-weight:550;line-height:1.4;overflow-wrap:anywhere;margin:0}
+#creator-ready-meta{font-size:11px;color:var(--muted);margin:0}
+.creator-ready-view .creator-action-row{width:100%;margin-top:8px}
+.creator-error{font-size:12px;line-height:1.55;color:#a13b2f;margin:10px 0 0;overflow-wrap:anywhere}
+.creator-service-note{display:flex;align-items:center;gap:8px;font-size:11px;line-height:1.5;border-top:1px solid color-mix(in srgb,var(--ink) 12%,transparent);padding-top:9px;margin-top:11px;color:var(--muted)}
+.creator-service-note span{flex:1}
+.creator-service-note a{color:var(--accent);white-space:nowrap;text-decoration:none}
+.creator-service-note button{color:var(--accent)}
+#creator-warning{margin-top:9px}
+#app .library-actions{gap:14px}
+#app #create-button{color:var(--accent)}
+#app #tape-album{max-width:62%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:600px){#app .creator-sheet input:not([type=file]),#app .creator-sheet textarea{font-size:16px!important}}
+@media(max-width:900px){#app .creator-ready-view{min-height:0;gap:5px;padding:0 2px}#app .creator-ready-symbol,#app .creator-sheet[data-view=ready] .creator-heading{display:none}#app .creator-ready-view .creator-action-row{margin-top:3px}}
+@media(max-width:480px){#app .creator-ready-view{gap:1px}#app #creator-ready-meta{display:none}#app .creator-ready-view .creator-action-row{margin-top:0}}
+@media(max-width:600px){#app .creator-sheet{padding:0 3px 8px}.creator-heading{margin-bottom:7px;font-size:9px}.creator-view{gap:6px}#app .creator-sheet input:not([type=file]),#app .creator-sheet textarea{font-size:12px;line-height:1.6}.creator-action-row{gap:7px}.creator-action-row .creator-note{font-size:10px}.creator-primary{font-size:11px;padding:6px 9px}.creator-modes button{padding:4px 13px;font-size:11px}.creator-progress-view,.creator-ready-view{min-height:114px;padding:7px}.creator-ready-view h3{font-size:14px}.creator-note{font-size:10px}.creator-service-note{flex-wrap:wrap}.creator-service-note span{flex-basis:70%}}
+
+/* Rewind r11: plastic is a material, printed paper is a separate surface. */
+body #app .cassette[data-material]{background:var(--materialSurface);border-color:var(--materialSurface);box-shadow:0 9px 18px -13px #0005}
+#app .cassette[data-material]:before{content:"";display:block;position:absolute;inset:0;pointer-events:none;z-index:1;border:0;border-radius:inherit;background:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,#000 0 1px,transparent 1px 4px);opacity:.015}
+#app .cassette-internals{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:0;color:var(--materialInterior)}
+#app .cassette-internals svg{width:100%;height:100%;display:block;overflow:hidden}
+#app .cassette-internals .internal-frame{fill:none;stroke:currentColor;stroke-width:2;opacity:.38}
+#app .cassette-internals .internal-liner{fill:currentColor;opacity:.045}
+#app .cassette-internals .internal-tape{fill:none;stroke:#4a3c2b;stroke-width:9;opacity:.52}
+#app .cassette-internals .internal-guides{fill:color-mix(in srgb,var(--materialSurface) 85%,white);stroke:currentColor;stroke-width:2;opacity:.52}
+#app .cassette-internals .internal-bosses{fill:none;stroke:currentColor;stroke-width:3;opacity:.54}
+#app .cassette-internals .internal-pressure{fill:none;stroke:currentColor;stroke-width:3;opacity:.45}
+#app .cassette-internals .internal-pressure rect{fill:#433c2e;stroke:none}
+#app .cassette[data-material=smoke] .cassette-internals{opacity:.5}
+#app .cassette[data-material=clear] .cassette-internals{opacity:.9}
+#app .cassette[data-material=smoke]:before{opacity:.018}
+#app .cassette[data-material=clear]:before{opacity:.01}
+#app .cassette[data-material] .tape-label{z-index:2}
+#app .cassette[data-material] .mechanics{box-shadow:inset 0 1px 3px #0005,0 0 0 3px var(--materialSurface)}
+#app .cassette[data-material=smoke] .moulded-foot{background:color-mix(in srgb,var(--materialSurface) 74%,transparent);border-top:1px solid color-mix(in srgb,var(--materialInterior) 24%,transparent)}
+#app .cassette[data-material=clear] .moulded-foot{background:color-mix(in srgb,var(--materialSurface) 62%,transparent);border-top:1px solid color-mix(in srgb,var(--materialInterior) 28%,transparent)}
+#app .cassette[data-material] .screw{background:color-mix(in srgb,var(--materialSurface) 45%,#b4b7ab);border-color:color-mix(in srgb,var(--materialSurface) 85%,var(--materialInterior))}
+#app .cassette[data-material] .screw:after{background:color-mix(in srgb,var(--materialSurface) 30%,#41473d)}
+
+/* Saturated feedback also remains readable when the paper is dark. */
+#app .cassette[data-material] .token.speech-pass:not(.active),#app .cassette[data-material] .token.speech-pass:not(.active) .reading{color:var(--materialPass)}
+#app .cassette[data-material] .token.speech-pass:not(.active) .han{color:var(--materialPass);text-decoration-color:var(--materialPass)}
+#app .cassette[data-material] .token.speech-live:not(.speech-pass){color:#174d8a;background:#d8ebff}
+#app .cassette[data-material] .token.speech-live:not(.speech-pass) .reading{color:#174d8a}
+
+/* The writing strip remains plain and fully opaque in every material/pattern. */
+#app .cassette[data-custom-pattern]:not([data-custom-pattern=preset]) .label-art{inset:0;border:0;border-radius:0}
+#app .cassette[data-custom-pattern]:not([data-custom-pattern=preset]) .label-art i{display:none}
+#app .cassette[data-custom-pattern]:not([data-custom-pattern=preset]) .label-art:before{top:49%;height:38%;left:0;right:0;border:0;clip-path:none}
+#app .cassette[data-custom-pattern=plain] .label-art:before{background:none}
+#app .cassette[data-custom-pattern=ruled] .label-art:before{background:repeating-linear-gradient(0deg,var(--band1) 0 1px,transparent 1px 10px);border-top:2px solid var(--band2);border-bottom:2px solid var(--band3)}
+#app .cassette[data-custom-pattern=stripes] .label-art:before{background:linear-gradient(0deg,var(--band1) 0 29%,var(--label) 29% 35%,var(--band2) 35% 64%,var(--label) 64% 70%,var(--band3) 70%)}
+#app .cassette[data-custom-pattern=blocks] .label-art:before{background:linear-gradient(90deg,var(--band1) 0 30%,var(--band2) 30% 70%,var(--band3) 70%)}
+#app .cassette[data-custom-pattern=ruled] .label-art i:nth-child(1),#app .cassette[data-custom-pattern=stripes] .label-art i:nth-child(1),#app .cassette[data-custom-pattern=blocks] .label-art i:nth-child(1){display:block;left:0;right:0;top:0;height:3%;background:var(--band1);width:auto;bottom:auto;clip-path:none}
+
+#app #skin-filters[hidden]{display:none!important}
+#app .material-customizer{position:relative;max-width:620px;margin:0 auto;color:var(--ink)}
+#app .material-editor-top{position:absolute;right:0;top:11px;display:flex;align-items:center;justify-content:flex-end;color:var(--muted);font-size:11px;line-height:1.4;padding:0}
+#app #material-reset{width:22px;height:22px;padding:3px;color:var(--muted);background:none;border:0;border-radius:3px}
+#app #material-reset svg{width:15px;height:15px;fill:none}
+#app #material-reset:hover{color:var(--accent);background:none}
+#app .material-control{display:grid;grid-template-columns:75px minmax(0,1fr);align-items:center;gap:18px;min-height:44px;padding:7px 0;border-bottom:1px solid color-mix(in srgb,var(--ink) 9%,var(--label))}
+#app .material-label{font-size:12px;font-weight:500;color:var(--muted)}
+#app .material-choices{display:flex;gap:22px;align-items:center}
+#app .material-choice{display:flex;align-items:center;gap:7px;padding:4px 0;background:none;color:var(--muted);font-size:11px;line-height:1.2;border:0;border-radius:0}
+#app .material-choice[aria-pressed=true]{color:var(--ink)}
+#app .material-choice[aria-pressed=true]>span{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+#app .material-sample{display:flex;justify-content:space-between;align-items:center;position:relative;width:27px;height:18px;border:1px solid #4d5752;border-radius:3px;overflow:hidden;background:#3d4841}
+#app .material-sample span{width:7px;height:7px;display:block;border:1px solid #5c655f;border-radius:50%;margin:0 3px;opacity:0}
+#app .material-sample.smoke{background:#839189}
+#app .material-sample.smoke span{opacity:.5}
+#app .material-sample.clear{background:#b9c4ba}
+#app .material-sample.clear span{opacity:1;background:#ced7cb}
+#app .material-colors,#app .material-swatches{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+#app .material-colors{gap:15px}
+#app .material-swatch{position:relative;display:block;width:22px;min-width:22px;height:22px;padding:0;border-radius:50%;background:var(--swatch);border:1px solid color-mix(in srgb,var(--ink) 24%,var(--swatch));box-shadow:none}
+#app .material-swatch:hover{background:var(--swatch);box-shadow:0 0 0 2px var(--label),0 0 0 3px color-mix(in srgb,var(--ink) 25%,var(--label))}
+#app .material-swatch[aria-pressed=true]{box-shadow:0 0 0 2px var(--label),0 0 0 3px var(--ink)}
+#app .material-custom-color{position:relative;display:block;width:22px;height:22px;overflow:hidden;border:1px solid color-mix(in srgb,var(--ink) 30%,var(--label));border-radius:50%;background:var(--label);color:var(--ink);cursor:pointer}
+#app .material-custom-color input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;padding:0;border:0}
+#app .material-custom-color span{display:block;position:absolute;inset:0;text-align:center;font:16px/20px system-ui;pointer-events:none}
+#app .material-custom-color:focus-within{outline:1.5px solid var(--accent);outline-offset:3px}
+#app .material-patterns{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+#app .material-pattern{display:grid;justify-items:center;gap:2px;padding:2px 0;background:none;color:var(--muted);border:0;border-radius:0;min-width:33px}
+#app .material-pattern svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.3}
+#app .material-pattern span{font-size:9px;line-height:1.4}
+#app .material-pattern[aria-pressed=true]{color:var(--ink)}
+#app .material-pattern[aria-pressed=true] span{text-decoration:underline;text-underline-offset:3px}
+#app .material-print-inputs{display:flex;align-items:center;gap:20px}
+#app .material-print-inputs label{display:flex;align-items:center;gap:6px;cursor:pointer;color:var(--muted);font-size:9px;font-variant-numeric:tabular-nums}
+#app .material-print-inputs input[type=color]{display:block;width:24px;height:22px;border:0;padding:0;background:none;border-radius:3px;cursor:pointer}
+#app .material-print-inputs input[type=color]::-webkit-color-swatch-wrapper{padding:2px}
+#app .material-print-inputs input[type=color]::-webkit-color-swatch{border:1px solid color-mix(in srgb,var(--ink) 25%,var(--label));border-radius:3px}
+#app .material-presets{max-width:620px;margin:10px auto 0}
+#app .material-presets>summary{cursor:pointer;font-size:11px;color:var(--muted);list-style:none;padding:7px 0;display:flex;align-items:center;gap:7px}
+#app .material-presets>summary:before{content:"";width:5px;height:5px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(-45deg);transition:transform .12s}
+#app .material-presets[open]>summary:before{transform:rotate(45deg)}
+#app .material-presets>summary::-webkit-details-marker{display:none}
+#app .material-presets .skin-grid{padding-top:7px}
+#app .material-print-colors[hidden]{display:none}
+@media(max-width:700px){
+ #app .material-control{grid-template-columns:52px minmax(0,1fr);gap:10px;min-height:35px;padding:6px 0}
+ #app .material-editor-top{font-size:10px;top:6px;padding:0}
+ #app .material-label{font-size:10px}
+ #app .material-choices{gap:14px}
+ #app .material-choice{gap:4px;font-size:10px}
+ #app .material-sample{width:22px;height:15px}
+ #app .material-sample span{width:5px;height:5px;margin:0 2px}
+ #app .material-colors,#app .material-swatches{gap:8px}
+ #app .material-swatch{width:18px;min-width:18px;height:18px}
+ #app .material-custom-color{width:18px;height:18px}
+ #app .material-custom-color span{font-size:14px;line-height:16px}
+ #app .material-patterns{gap:12px}
+ #app .material-pattern{min-width:28px}
+ #app .material-pattern svg{width:20px;height:20px}
+ #app .material-pattern span{font-size:8px}
+ #app .material-print-inputs{gap:16px}
+ #app .material-presets{margin-top:5px}
+}
+@media(max-width:600px){#app .cassette[data-material] .mechanics{box-shadow:inset 0 1px 3px #0005}}
+@media(max-width:380px){
+ #app .material-choices{gap:9px}
+ #app .material-choice{font-size:9px;gap:3px}
+ #app .material-swatches{gap:7px}
+ #app .material-swatch{width:16px;min-width:16px;height:16px}
+ #app .material-patterns{gap:9px}
+}
+@media(prefers-reduced-motion:reduce){#app .material-presets>summary:before{transition:none}}
+
+/* Selection belongs to the written character, not its pronunciation guide. */
+#app .cassette .token.selected,#app .cassette .token.selected.active,#app .cassette .token.selected:hover{background:transparent;box-shadow:none;color:var(--ink)}
+#app .cassette .token .han{position:relative;isolation:isolate;min-width:1.04em;text-align:center}
+#app .cassette .token.selected .han:before{content:"";position:absolute;inset:0 -.015em;z-index:-1;border-radius:.14em;background:color-mix(in srgb,var(--accent) 12%,var(--label));border:1px solid color-mix(in srgb,var(--accent) 14%,var(--label));pointer-events:none}
+#app .cassette .token.selected.active .han:before{background:color-mix(in srgb,var(--accent) 22%,var(--label));border-color:color-mix(in srgb,var(--accent) 24%,var(--label))}
+#app .cassette .token.selected .reading,#app .cassette .token.selected.active .reading{color:var(--muted);font-weight:450;background:none;box-shadow:none}
+#app .cassette .token.selected.speech-pass:not(.active) .reading{color:var(--materialPass,#0866d9)}
+#app .cassette .token.selected.speech-pass:not(.active) .han{color:var(--materialPass,#0866d9)}
+#app .cassette .token.selected.speech-live:not(.speech-pass){background:transparent;box-shadow:none}
+#app .cassette .token.selected.speech-live:not(.speech-pass) .han:before{background:color-mix(in srgb,var(--materialPass,#0866d9) 12%,var(--label));border-color:color-mix(in srgb,var(--materialPass,#0866d9) 22%,var(--label))}
+#app .cassette #clear-selection{width:14px;min-width:14px;height:14px;min-height:14px;padding:2px;border:0;border-radius:3px;background:none;color:var(--muted);opacity:.85;box-shadow:none;z-index:6;transition:color 100ms,opacity 100ms}
+#app .cassette #clear-selection svg{width:10px;height:10px;display:block;fill:currentColor}
+#app .cassette #clear-selection:before{width:12px;height:12px;border-radius:2px;background:none}
+#app .cassette #clear-selection:hover{color:var(--ink);opacity:1;background:none;box-shadow:none;transform:none}
+#app .cassette #clear-selection:hover:before{background:none}
+#app .cassette #clear-selection:focus-visible{outline:1px solid var(--accent);outline-offset:2px}
+#app .cassette .caption[data-clear-gutter=true]{width:calc(100% - 18px)}
+@media(prefers-reduced-motion:reduce){#app .cassette #clear-selection{transition:none}}
+
+/* Quiet final assessment marks: filled = pass; hollow = close; no mark = other. */
+#app .cassette[data-material] .token.speech-pass,#app .cassette[data-material] .token.speech-close,#app .cassette[data-material] .token.speech-retry,#app .cassette[data-material] .token.speech-uncertain,#app .cassette[data-material] .token.speech-omitted{color:var(--ink)}
+#app .cassette[data-material] .token:is(.speech-pass,.speech-close,.speech-retry,.speech-uncertain,.speech-omitted) .han{color:inherit;text-decoration:none}
+#app .cassette[data-material] .token:is(.speech-pass,.speech-close,.speech-retry,.speech-uncertain,.speech-omitted,.speech-live) .reading{color:var(--muted);font-weight:450;background:none;text-decoration:none}
+#app .cassette[data-material] .token.speech-pass:not(.active) .han,#app .cassette[data-material] .token.speech-pass:not(.active) .reading{color:var(--materialPass,#367f94);text-decoration:none}
+#app .cassette[data-material] .token.speech-pass:not(.active) .reading{color:var(--muted)}
+#app .cassette[data-material] .token:is(.speech-pass,.speech-close) .han:after{content:"";position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);box-sizing:border-box;width:clamp(4.5px,.18em,6px);height:3.5px;border:1px solid var(--materialPass,#367f94);border-radius:1.2px;pointer-events:none}
+#app .cassette[data-material] .token.speech-pass .han:after{background:var(--materialPass,#367f94)}
+#app .cassette[data-material] .token.speech-close .han:after{background:transparent}
+#app .cassette[data-material] .token:is(.speech-retry,.speech-uncertain,.speech-omitted) .han:after{content:none}
+#app .cassette[data-material] .token.speech-live:not(.speech-pass):not(.speech-close){color:var(--ink);background:none;box-shadow:none}
+#app .cassette[data-material] .token.speech-live:not(.speech-pass):not(.speech-close) .han:before{content:"";position:absolute;inset:0;z-index:-1;background:color-mix(in srgb,var(--materialPass,#367f94) 8%,var(--label));border-radius:.14em;pointer-events:none}
+#app .cassette[data-material] .token.speech-live:not(.speech-pass):not(.speech-close) .han:after{content:none}
+#app .cassette[data-material] .token:is(.speech-pass,.speech-close,.speech-retry,.speech-uncertain,.speech-omitted).active:not(.selected) .han{color:var(--accentInk)}
+@media(prefers-contrast:more){#app .cassette[data-material] .token:is(.speech-pass,.speech-close) .han:after{height:4px;border-width:1.25px}}
+/* Reserve the mark's baseline on a phone without moving the fixed reel window. */
+@media(max-width:600px){
+ #app .cassette[data-material] .caption:has(.speech-pass,.speech-close) .token{padding-bottom:4px}
+ #app .cassette[data-material] .caption:has(.speech-pass,.speech-close) .han{font-size:calc(var(--zh-size)*.9);line-height:1.12}
+ #app .cassette[data-material] .caption:has(.speech-pass,.speech-close) .token.latin .han{font-size:calc(var(--zh-size)*.7)}
 }
 </style><!-- Phosphor Icons license
 MIT License
@@ -545,7 +747,7 @@ SOFTWARE.
         <input id="seek" class="range seek" type="range" min="0" max="1" step="0.01" value="0" aria-label="本段播放位置">
         <div class="transport-row">
           
-          <div class="transport"><button id="loop" class="icon-button" aria-label="循環播放這一段" title="循環播放這一段" aria-pressed="false"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M24,128A72.08,72.08,0,0,1,96,56H204.69L194.34,45.66a8,8,0,0,1,11.32-11.32l24,24a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L204.69,72H96a56.06,56.06,0,0,0-56,56,8,8,0,0,1-16,0Zm200-8a8,8,0,0,0-8,8,56.06,56.06,0,0,1-56,56H51.31l10.35-10.34a8,8,0,0,0-11.32-11.32l-24,24a8,8,0,0,0,0,11.32l24,24a8,8,0,0,0,11.32-11.32L51.31,200H160a72.08,72.08,0,0,0,72-72A8,8,0,0,0,224,120Z"/></svg></button><button id="previous" class="icon-button" aria-label="選擇上一段，不播放" title="Previous · no playback (←)"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M199.81,34a16,16,0,0,0-16.24.43L64,109.23V40a8,8,0,0,0-16,0V216a8,8,0,0,0,16,0V146.77l119.57,74.78A15.95,15.95,0,0,0,208,208.12V47.88A15.86,15.86,0,0,0,199.81,34ZM192,208,64.16,128,192,48.07Z"/></svg></button><button id="rewind" class="icon-button" aria-label="倒帶重播這一段" title="倒帶重播（R）"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M223.77,58a16,16,0,0,0-16.25.53L128,109.14V71.84A15.91,15.91,0,0,0,103.52,58.5L15.33,114.66a15.8,15.8,0,0,0,0,26.68l88.19,56.16A15.91,15.91,0,0,0,128,184.16v-37.3l79.52,50.64A15.91,15.91,0,0,0,232,184.16V71.84A15.83,15.83,0,0,0,223.77,58ZM112,183.93,24.18,128,112,72.06Zm104,0L128.18,128,216,72.06Z"/></svg></button><div class="play-control"><button id="play" class="play-button" aria-label="播放這一段" title="播放／暫停（空白鍵）" disabled><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></svg></button><span id="play-label" aria-hidden="true">播放</span></div><button id="speech-record" class="icon-button speech-record" aria-label="錄音練習" title="Record practice" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4.3"/></svg></button><button id="next" class="icon-button" aria-label="選擇下一段，不播放" title="Next · no playback (→)"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M200,32a8,8,0,0,0-8,8v69.23L72.43,34.45A15.95,15.95,0,0,0,48,47.88V208.12a16,16,0,0,0,24.43,13.43L192,146.77V216a8,8,0,0,0,16,0V40A8,8,0,0,0,200,32ZM64,207.93V48.05l127.84,80Z"/></svg></button></div>
+          <div class="transport"><button id="loop" class="icon-button" aria-label="循環播放這一段" title="循環播放這一段" aria-pressed="false"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M24,128A72.08,72.08,0,0,1,96,56H204.69L194.34,45.66a8,8,0,0,1,11.32-11.32l24,24a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L204.69,72H96a56.06,56.06,0,0,0-56,56,8,8,0,0,1-16,0Zm200-8a8,8,0,0,0-8,8,56.06,56.06,0,0,1-56,56H51.31l10.35-10.34a8,8,0,0,0-11.32-11.32l-24,24a8,8,0,0,0,0,11.32l24,24a8,8,0,0,0,11.32-11.32L51.31,200H160a72.08,72.08,0,0,0,72-72A8,8,0,0,0,224,120Z"/></svg></button><button id="previous" class="icon-button" aria-label="選擇上一段，不播放" title="Previous · no playback (←)"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M199.81,34a16,16,0,0,0-16.24.43L64,109.23V40a8,8,0,0,0-16,0V216a8,8,0,0,0,16,0V146.77l119.57,74.78A15.95,15.95,0,0,0,208,208.12V47.88A15.86,15.86,0,0,0,199.81,34ZM192,208,64.16,128,192,48.07Z"/></svg></button><button id="rewind" class="icon-button" aria-label="倒帶重播這一段" title="倒帶重播（R）"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M223.77,58a16,16,0,0,0-16.25.53L128,109.14V71.84A15.91,15.91,0,0,0,103.52,58.5L15.33,114.66a15.8,15.8,0,0,0,0,26.68l88.19,56.16A15.91,15.91,0,0,0,128,184.16v-37.3l79.52,50.64A15.91,15.91,0,0,0,232,184.16V71.84A15.83,15.83,0,0,0,223.77,58ZM112,183.93,24.18,128,112,72.06Zm104,0L128.18,128,216,72.06Z"/></svg></button><div class="play-control"><button id="play" class="play-button" aria-label="播放這一段" title="播放／暫停（空白鍵）" disabled><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></svg></button><span id="play-label" aria-hidden="true">播放</span></div><button id="speech-record" class="icon-button speech-record" aria-label="錄音練習" title="Record practice" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="12" cy="12" r="4.4"/></svg></button><button id="next" class="icon-button" aria-label="選擇下一段，不播放" title="Next · no playback (→)"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M200,32a8,8,0,0,0-8,8v69.23L72.43,34.45A15.95,15.95,0,0,0,48,47.88V208.12a16,16,0,0,0,24.43,13.43L192,146.77V216a8,8,0,0,0,16,0V40A8,8,0,0,0,200,32ZM64,207.93V48.05l127.84,80Z"/></svg></button></div>
           <div class="play-options"><button id="through" class="icon-button through-button" aria-label="連續通讀" title="連續通讀" aria-pressed="false"><span class="through-icon"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M223.77,58a16,16,0,0,0-16.25.53L128,109.14V71.84A15.91,15.91,0,0,0,103.52,58.5L15.33,114.66a15.8,15.8,0,0,0,0,26.68l88.19,56.16A15.91,15.91,0,0,0,128,184.16v-37.3l79.52,50.64A15.91,15.91,0,0,0,232,184.16V71.84A15.83,15.83,0,0,0,223.77,58ZM112,183.93,24.18,128,112,72.06Zm104,0L128.18,128,216,72.06Z"/></svg></span><span class="control-caption">通讀</span></button></div>
         </div>
       </section>
@@ -583,11 +785,33 @@ SOFTWARE.
 <p id="speech-service-note" class="speech-service-note">正在檢查連線…</p>
 <form id="speech-config" autocomplete="off" hidden><label for="speech-provider">Service</label><select id="speech-provider" name="provider" aria-label="Speech provider"><option value="azure">Azure Speech</option><option value="openai">OpenAI Audio · Experimental</option></select><label id="speech-region-label" for="speech-region">Region</label><input id="speech-region" name="region" type="text" spellcheck="false" autocapitalize="none" placeholder="eastasia" autocomplete="off" required maxlength="64"><label id="speech-key-label" for="speech-key">Speech key</label><input id="speech-key" name="speech-key" type="password" autocomplete="off" placeholder="Azure Speech resource key" required maxlength="1024"><button type="submit" class="speech-primary">Connect</button><p class="speech-footnote">密鑰只保留在本機服務的記憶體，關閉服務後清除。</p></form>
 <div id="speech-consent" hidden><p id="speech-disclosure" class="speech-disclosure">先錄音、回聽，再決定是否送出。送出時，這段錄音與文字會交給 Azure 做發音評測和字詞核對（兩次處理）。錄音只暫存在此頁，離開或清除後不保留。</p><button id="speech-start" class="speech-primary">開始錄音</button><p class="speech-footnote">每次最多 25 s。藍色表示這次練習足夠接近；不代表聲調已獨立驗證。</p></div>
-<div id="speech-details" hidden><div class="speech-actions"><button id="speech-replay" aria-label="回聽我的錄音" title="Listen back" hidden><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></svg></button><button id="speech-send" aria-label="傳送錄音到 Azure 評測" title="Assess with Azure" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-5 5 5-5 5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="speech-clear" aria-label="清除練習錄音和結果" title="Clear practice"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></div><p id="speech-detail-text"></p><p id="speech-recognized" class="speech-footnote"></p><p id="speech-legend" class="speech-footnote">淺藍：辨識進度（未評分）<br>鮮藍實線：已通過　琥珀底線：再練一次<br>灰色點線：未能確認。詞組可能共用一個分數。</p><p id="speech-cloud-note" class="speech-footnote">這是容錯練習提示，並非精確聲調診斷。</p><div class="speech-detail-actions"><button id="speech-again" class="speech-primary">再試一次</button><button id="speech-connect-from-review" class="speech-primary">Connect</button></div></div>
+<div id="speech-details" hidden><div class="speech-actions"><button id="speech-replay" aria-label="回聽我的錄音" title="Listen back" hidden><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></svg></button><button id="speech-send" aria-label="傳送錄音到 Azure 評測" title="Assess with Azure" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-5 5 5-5 5 5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="speech-clear" aria-label="清除練習錄音和結果" title="Clear practice"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></div><p id="speech-detail-text"></p><p id="speech-recognized" class="speech-footnote"></p><p id="speech-legend" class="speech-footnote">字後淡色：辨識進度，未評分。<br>實心小標記：已通過　空心：接近，可再練。<br>無標記：未通過或未確認。詞組可能共用回饋。</p><p id="speech-cloud-note" class="speech-footnote">這是容錯練習提示，並非精確聲調診斷。</p><div class="speech-detail-actions"><button id="speech-again" class="speech-primary">再試一次</button><button id="speech-connect-from-review" class="speech-primary">Connect</button></div></div>
 <p id="speech-panel-error" class="speech-panel-error" role="alert" hidden></p>
 </section>
 <section id="skins-dialog" class="insert-panel skin-sheet" data-panel="skins" aria-labelledby="skin-button" hidden><div class="insert-meta"><span id="skin-name"></span></div><div id="skin-filters" class="skin-filters"></div><div id="skin-grid" class="skin-grid"></div></section>
-  <section id="library-panel" class="insert-panel" data-panel="library" aria-label="Practice library" hidden><div class="library-actions"><button id="import" title="Load practice" aria-label="Load practice"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg><span>Import</span></button><button id="export" title="Export practice" aria-label="Export practice"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg><span>Export</span></button></div><div id="library"></div></section>
+  <section id="creator-panel" class="insert-panel creator-sheet" data-panel="creator" aria-label="Create a practice tape" hidden>
+  <div class="creator-heading"><span id="creator-step">01 · Script</span><button id="creator-reset" class="creator-text-button" title="Start a new draft">New draft</button></div>
+  <div id="creator-source-view" class="creator-view">
+    <div class="creator-title-row"><input id="creator-title" aria-label="Tape title" placeholder="Tape title" maxlength="120"><button id="creator-file-button" class="creator-file-button" aria-label="Import a script file" title="TXT · DOCX · PDF"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M245,110.64A16,16,0,0,0,232,104H216V88a16,16,0,0,0-16-16H130.67L102.94,51.2a16.14,16.14,0,0,0-9.6-3.2H40A16,16,0,0,0,24,64V208h0a8,8,0,0,0,8,8H211.1a8,8,0,0,0,7.59-5.47l28.49-85.47A16.05,16.05,0,0,0,245,110.64ZM93.34,64,123.2,86.4A8,8,0,0,0,128,88h72v16H69.77a16,16,0,0,0-15.18,10.94L40,158.7V64Zm112,136H43.1l26.67-80H232Z"/></svg></button></div>
+    <textarea id="creator-source" aria-label="Original script" placeholder="Paste or type your script…" maxlength="12000" spellcheck="false"></textarea>
+    <div class="creator-source-meta"><span id="creator-file-name">TXT · DOCX · PDF</span><span id="creator-count">0 / 12,000</span></div>
+    <div class="creator-modes" role="group" aria-label="Cantonese translation mode"><button id="creator-faithful" aria-pressed="true" data-mode="faithful">Faithful</button><button id="creator-beginner" aria-pressed="false" data-mode="beginner">Beginner</button></div>
+    <p id="creator-mode-note" class="creator-note">保留原意、細節與語氣，轉成自然粵語口語。</p>
+    <div class="creator-action-row"><p class="creator-note">文字會交給 OpenAI 轉換；下一步可先修改。</p><button id="creator-translate" class="creator-primary">轉成粵語</button></div>
+  </div>
+  <div id="creator-draft-view" class="creator-view" hidden>
+    <input id="creator-draft-title" aria-label="Cantonese tape title" placeholder="Tape title" maxlength="120">
+    <textarea id="creator-draft" aria-label="Review Cantonese script" spellcheck="false" maxlength="6000"></textarea>
+    <div class="creator-action-row"><button id="creator-edit-source" class="creator-text-button">原稿</button><span class="creator-note">可修改粵語稿，再製作 AI 示範錄音。</span><button id="creator-render" class="creator-primary">製作錄音</button></div>
+  </div>
+  <div id="creator-progress-view" class="creator-progress-view" hidden><span class="creator-spinner" aria-hidden="true"></span><p id="creator-progress-message" role="status">準備中…</p><progress id="creator-progress" max="1" value="0" aria-label="Creation progress"></progress><button id="creator-cancel" class="creator-text-button">Cancel</button></div>
+  <div id="creator-ready-view" class="creator-ready-view" hidden><span class="creator-ready-symbol" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48ZM80,192l12-16h72l12,16Zm144,0H196l-21.6-28.8A8,8,0,0,0,168,160H88a8,8,0,0,0-6.4,3.2L60,192H32V64H224V192ZM176,80H80a32,32,0,0,0,0,64h96a32,32,0,0,0,0-64ZM148.3,96a31.92,31.92,0,0,0,0,32H107.7a31.92,31.92,0,0,0,0-32ZM64,112a16,16,0,1,1,16,16A16,16,0,0,1,64,112Zm112,16a16,16,0,1,1,16-16A16,16,0,0,1,176,128Z"/></svg></span><h3 id="creator-ready-title"></h3><p id="creator-ready-meta"></p><p class="creator-note">AI 粵語示範 · 字詞時間為近似定位，可先聽一遍確認讀音。</p><div class="creator-action-row"><button id="creator-revise" class="creator-text-button">修改講稿</button><button id="creator-use" class="creator-primary">開始練習</button></div></div>
+  <p id="creator-warning" class="creator-note" role="status" hidden></p><p id="creator-error" class="creator-error" role="alert" hidden></p>
+  <div id="creator-service-note" class="creator-service-note" hidden><span id="creator-service-message"></span><button id="creator-connect" class="creator-text-button">Connect</button><a id="creator-local-guide" href="https://github.com/cstemlab/Rewind#online-and-local-use" target="_blank" rel="noopener" hidden>本機版設定</a></div>
+  <input id="creator-file" type="file" accept=".txt,.docx,.pdf,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
+</section>
+
+  <section id="library-panel" class="insert-panel" data-panel="library" aria-label="Practice library" hidden><div class="library-actions"><button id="create-button" title="Create from a script" aria-label="Create from a script"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg><span>New</span></button><button id="import" title="Load prepared practice" aria-label="Load practice"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M245,110.64A16,16,0,0,0,232,104H216V88a16,16,0,0,0-16-16H130.67L102.94,51.2a16.14,16.14,0,0,0-9.6-3.2H40A16,16,0,0,0,24,64V208h0a8,8,0,0,0,8,8H211.1a8,8,0,0,0,7.59-5.47l28.49-85.47A16.05,16.05,0,0,0,245,110.64ZM93.34,64,123.2,86.4A8,8,0,0,0,128,88h72v16H69.77a16,16,0,0,0-15.18,10.94L40,158.7V64Zm112,136H43.1l26.67-80H232Z"/></svg><span>Open</span></button><button id="export" title="Export practice" aria-label="Export practice"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg><span>Export</span></button></div><div id="library"></div></section>
   <section id="guide-dialog" class="insert-panel help-sheet" data-panel="help" aria-label="Help" hidden><div id="guide-content" class="guide-content">
 
 <p>聽一小段，停一停，再自己說一次。</p>
@@ -613,22 +837,27 @@ SOFTWARE.
 </ul>
 <h2>磁帶內的臨時選項</h2>
 <p>點貼紙右上角的 ⋯，選項會暫時出現在同一張貼紙內。磁帶的大小、比例和位置保持不變。打開時先暫停朗讀，關閉後不會自動繼續；按播放便可繼續。</p>
-<p>Chapters 是六個章節入口；Full script 顯示完整講稿，可搜尋。點章節或句子後會回到練習畫面，但不會自動播放。Short / Long 的選擇保持不變。</p>
-<p>Skin 可選擇 24 款原創卡帶設計；點選後立即套用並返回。Settings 可調整音量、語速、字體、按鍵音效及循環間隔。點選數值後返回；拖動滑桿時可先調整，放開後返回。鍵盤可用方向鍵調整滑桿，再按 Enter 完成。</p>
+<p>Chapters 顯示目前練習的章節；Full script 顯示完整講稿，可搜尋。點章節或句子後會回到練習畫面，但不會自動播放。Short / Long 的選擇保持不變。</p>
+<p>Skin 可分別調整塑料材質、外殼顏色、貼紙顏色、圖案及三種印刷色。Matte 隱藏內部結構，Smoked 和 Clear 顯示不同程度的帶輪、導帶和支架。Presets 保留 24 款完整設計。調整後點 × 返回練習，卡帶比例與帶輪位置保持不變。Settings 可調整音量、語速、字體、按鍵音效及循環間隔。點選數值後返回；拖動滑桿時可先調整，放開後返回。鍵盤可用方向鍵調整滑桿，再按 Enter 完成。</p>
 <p>選項內容較多時，只在貼紙內捲動。左上角的小箭頭回到選項目錄；右上角的 × 或 Esc 關閉。沒有自動消失的倒數計時。需要點字練習提示時，可在 Help 選 Selection tips。</p>
 <h2>錄音跟讀 · 試驗功能</h2>
 <p>播放鍵旁的圓點是錄音鍵。按一下開始，再按變成方形的同一個鍵停止；每次最多 25 s。預設練習目前短句；選取部分字詞後，也可以只練那一部分。切換內容、播放示範、離開頁面或按 Esc，會取消未完成的錄音或評測。</p>
 <p>還未連接雲端時，錄音只留在此頁，可在磁帶內的臨時選項回聽或清除，不會上傳，也不會顯示模擬分數。重新載入或離開此頁便會清除。</p>
 <p>在 ⋯ → Settings → Speech 選擇 Azure Speech 或 OpenAI Audio，並連接相應服務。密鑰只在本機服務記憶體內保留，關閉服務即清除，不會包含於分享的 HTML。Azure 帳戶登入本身不等於已有可使用的 Speech 資源；OpenAI API 也使用獨立的 API 服務。</p>
 <p>已連接後，第一次按錄音鍵會顯示靠近按鍵的小提示：Azure 在停止後分別作發音評測和獨立字詞核對；OpenAI 在錄音時即時接收音訊，辨識朗讀進度，停止後再由語音模型提供試驗回饋。確認後，同一頁內的下一次練習可直接按圓點開始、方形停止，不用反覆確認。連線前留下的錄音不會因為之後連線而自動送出。</p>
-<p>錄音時的淺藍底線只表示即時辨識到該段文字，尚未判斷發音正確。系統根據實際辨識文字對應原句；沒有聽到或未能確定的位置保留原色，後面讀出的部分仍可繼續對應。它不會跟計時器逐字變色。即時辨識不可用時仍可錄音，停止後取得最後的發音回饋。</p>
-<p>最後結果直接顯示在原來文字上：鮮藍字和實線表示本次字詞組已通過；琥珀底線提示再練；灰色點線表示未能確認或匹配。點下方的小結果摘要可以回聽或清除。摘要分開列出通過、待練和未能確認的組數。詞組可能共用回饋，不代表每字聲調都已獨立驗證。OpenAI Audio 沒有標準化發音分數；結果只供試驗，不是經校準的診斷。</p>
+<p>錄音時淡淡的字後色塊只表示即時辨識到該段文字，尚未判斷發音正確。系統根據實際辨識文字對應原句；沒有聽到或未能確定的位置保留原色，後面讀出的部分仍可繼續對應。它不會跟計時器逐字變色。即時辨識不可用時仍可錄音，停止後取得最後的發音回饋。</p>
+<p>最後結果直接顯示在原來文字上：清新的藍綠字與字下實心小標記表示本次字詞組已通過；空心小標記表示接近、可以再練；無標記表示未通過或未能確認。粵拼保持原色，文字沒有評測下划線。點下方的小結果摘要可以回聽或清除。摘要分開列出通過、接近、待練和未能確認的組數；懸停或輔助閱讀標籤提供細節。詞組可能共用回饋，不代表每字聲調都已獨立驗證。OpenAI Audio 沒有標準化發音分數；結果只供試驗，不是經校準的診斷。</p>
 <p>雲端回饋目前是本機試驗功能，需要「Open Rewind trial」程式。普通 HTML 仍可播放示範，麥克風是否可用視瀏覽器而定。公開網站和既有 Windows／Mac 安裝版本尚未包含本輪服務接入。</p>
 <h2>快捷鍵</h2>
 <p><kbd>空白鍵</kbd> 播放／暫停　<kbd>R</kbd> 倒帶　<kbd>←</kbd> 上一段　<kbd>→</kbd> 下一段</p>
 <h2>載入其他練習</h2>
-<p>IN-SMART 是內置的練習之一。在 Library 按 Import，可載入包含錄音、講稿、粵拼和時間資料的 <code>.rewind.json</code> 練習檔；也可匯出目前的練習，留待日後使用。</p>
-<p>載入的練習會保留在這次開啟的練習庫中，可在 Library 查看。重新開啟後，可再次載入。從任意講稿自動生成錄音、粵拼和時間標記，尚未包含在這個版本。</p>
+<p>IN-SMART 是內置的練習之一。在 Library 按 Open，可載入包含錄音、講稿、粵拼和時間資料的 <code>.rewind.json</code> 練習檔；也可匯出目前的練習，留待日後使用。</p>
+<p>載入的練習會保留在這次開啟的練習庫中，可在 Library 查看。重新開啟後，可再次載入。新練習製作完成後，也會保留在這次開啟的練習庫中。請用 Export 保存，重新開啟後可用 Open 載入。</p>
+<h2>從講稿製作新練習</h2>
+<p>在本機版先連接 OpenAI，然後打開 ⋯ → Library → New。可貼上或輸入簡體中文、繁體中文或英文，也可匯入 TXT、DOCX 或有文字層的 PDF。檔案上限 5 MB，原稿上限 12,000 字。舊式 DOC 請另存為 DOCX；掃描 PDF 請先作文字辨識。</p>
+<p>Faithful 保留原意、細節與語氣，轉成自然粵語口語；Beginner 保留重要內容，使用常見詞和短句。按「轉成粵語」後，稿件會傳送到 OpenAI。請檢查並修改返回的粵語稿，再按「製作錄音」。製作使用自己的 API 額度。</p>
+<p>錄音由 AI 生成，並非真人錄製。每句錄音長度會實測；句內的逐字與短句時間目前按字詞估算，點字或拖選時可能有切音誤差。粵拼與讀音也需人工核對。錄音完成後按「開始練習」才會替換目前磁帶；封面標題跟隨新稿，Rewind 標誌保持不變。原有練習仍可在 Library 找回。取消或失敗會保留原稿。</p>
+<p>GitHub 分享版可播放和匯入已製作的練習，不能直接使用本機 AI 服務。它不會要求填入公開可見的 API key。製作新練習需在電腦執行配套服務；完成後匯出一個 <code>.rewind.json</code> 檔，即可在分享版載入。</p>
 <h2>離線使用與分享</h2>
 <p><code>Rewind.html</code> 已包含錄音、講稿、粵拼、時間資料及這份說明。分享時只需傳送這一個檔案，對方下載後用瀏覽器開啟即可，不需要附上 Source 資料夾，也不需要連線。</p>
 <p>Windows 版可直接開啟 EXE。Mac 版請先解壓縮對應 Apple Silicon 或 Intel 的 ZIP，再開啟 Rewind.app。桌面版同樣內置播放器與練習內容。這些桌面套件未作開發者簽署；Mac 版未經 Apple 公證，亦未在 Mac 實機測試，系統可能阻止首次開啟。</p>
@@ -1475,6 +1704,20 @@ function sound(kind='click'){
   }catch{/* The speech player remains usable if an audio-effect context is unavailable. */}
 }
 
+function refineGeneratedPhrases(s){
+  if(s.source?.kind!=='ai-generated-practice')return s;
+  const phrases=[];let changed=false;
+  const spoken=p=>s.units.slice(p.from,p.to).reduce((n,u)=>n+Number(u.spoken),0);
+  for(const part of s.phrases){
+    const previous=phrases[phrases.length-1];
+    // Keep a split tail such as 合 / 作 together, without crossing a clause or sentence.
+    if(previous&&spoken(part)<=2&&previous.to===part.from&&previous.sentence===part.sentence&&previous.section===part.section&&spoken(previous)+spoken(part)<=12&&!/[，,。.!！？?；;：:、…]$/u.test(previous.text.trim())){
+      phrases[phrases.length-1]={...previous,to:part.to,end:part.end,text:previous.text+part.text};changed=true;
+    }else phrases.push({...part});
+  }
+  return changed?{...s,phrases,source:{...s.source,phrase_refinement:'joined-short-tails-within-clause; maximum-12-spoken-units'}}:s;
+}
+
 function validateSession(s){
   if(!s||s.format!=='rewind-session'||s.version!==1)throw Error('請選擇 Rewind 練習檔（.rewind.json）。');
   if(typeof s.title!=='string'||s.title.length>200||!Array.isArray(s.units)||s.units.length>50000||!s.units.length)throw Error('練習檔的文字格式不正確。');
@@ -1644,8 +1887,8 @@ function renderCue(){
   const [album,...subtitle]=session.title.split('·');
   $('tape-album').textContent=album.trim();$('tape-subtitle').textContent=subtitle.join('·').trim();
   $('tape-album').title=session.title;
-  document.querySelector('.tape-edition span').textContent=subtitle.join(' · ').trim();
-  $('tape-section').textContent=session.sections[g.section].title;
+  document.querySelector('.tape-edition span').textContent=subtitle.join(' · ').trim()||(session.source?.ai_voice?'AI · 粵語':'');
+  $('tape-section').textContent=session.sections[g.section].title.trim()===album.trim()?'':session.sections[g.section].title;
   $('section-title').textContent=session.sections[g.section].title;
   $('section-position').textContent=`第 ${g.section+1} 節 / ${session.sections.length}`;
   $('position').textContent=`${grain==='phrases'?'短句':'整句'} ${index+1} / ${groups().length}`;
@@ -1697,6 +1940,7 @@ function paintSelection(preview=null){
 }
 
 function positionSelectionClear(){
+  if(window.RewindSelection){window.RewindSelection.position();return;}
   if(!selection||$('clear-selection').hidden)return;
   const viewport=$('caption').getBoundingClientRect();
   const rects=tokenNodes.filter(t=>t.index>=selection.from&&t.index<selection.to).map(t=>t.element.getBoundingClientRect()).filter(r=>r.bottom>viewport.top+4&&r.top<viewport.bottom-4&&r.right>viewport.left&&r.left<viewport.right);
@@ -1787,12 +2031,12 @@ async function loadSession(candidate,{add=false}={}){
   const token=++loadGeneration;
   const oldPhase=phase;stopAction();phase='loading';updateStatus();error('');
   try{
-    const verified=validateSession(candidate),buffer=await decodeSession(verified);
-    if(token!==loadGeneration)return;
+    const verified=refineGeneratedPhrases(validateSession(candidate)),buffer=await decodeSession(verified);
+    if(token!==loadGeneration)return false;
     session=verified;decoded=buffer;grain='phrases';index=0;selection=null;phase='ready';
     if(add&&!library.includes(session))library.push(session);
-    renderLibrary();renderSections();activate(0);renderOutline();
-  }catch(e){if(token!==loadGeneration)return;phase=decoded?(oldPhase==='playing'||oldPhase==='rewinding'?'paused':oldPhase):'loading';updateStatus();error(e.message||'未能載入這份練習。');}
+    renderLibrary();renderSections();activate(0);renderOutline();return true;
+  }catch(e){if(token!==loadGeneration)return false;phase=decoded?(oldPhase==='playing'||oldPhase==='rewinding'?'paused':oldPhase):'loading';updateStatus();error(e.message||'未能載入這份練習。');return false;}
 }
 
 let activePanel='home', previousPanel='home';
@@ -1839,7 +2083,7 @@ function openPanel(name){
   const next=document.querySelector('.insert-panel[data-panel="'+name+'"]');if(!next)return;
   previousPanel=activePanel;activePanel=name;
   document.querySelectorAll('.insert-panel').forEach(p=>p.hidden=p!==next);
-  $('options-title').textContent=({home:'Options',chapters:'Chapters',script:'Full script',settings:'Settings',skins:'Skin',library:'Library',help:'Help',speech:'Speech'})[name];
+  $('options-title').textContent=({home:'Options',chapters:'Chapters',script:'Full script',settings:'Settings',skins:'Skin',library:'Library',help:'Help',speech:'Speech',creator:'New tape'})[name];
   $('options-back').hidden=name==='home';
   if(name==='script')renderOutline();
   setFocus(false);
@@ -1946,13 +2190,13 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  caption.dataset.flow=mobile?'horizontal':'wrap';caption.dataset.compact=String(!mobile&&whole);
  if(mobile){caption.style.setProperty('--zh-size','20px');caption.style.setProperty('--row-gap','0px');caption.dataset.scrollable=String(caption.scrollWidth>caption.clientWidth+1);return;}
  let size=Math.min(preferred,34),min=whole?16:22;caption.style.setProperty('--row-gap',whole?'0px':'2px');
- for(;size>=min;size--){caption.style.setProperty('--zh-size',size+'px');if(caption.scrollHeight<=caption.clientHeight+1&&caption.scrollWidth<=caption.clientWidth+1)break;}
+ for(;size>=min;size--){caption.style.setProperty('--zh-size',size+'px');if(caption.scrollHeight<=caption.clientHeight&&caption.scrollWidth<=caption.clientWidth+1)break;}
  if(size<min){
    // A readable horizontal line is preferable to tiny type or a clipped third row.
    caption.dataset.flow='horizontal';caption.dataset.compact='false';size=Math.min(preferred,24);
-   for(;size>=16;size--){caption.style.setProperty('--zh-size',size+'px');if(caption.scrollHeight<=caption.clientHeight+1)break;}
+   for(;size>=16;size--){caption.style.setProperty('--zh-size',size+'px');if(caption.scrollHeight<=caption.clientHeight)break;}
  }
- caption.dataset.scrollable=String(caption.scrollWidth>caption.clientWidth+1||caption.scrollHeight>caption.clientHeight+1);}
+ caption.dataset.scrollable=String(caption.scrollWidth>caption.clientWidth+1||caption.scrollHeight>caption.clientHeight);}
  function schedule(){if(!fitPending){fitPending=true;requestAnimationFrame(fit);}}
  new ResizeObserver(schedule).observe(caption);new MutationObserver(()=>{caption.scrollTop=0;caption.scrollLeft=0;schedule();}).observe(caption,{childList:true});document.getElementById('font-size').addEventListener('input',schedule);
  caption.addEventListener('wheel',e=>{if(caption.dataset.flow==='horizontal'&&caption.scrollWidth>caption.clientWidth){e.preventDefault();caption.scrollLeft+=e.deltaY+e.deltaX;}},{passive:false});
@@ -2001,11 +2245,11 @@ loadSession(defaultSession);requestAnimationFrame(frame);
       }}return Int16Array.from(out);},reset(){remaining=span;sum=0;}};
   }
   function summary(counts){
-    const pass=counts.pass||0,retry=counts.retry||0,uncertain=(counts.uncertain||0)+(counts.omitted||0),total=pass+retry+uncertain;
+    const pass=counts.pass||0,close=counts.close||0,retry=counts.retry||0,uncertain=(counts.uncertain||0)+(counts.omitted||0),total=pass+close+retry+uncertain;
     if(!total)return '未能確認 · 再試一次';
     if(pass===total)return `${pass} / ${total} 組已通過`;
     if(retry===total)return `${retry} 組需要重練`;
-    return [pass?`${pass} 組已通過`:'',retry?`${retry} 組待練`:'',uncertain?`${uncertain} 組未能確認`:''].filter(Boolean).join(' · ');
+    return [pass?`${pass} 組已通過`:'',close?`${close} 組接近`:'',retry?`${retry} 組待練`:'',uncertain?`${uncertain} 組未能確認`:''].filter(Boolean).join(' · ');
   }
   const api=Object.freeze({align,createResampler,summary});root.RewindLiveProgress=api;if(typeof module==='object'&&module.exports)module.exports=api;
 })(typeof globalThis==='object'?globalThis:this);
@@ -2070,7 +2314,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   const localToken='__LOCAL_TOKEN__', byId=id=>document.getElementById(id);
   const providerName=()=>service?.provider==='openai'?'OpenAI':'Azure';
   const record=byId('speech-record'), bar=byId('speech-bar'), replay=new Audio();
-  const recordSVG='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="4.3"/></svg>';
+  const recordSVG='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="12" cy="12" r="4.4"/></svg>';
   const stopSVG='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>';
   let state='idle', generation=0, service=null, consent='', snapshot=null, result=null;
   let stream=null, context=null, source=null, processor=null, muteNode=null, chunks=[],samples=0,sampleRate=0;
@@ -2078,7 +2322,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   let live=null,liveText='',liveState='off',consentAction=null;
   const originalLabels=new Map();
   const local=location.protocol==='http:'&&['127.0.0.1','localhost'].includes(location.hostname)&&!localToken.startsWith('__');
-  const names={pass:'已通過',retry:'再練一次',uncertain:'未能確認',omitted:'未能匹配'};
+  const names={pass:'已通過',close:'接近，再練一次',retry:'需要重練',uncertain:'未能確認',omitted:'未能匹配'};
   const seconds=()=>Math.min(25,(performance.now()-started)/1000);
   function announce(message){byId('speech-announcement').textContent=message;}
   function panelError(message=''){byId('speech-panel-error').textContent=message;byId('speech-panel-error').hidden=!message;}
@@ -2104,7 +2348,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     source=processor=muteNode=null;
   }
   function clearFeedback(){
-    for(const [node,old] of originalLabels){node.classList.remove('speech-pass','speech-retry','speech-uncertain','speech-omitted');node.title=old.title;node.setAttribute('aria-label',old.label);delete node.dataset.speechScore;delete node.dataset.speechGroup;}
+    for(const [node,old] of originalLabels){node.classList.remove('speech-pass','speech-close','speech-retry','speech-uncertain','speech-omitted');node.title=old.title;node.setAttribute('aria-label',old.label);delete node.dataset.speechScore;delete node.dataset.speechGroup;}
     originalLabels.clear();result=null;
   }
   function clearLive(){for(const entry of tokenNodes){entry.element.classList.remove('speech-live');delete entry.element.dataset.speechLive;}liveText='';}
@@ -2224,7 +2468,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     else{announce('錄音已停止。只存於此頁，可以回聽。尚未進行雲端評測。');showDetails();}
   }
   function paintResult(data){
-    endLive();clearFeedback();result=data;const chars=Array.from(snapshot.text),allowed=['pass','retry','uncertain','omitted'],counts={pass:0,retry:0,uncertain:0,omitted:0};let total=0;
+    endLive();clearFeedback();result=data;const chars=Array.from(snapshot.text),allowed=['pass','close','retry','uncertain','omitted'],counts={pass:0,close:0,retry:0,uncertain:0,omitted:0};let total=0;
     for(const group of Array.isArray(data.groups)?data.groups:[]){
       if(!Number.isInteger(group.start)||!Number.isInteger(group.end)||group.start<0||group.end<=group.start||group.end>chars.length)continue;
       if(group.text!==chars.slice(group.start,group.end).join(''))continue;
@@ -2232,12 +2476,13 @@ loadSession(defaultSession);requestAnimationFrame(frame);
       const score=Number.isFinite(group.score)?Math.max(0,Math.min(100,group.score)):null;
       const modelFeedback=data.provider==='openai'&&data.assessment_kind==='audio-coaching'&&data.experimental===true;
       if(status==='pass'&&!modelFeedback&&(score===null||score<80||data.crosscheck?.status!=='available'))status='uncertain';
+      if(status==='close'&&!modelFeedback&&(score===null||score<60||data.crosscheck?.status!=='available'||group.error_type==='Mispronunciation'))status='uncertain';
       const spans=snapshot.unitSpans.filter(s=>s.spoken&&s.start<group.end&&s.end>group.start);
       for(const span of spans){
         const entry=tokenNodes.find(t=>t.index===span.unit);if(!entry)continue;
         const complete=span.start>=group.start&&span.end<=group.end,mark=complete?status:'uncertain',node=entry.element;
         if(!originalLabels.has(node))originalLabels.set(node,{title:node.title,label:node.getAttribute('aria-label')||''});
-        node.classList.remove('speech-pass','speech-retry','speech-uncertain','speech-omitted');node.classList.add('speech-'+mark);
+        node.classList.remove('speech-pass','speech-close','speech-retry','speech-uncertain','speech-omitted');node.classList.add('speech-'+mark);
         const detail=`${group.text}${score===null?'':` · ${Math.round(score)}`} · ${names[mark]}${Array.from(group.text).length>1?'（詞組共同回饋）':''}${modelFeedback?' · 模型試驗判斷':''}${group.reason?' · '+group.reason:''}`;
         node.title=detail;node.setAttribute('aria-label',`${entry.unit.display} ${entry.unit.jyutping}；${detail}；點按可聽示範。`);node.dataset.speechGroup=group.text;if(score!==null)node.dataset.speechScore=String(score);
       }
@@ -2306,6 +2551,220 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&['requesting','recording'].includes(state))cancel({quiet:true});});
   window.rewindSpeech=Object.freeze({getState:()=>({state,configured:!!service?.configured,connectionVerified:!!service?.connection_verified,reference:snapshot?.text||'',hasRecording:!!recording,duration:recording?.duration||0,hasResult:!!result,generation,liveState,liveText,live:live?.getState()||null}),clear:cancel,openSettings,pcmWav,alignTranscript:RewindLiveProgress.align});
   paint('');checkService();
+})();
+
+/* Source → reviewed Cantonese → a prepared tape. All AI requests use the local companion. */
+(()=>{
+ const el=id=>document.getElementById(id),token='__LOCAL_TOKEN__';
+ const local=location.protocol==='http:'&&['127.0.0.1','localhost'].includes(location.hostname)&&!token.startsWith('__');
+ let mode='faithful',view='source',service=null,job=null,ticket=0,abort=null,pendingSession=null,busy=false,returnView='source';
+ const modes={faithful:'保留原意、細節與語氣，轉成自然粵語口語。',beginner:'保留原意和重要細節，用常用詞和較短句子表達。'};
+ const stages={queued:'等候處理…',translating:'轉成粵語口語…',planning:'整理粵拼與短句…',synthesizing:'製作粵語錄音…',assembling:'整理練習…'};
+ function error(message=''){el('creator-error').textContent=message;el('creator-error').hidden=!message;}
+ function warning(message=''){el('creator-warning').textContent=message;el('creator-warning').hidden=!message;}
+ function paint(next){view=next;el('creator-panel').dataset.view=next;for(const name of ['source','draft','progress','ready'])el('creator-'+name+'-view').hidden=name!==next;el('creator-step').textContent=({source:'01 · Script',draft:'02 · Cantonese',progress:'Making your tape',ready:'03 · Ready'})[next];el('creator-reset').hidden=next==='progress';if(next!=='source')el('creator-service-note').hidden=true;}
+ function count(){el('creator-count').textContent=Array.from(el('creator-source').value).length.toLocaleString('en')+' / 12,000';}
+ async function request(route,body,signal){
+   if(!local)throw Error('請開啟本機版製作練習；這裡貼上的稿件會保留。');
+   const res=await fetch(route,{method:'POST',headers:{'Content-Type':'application/json','X-Rewind-Token':token},body:JSON.stringify(body),signal});
+   let result;try{result=await res.json();}catch{throw Error('服務沒有返回可讀的結果。請稍後再試。');}
+   if(!res.ok)throw Error(result.error||'處理未完成。');return result;
+ }
+ function connectionNote(){
+   const available=local&&service?.configured&&service?.provider==='openai'&&service?.creator?.available;
+   el('creator-service-note').hidden=!!available;
+   el('creator-service-message').textContent=!local?'AI 製作需要本機配套服務。稿件不會從分享網頁送出。':service?.provider==='azure'&&service?.configured?'製作新練習需連接 OpenAI。現有錄音練習仍可使用 Azure。':'連接 OpenAI 後，即可製作新練習。';
+   el('creator-connect').hidden=!local;el('creator-local-guide').hidden=local;return available;
+ }
+ async function refresh(){if(local){try{const res=await fetch('/api/status',{cache:'no-store'});if(res.ok)service=await res.json();}catch{service=null;}}connectionNote();}
+ async function cancel(show=true){const old=job;ticket++;job=null;abort?.abort();abort=null;const was=busy;busy=false;if(old&&local)request('/api/creator/cancel',{job_id:old}).catch(()=>{});if(was){paint(returnView);if(show)warning('已取消；原稿和目前練習均保留。');}}
+ async function run(route,body,back){
+   if(busy)return;
+   const mine=++ticket;busy=true;returnView=back;error();warning();pendingSession=null;
+   abort=new AbortController();paint('progress');el('creator-progress-message').textContent='準備中…';el('creator-progress').removeAttribute('value');
+   try{
+     await refresh();if(mine!==ticket)return;
+     if(!connectionNote()){busy=false;abort=null;paint(back);connectionNote();error(local?'請先連接 OpenAI，再按一次製作。':'請使用本機配套服務製作；完成的練習可以匯入分享版。');return;}
+     // Keep the short start request alive so cancellation can dispose its eventual job ID.
+     const started=await request(route,{...body,consent:true});
+     if(mine!==ticket){if(started.job_id)request('/api/creator/cancel',{job_id:started.job_id}).catch(()=>{});return;}
+     if(!started.job_id)throw Error('服務未建立製作工作。');job=started.job_id;
+     while(mine===ticket){
+       const status=await request('/api/creator/status',{job_id:job},abort.signal);if(mine!==ticket)return;
+       el('creator-progress-message').textContent=status.message||stages[status.stage]||'處理中…';
+       if(status.total>0){el('creator-progress').max=status.total;el('creator-progress').value=Math.max(0,status.completed||0);}
+       if(status.state==='completed'){
+         const result=status.result||status;busy=false;job=null;abort=null;
+         if(result.draft){const draft=result.draft;el('creator-draft-title').value=draft.title||el('creator-title').value;el('creator-draft').value=draft.text||'';paint('draft');}
+         else if(result.session){pendingSession=refineGeneratedPhrases(validateSession(result.session));el('creator-ready-title').textContent=pendingSession.title;el('creator-ready-meta').textContent=`${pendingSession.sentences.length} 句 · ${pendingSession.phrases.length} 小段 · ${stamp(pendingSession.duration||0)}`;paint('ready');}
+         else throw Error('製作結果不完整，尚未更換目前練習。');return;
+       }
+       if(status.state==='failed')throw Error(typeof status.error==='string'?status.error:status.error?.message||'製作未完成，原稿仍保留。');
+       if(status.state==='cancelled')throw Error('製作已取消，原稿仍保留。');
+       await new Promise(resolve=>setTimeout(resolve,700));
+     }
+   }catch(e){if(mine!==ticket||e.name==='AbortError')return;busy=false;job=null;abort=null;paint(back);error(e.message);}
+ }
+ function base64(bytes){let out='';for(let i=0;i<bytes.length;i+=32768)out+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(out);}
+ async function readTextFile(file){const bytes=new Uint8Array(await file.arrayBuffer());let encoding='utf-8';if(bytes[0]===255&&bytes[1]===254)encoding='utf-16le';else if(bytes[0]===254&&bytes[1]===255)encoding='utf-16be';return new TextDecoder(encoding,{fatal:true}).decode(bytes).replace(/^\uFEFF/,'');}
+ el('create-button').onclick=()=>{rewindPanels.open('creator');};
+ el('creator-source').addEventListener('input',count);
+ for(const button of el('creator-panel').querySelectorAll('[data-mode]'))button.onclick=()=>{mode=button.dataset.mode;for(const item of el('creator-panel').querySelectorAll('[data-mode]'))item.setAttribute('aria-pressed',String(item===button));el('creator-mode-note').textContent=modes[mode];};
+ el('creator-file-button').onclick=()=>el('creator-file').click();
+ el('creator-file').onchange=async e=>{
+   const file=e.target.files?.[0];e.target.value='';if(!file)return;error();warning();
+   const mine=++ticket;const button=el('creator-file-button');button.disabled=true;
+   try{
+     if(file.size>5000000)throw Error('請使用小於 5 MB 的講稿檔。');
+     const ext=file.name.split('.').pop().toLowerCase();if(!['txt','docx','pdf'].includes(ext))throw Error('請選擇 TXT、DOCX 或 PDF；舊式 DOC 請先另存為 DOCX。');
+     let result;if(ext==='txt')result={text:await readTextFile(file),title:file.name.replace(/\.txt$/i,''),warnings:[]};
+     else result=await request('/api/creator/extract',{filename:file.name,data:base64(new Uint8Array(await file.arrayBuffer()))});
+     if(mine!==ticket)return;if(!result.text?.trim())throw Error('沒有找到可讀文字；掃描頁面請先轉成文字。');if(Array.from(result.text).length>12000)throw Error('講稿超過 12,000 字，請分成幾份；沒有截斷或替換目前內容。');
+     el('creator-source').value=result.text;el('creator-title').value=(result.title||file.name).slice(0,120);el('creator-file-name').textContent=file.name;count();warning((result.warnings||[]).join(' '));
+   }catch(err){if(mine===ticket)error(err instanceof TypeError?'無法讀取檔案，請另存為 UTF-8 文字再試。':err.message);}finally{button.disabled=false;}
+ };
+ el('creator-translate').onclick=()=>{const text=el('creator-source').value.trim();if(!text){error('請先貼上或匯入講稿。');el('creator-source').focus();return;}run('/api/creator/translate',{text,title:el('creator-title').value.trim(),mode},'source');};
+ el('creator-render').onclick=()=>{const text=el('creator-draft').value.trim();if(!text){error('請先填寫粵語講稿。');return;}run('/api/creator/render',{draft:{title:el('creator-draft-title').value.trim(),text,mode}},'draft');};
+ el('creator-edit-source').onclick=()=>{error();warning();paint('source');connectionNote();};
+ el('creator-revise').onclick=()=>{pendingSession=null;paint('draft');};
+ el('creator-cancel').onclick=()=>cancel();
+ el('creator-reset').onclick=async()=>{await cancel(false);pendingSession=null;error();warning();el('creator-source').value='';el('creator-title').value='';el('creator-draft').value='';el('creator-draft-title').value='';el('creator-file-name').textContent='TXT · DOCX · PDF';count();paint('source');connectionNote();};
+ el('creator-connect').onclick=()=>rewindSpeech.openSettings();
+ el('creator-use').onclick=async()=>{if(!pendingSession)return;error();const candidate=pendingSession;el('creator-use').disabled=true;try{const loaded=await loadSession(candidate,{add:true});if(loaded){pendingSession=null;setFocus(true);}else error('這份練習未能載入，原練習保持不變。');}finally{el('creator-use').disabled=false;}};
+ window.addEventListener('rewind:panel',e=>{if(e.detail==='creator'){refresh();}else if(busy)cancel(false);});
+ new MutationObserver(()=>{if(el('drawer').hidden&&busy)cancel(false);}).observe(el('drawer'),{attributes:true,attributeFilter:['hidden']});
+ window.addEventListener('pagehide',()=>cancel(false));
+ window.rewindCreator=Object.freeze({getState:()=>({mode,view,busy,hasDraft:!!el('creator-draft').value,hasSession:!!pendingSession,local,job}),open:()=>rewindPanels.open('creator')});
+ paint('source');count();connectionNote();
+})();
+
+/* Independent cassette shell, paper and printed artwork. No player geometry is changed. */
+(()=>{
+ 'use strict';
+ const root=document.documentElement,cassette=document.getElementById('cassette'),panel=document.getElementById('skins-dialog'),grid=document.getElementById('skin-grid'),label=cassette?.querySelector('.label-surface');
+ if(!root||!cassette||!panel||!grid||!label||!window.rewindTheme)return;
+ const STORAGE='rewind-materials-v1',materials=['matte','smoke','clear'],patterns=['preset','plain','ruled','stripes','blocks'];
+ const hex=x=>typeof x==='string'&&/^#[0-9a-f]{6}$/i.test(x);
+ const rgb=x=>x.slice(1).match(/../g).map(n=>parseInt(n,16));
+ const color=x=>'#'+x.map(n=>Math.max(0,Math.min(255,Math.round(n))).toString(16).padStart(2,'0')).join('');
+ const mix=(a,b,amount)=>color(rgb(a).map((v,i)=>v*amount+rgb(b)[i]*(1-amount)));
+ const lum=x=>rgb(x).map(v=>{v/=255;return v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4);}).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);
+ const contrast=(a,b)=>(Math.max(lum(a),lum(b))+.05)/(Math.min(lum(a),lum(b))+.05);
+ const inkFor=bg=>{const preferred=contrast('#252b29',bg)>=contrast('#fbfaf4',bg)?'#252b29':'#fbfaf4';return contrast(preferred,bg)>=4.5?preferred:(contrast('#000000',bg)>contrast('#ffffff',bg)?'#000000':'#ffffff');};
+ const mutedFor=(ink,bg)=>{let result=mix(ink,bg,.78);for(let i=0;contrast(result,bg)<4.5&&i<20;i++)result=mix(result,ink,.7);return contrast(result,bg)>=4.5?result:ink;};
+ const accentFor=(preferred,bg)=>{
+   let result=preferred;const target=inkFor(bg);
+   for(let i=0;contrast(result,bg)<4.5&&i<20;i++)result=mix(result,target,.82);
+   return contrast(result,bg)>=4.5?result:target;
+ };
+ function validate(input){
+   if(!input||input.version!==1||!materials.includes(input.material)||!patterns.includes(input.pattern)||!hex(input.caseColor)||!hex(input.stickerColor)||!Array.isArray(input.bands)||input.bands.length!==3||!input.bands.every(hex)||!REWIND_SKINS.some(s=>s.id===input.presetId))return null;
+   return {version:1,material:input.material,caseColor:input.caseColor.toLowerCase(),stickerColor:input.stickerColor.toLowerCase(),pattern:input.pattern,bands:input.bands.map(x=>x.toLowerCase()),presetId:input.presetId};
+ }
+ function fromPreset(id){const s=REWIND_SKINS.find(s=>s.id===id)||REWIND_SKINS[0];return {version:1,material:s.transparent?'clear':'matte',caseColor:s.colors.shell.toLowerCase(),stickerColor:s.colors.label.toLowerCase(),pattern:'preset',bands:[s.artwork.band1,s.artwork.band2,s.artwork.band3].map(x=>x.toLowerCase()),presetId:s.id};}
+ let state=fromPreset(window.rewindTheme.get());
+ try{const saved=validate(JSON.parse(localStorage.getItem(STORAGE)));if(saved){window.rewindTheme.apply(saved.presetId);state=saved;}}catch{}
+
+ const internals=document.createElement('div');internals.className='cassette-internals';internals.setAttribute('aria-hidden','true');
+ // Physical reference: NAC shell chart + opened Memorex photograph (see Material references r11.md).
+ // Two corner guide rollers and a straight lower tape run; the central piece is a pressure pad, not a third wheel.
+ internals.innerHTML=`<svg viewBox="0 0 1000 633" preserveAspectRatio="none">
+ <g class="internal-liner"><path d="M54 73 108 43H892L946 73V493H54Z"/></g>
+ <g class="internal-frame"><path d="M56 60H128V24M944 60H872V24M39 84V501M961 84V501M56 488H944M63 499H937"/><path d="M53 56 76 72H122L139 58M947 56 924 72H878L861 58M45 505 66 529M955 505 934 529"/><path d="M169 523 153 583M831 523 847 583M203 568V591M797 568V591M315 560V589M685 560V589"/><path d="M190 576H810M190 580H810"/></g>
+ <g class="internal-tape"><path d="M207 369 99 534Q86 565 116 579H884Q914 565 901 534L793 369"/></g>
+ <g class="internal-guides"><circle cx="111" cy="551" r="27"/><circle cx="889" cy="551" r="27"/><circle cx="111" cy="551" r="7"/><circle cx="889" cy="551" r="7"/></g>
+ <g class="internal-pressure"><path d="M431 574V556H569V574"/><path d="M451 577H549"/><rect x="478" y="567" width="44" height="13" rx="2"/></g>
+ <g class="internal-bosses"><circle cx="28" cy="27" r="20"/><circle cx="972" cy="27" r="20"/><circle cx="28" cy="606" r="20"/><circle cx="972" cy="606" r="20"/><path d="M28 47 51 70M972 47 949 70M28 586 54 560M972 586 946 560"/></g></svg>`;
+ cassette.insertBefore(internals,cassette.firstChild);
+ const editor=document.createElement('div');editor.id='material-customizer';editor.className='material-customizer';
+ editor.innerHTML=`<div class="material-editor-top"><button id="material-reset" title="Reset to preset" aria-label="Reset appearance to preset"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11a8 8 0 1 1 1.8 6M4 5v6h6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+ <div class="material-control"><span id="material-label" class="material-label">Material</span><div id="material-row" class="material-choices" role="group" aria-labelledby="material-label"></div></div>
+ <div class="material-control"><label class="material-label" for="case-color">Case</label><div class="material-colors"><div id="case-swatches" class="material-swatches" role="group" aria-label="Case colors"></div><label class="material-custom-color" title="Custom case color"><input id="case-color" type="color" aria-label="Custom case color"><span aria-hidden="true">+</span></label></div></div>
+ <div class="material-control"><label class="material-label" for="sticker-color">Sticker</label><div class="material-colors"><div id="sticker-swatches" class="material-swatches" role="group" aria-label="Sticker colors"></div><label class="material-custom-color" title="Custom sticker color"><input id="sticker-color" type="color" aria-label="Custom sticker color"><span aria-hidden="true">+</span></label></div></div>
+ <div class="material-control"><span id="pattern-label" class="material-label">Pattern</span><div id="pattern-row" class="material-patterns" role="group" aria-labelledby="pattern-label"></div></div>
+ <div id="pattern-colors-row" class="material-control material-print-colors"><span class="material-label">Print</span><div class="material-print-inputs"><label title="First print color"><input id="pattern-color-1" type="color" aria-label="First print color"><span>01</span></label><label title="Second print color"><input id="pattern-color-2" type="color" aria-label="Second print color"><span>02</span></label><label title="Third print color"><input id="pattern-color-3" type="color" aria-label="Third print color"><span>03</span></label></div></div>
+ <span id="material-announcement" class="sr-only" role="status" aria-live="polite"></span>`;
+ const oldFilters=document.getElementById('skin-filters');if(oldFilters)oldFilters.hidden=true;
+ panel.insertBefore(editor,grid);
+ const presets=document.createElement('details');presets.id='material-presets';presets.className='material-presets';const summary=document.createElement('summary');summary.textContent='Presets';presets.append(summary);grid.before(presets);presets.append(grid);
+ const names={matte:'Matte',smoke:'Smoked',clear:'Clear',preset:'Original',plain:'Plain',ruled:'Ruled',stripes:'Stripes',blocks:'Blocks'};
+ materials.forEach(m=>{const b=document.createElement('button');b.type='button';b.dataset.material=m;b.setAttribute('aria-label',names[m]+' plastic');b.className='material-choice';b.innerHTML=`<i class="material-sample ${m}" aria-hidden="true"><span></span><span></span></i><span>${names[m]}</span>`;b.onclick=()=>set({material:m});document.getElementById('material-row').append(b);});
+ const motifs={preset:'<path d="M3 5h18M3 18h18"/>',plain:'<path d="M4 4h16v16H4Z"/>',ruled:'<path d="M4 6h16M4 12h16M4 18h16"/>',stripes:'<path stroke-width="3.5" d="M3 8h18M3 16h18"/>',blocks:'<path d="M3 5h11v7H3zM14 12h7v7h-7z"/>'};
+ patterns.forEach(p=>{const b=document.createElement('button');b.type='button';b.dataset.pattern=p;b.className='material-pattern';b.setAttribute('aria-label',names[p]+' pattern');b.title=names[p];b.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true">${motifs[p]}</svg><span>${names[p]}</span>`;b.onclick=()=>set({pattern:p});document.getElementById('pattern-row').append(b);});
+ const palettes={caseColor:[['Graphite','#282a29'],['Ivory','#e6e2d8'],['Navy','#344b58'],['Forest','#4b6255'],['Wine','#713e43'],['Amber','#be9452'],['Lilac','#a59bb3'],['Mist','#acc3c0']],stickerColor:[['Warm paper','#f8f4e7'],['White','#fffefd'],['Cream','#f5e6bd'],['Mint','#deece1'],['Blue','#e0eaf1'],['Blush','#f2ded8'],['Lilac','#e7e0ee'],['Ink','#303b41']]};
+ function swatches(field,id){palettes[field].forEach(([name,value])=>{const b=document.createElement('button');b.type='button';b.className='material-swatch';b.dataset.color=value;b.dataset.colorField=field;b.style.setProperty('--swatch',value);b.setAttribute('aria-label',name+(field==='caseColor'?' case':' sticker'));b.title=name;b.onclick=()=>set({[field]:value});document.getElementById(id).append(b);});}
+ swatches('caseColor','case-swatches');swatches('stickerColor','sticker-swatches');
+ document.getElementById('case-color').addEventListener('input',e=>set({caseColor:e.target.value},false));document.getElementById('sticker-color').addEventListener('input',e=>set({stickerColor:e.target.value},false));
+ for(let i=0;i<3;i++)document.getElementById('pattern-color-'+(i+1)).addEventListener('input',e=>{const bands=[...state.bands];bands[i]=e.target.value;set({bands},false);});
+ document.getElementById('material-reset').onclick=()=>reset();
+ function render(){
+   editor.querySelectorAll('[data-material]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.material===state.material)));
+   editor.querySelectorAll('[data-pattern]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pattern===state.pattern)));
+   editor.querySelectorAll('[data-color-field]').forEach(b=>b.setAttribute('aria-pressed',String(state[b.dataset.colorField]===b.dataset.color)));
+   document.getElementById('case-color').value=state.caseColor;document.getElementById('sticker-color').value=state.stickerColor;
+   for(let i=0;i<3;i++)document.getElementById('pattern-color-'+(i+1)).value=state.bands[i];
+   document.getElementById('pattern-colors-row').hidden=state.pattern==='plain';
+   editor.querySelectorAll('.material-custom-color').forEach(l=>l.style.setProperty('--swatch',l.querySelector('input').value));
+ }
+ function apply(){
+   const ink=inkFor(state.stickerColor),page=mix(state.caseColor,'#f4f0e7',.09),shellSurface=state.material==='matte'?state.caseColor:mix(state.caseColor,page,state.material==='smoke'?.76:.37),controlInk=inkFor(shellSurface),accent=accentFor(state.bands[0],state.stickerColor);
+   const passBlue=accentFor(lum(ink)<.5?'#367f94':'#7ac5cd',state.stickerColor);
+   const props={shell:state.caseColor,shellDark:mix(state.caseColor,'#101412',.72),label:state.stickerColor,ink,muted:mutedFor(ink,state.stickerColor),page,panel:state.stickerColor,panelText:ink,line:mix(ink,state.stickerColor,.18),accent,accentInk:inkFor(accent),controlInk,recordInk:accentFor(lum(controlInk)<.5?'#a32624':'#f18b77',shellSurface),materialSurface:shellSurface,materialInterior:inkFor(shellSurface),materialEdge:mix(shellSurface,inkFor(shellSurface),.75),materialPass:passBlue};
+   Object.entries(props).forEach(([k,v])=>root.style.setProperty('--'+k,v));state.bands.forEach((c,i)=>{root.style.setProperty('--band'+(i+1),c);label.style.setProperty('--band'+(i+1),c);});root.style.setProperty('--labelFrame',state.bands[0]);label.style.setProperty('--labelFrame',state.bands[0]);
+   cassette.dataset.material=state.material;cassette.dataset.customPattern=state.pattern;document.body.dataset.material=state.material;document.body.dataset.transparent=String(state.material!=='matte');
+   try{localStorage.setItem(STORAGE,JSON.stringify(state));}catch{}
+   render();window.dispatchEvent(new CustomEvent('rewind:materialchange',{detail:{...state,bands:[...state.bands]}}));
+ }
+ function set(patch,announce=true){const candidate=validate({...state,...patch});if(!candidate)return false;state=candidate;apply();if(announce)document.getElementById('material-announcement').textContent='Appearance updated';return true;}
+ function reset(){state=fromPreset(window.rewindTheme.get());apply();document.getElementById('material-announcement').textContent='Preset restored';}
+ apply();
+ new MutationObserver(records=>{if(records.some(r=>r.attributeName==='data-skin')){state=fromPreset(window.rewindTheme.get());apply();presets.open=false;}}).observe(document.body,{attributes:true,attributeFilter:['data-skin']});
+ window.RewindMaterials=Object.freeze({get:()=>({...state,bands:[...state.bands]}),set,reset,validate,contrast});
+})();
+
+/* Presentation-only positioning: preserve the player's selection and playback logic. */
+(()=>{
+ 'use strict';
+ const caption=document.getElementById('caption'),host=document.getElementById('transcript'),clear=document.getElementById('clear-selection');
+ if(!caption||!host||!clear)return;
+ let queued=false,signature='';
+ // The painted mark is 10px inside a transparent 14px hit target.
+ const overlap=(a,b)=>a.x+2<b.right+.75&&a.x+12>b.left-.75&&a.y+2<b.bottom+.75&&a.y+12>b.top-.75;
+ const visible=(r,v)=>r.bottom>v.top&&r.top<v.bottom&&r.right>v.left&&r.left<v.right;
+ function paint(){
+   queued=false;
+   if(clear.hidden){if(caption.dataset.clearGutter)delete caption.dataset.clearGutter;signature='';return;}
+   const selected=[...caption.querySelectorAll('.token.selected')],nextSignature=selected.map(x=>x.dataset.unit).join(',');
+   if(!selected.length)return;
+   if(signature!==nextSignature){signature=nextSignature;if(caption.dataset.clearGutter)delete caption.dataset.clearGutter;}
+   const h=host.getBoundingClientRect(),v=caption.getBoundingClientRect();
+   const selectedRects=selected.map(x=>x.querySelector('.han').getBoundingClientRect()).filter(r=>visible(r,v));
+   if(!selectedRects.length){if(clear.style.visibility!=='hidden')clear.style.visibility='hidden';return;}
+   if(clear.style.visibility!=='visible')clear.style.visibility='visible';
+   let candidate;
+   if(caption.dataset.clearGutter==='true')candidate={x:v.right+3,y:Math.max(v.top,selectedRects[0].top-15)};
+   else{
+     const firstTop=Math.min(...selectedRects.map(r=>r.top)),row=selectedRects.filter(r=>Math.abs(r.top-firstTop)<5),right=Math.min(v.right,Math.max(...row.map(r=>r.right)));
+     const occupied=[...caption.querySelectorAll('.han,.reading')].map(x=>x.getBoundingClientRect()).filter(r=>visible(r,v));
+     const readings=selected.map(x=>x.querySelector('.reading').getBoundingClientRect()).filter(r=>visible(r,v));
+     const readingTop=Math.min(...readings.map(r=>r.top)),anchor={x:right+3,y:readingTop-15};
+     const rows=[readingTop-15,h.top,firstTop-17,firstTop,firstTop+row[0].height/2-7,v.bottom-15];
+     let best=Infinity;
+     for(const y of rows){if(y<h.top-4.5||y+14>h.bottom)continue;for(let x=v.left+1;x+14<=v.right-1;x+=3){const rect={x,y};if(occupied.some(r=>overlap(rect,r)))continue;const score=Math.abs(x-anchor.x)+Math.abs(y-anchor.y)*1.5;if(score<best){best=score;candidate=rect;}}}
+     if(!candidate){caption.dataset.clearGutter='true';schedule();return;}
+   }
+   const left=Math.round(candidate.x-h.left)+'px',top=Math.round(Math.min(candidate.y,h.bottom-15)-h.top)+'px';
+   if(clear.style.left!==left)clear.style.left=left;
+   if(clear.style.top!==top)clear.style.top=top;
+ }
+ function schedule(){if(!queued){queued=true;requestAnimationFrame(paint);}}
+ new MutationObserver(schedule).observe(caption,{subtree:true,childList:true,attributes:true,attributeFilter:['class','style','data-clear-gutter']});
+ new MutationObserver(schedule).observe(clear,{attributes:true,attributeFilter:['hidden','style']});
+ new ResizeObserver(schedule).observe(host);
+ caption.addEventListener('scroll',schedule,{passive:true});
+ window.addEventListener('resize',schedule);window.addEventListener('rewind:materialchange',schedule);
+ window.RewindSelection=Object.freeze({position:paint});
+ schedule();
 })();
 </script>
 </body></html>

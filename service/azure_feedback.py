@@ -156,8 +156,10 @@ def build_feedback(reference: str, assessment: dict, recognition: dict | None,
             state, reason = 'retry', 'different_or_unmatched_words'
         elif any(k != 'match' for k in errors) or score is None:
             state, reason = 'uncertain', 'mapping_unavailable'
-        elif error_type == 'Mispronunciation' or score < PASS_SCORE:
+        elif error_type == 'Mispronunciation' or score < 60:
             state, reason = 'retry', 'pronunciation_review'
+        elif score < PASS_SCORE:
+            state, reason = 'close', 'minor_pronunciation_review'
         else:
             state, reason = 'pass', 'practice_match'
         result['groups'].append({'start': start, 'end': end, 'text': reference[start:end],

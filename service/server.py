@@ -16,6 +16,7 @@ from assess import AssessmentError, assess_azure_bytes, recognize_azure_bytes, r
 from azure_feedback import build_feedback, no_speech_result, validate_wav
 from openai_feedback import coach_openai_bytes, MODEL as OPENAI_MODEL
 from live_transcription import LiveManager, MODEL as LIVE_MODEL
+from creator import CreatorManager, capabilities as creator_capabilities, extract_document, MAX_FILE_BYTES
 
 HERE = Path(__file__).resolve().parent
 TOKEN = secrets.token_urlsafe(32)
@@ -33,6 +34,8 @@ CALL_TIMES = collections.deque()
 PORT = 0
 MAX_BODY = 1_200_000
 LIVE = LiveManager()
+CREATOR = CreatorManager()
+EXTRACT_LOCK = threading.Lock()
 
 
 def player_path():
@@ -55,7 +58,32 @@ def status():
                 'max_recording_seconds': 25, 'cloud_requests_per_attempt': 1 if PROVIDER == 'openai' else 2,
                 'live_transcription': {'supported': True, 'available': bool(PROVIDER == 'openai' and API_KEY),
                                        'model': LIVE_MODEL, 'feedback_kind': 'transcription-progress',
-                                       'sample_rate': 24000, 'max_seconds': 25}}
+                                       'sample_rate': 24000, 'max_seconds': 25},
+                'creator': creator_capabilities(PROVIDER == 'openai' and API_KEY)}
+
+
+def creator_request(route, body):
+    if route == '/api/creator/extract':
+        encoded=body.get('data')
+        if not isinstance(encoded,str) or len(encoded)>((MAX_FILE_BYTES+2)//3)*4:
+            raise AssessmentError('file_size','檔案請限制在 5 MB 以內。')
+        data=base64.b64decode(encoded,validate=True)
+        if not EXTRACT_LOCK.acquire(blocking=False):
+            raise AssessmentError('creator_busy','正在讀取另一個檔案，請稍候。')
+        try:return extract_document(body.get('filename'),data)
+        finally:EXTRACT_LOCK.release()
+    with LOCK:
+        generation=GENERATION
+        if route == '/api/creator/status':return CREATOR.status(body.get('job_id'),generation)
+        if route == '/api/creator/cancel':return CREATOR.cancel(body.get('job_id'),generation)
+        if PROVIDER!='openai' or not API_KEY:
+            raise AssessmentError('not_configured','請先在 Speech 設定連接 OpenAI，然後建立粵語練習。')
+        key=validate_key(API_KEY)
+        if route not in ('/api/creator/translate','/api/creator/render'):
+            raise AssessmentError('invalid_request','生成請求不正確。')
+        # Starting a worker only reserves a job; the worker releases its own
+        # lock before making any network request.
+        return CREATOR.start(route.rsplit('/',1)[-1],body,key,generation)
 
 
 def live_request(route, body):
@@ -195,9 +223,11 @@ class Handler(BaseHTTPRequestHandler):
         if self.headers.get_content_type() != 'application/json':
             return self.send(415, {'error': 'Expected application/json.'})
         try:
+            route = urllib.parse.urlsplit(self.path).path
             size = int(self.headers.get('Content-Length', '0'))
-            if not 0 < size <= MAX_BODY:
-                return self.send(413, {'error': '錄音請控制在 25 秒以內。'})
+            maximum = 6_700_000 if route == '/api/creator/extract' else MAX_BODY
+            if not 0 < size <= maximum:
+                return self.send(413, {'error': '檔案請限制在 5 MB 以內。' if route == '/api/creator/extract' else '請求內容過大。'})
             body = json.loads(self.rfile.read(size), parse_constant=lambda _value: (_ for _ in ()).throw(ValueError()))
             if not isinstance(body, dict):
                 raise ValueError()
@@ -218,15 +248,19 @@ class Handler(BaseHTTPRequestHandler):
                     GENERATION += 1
                     CALL_TIMES.clear()
                     LIVE.cancel('configuration_changed')
+                    CREATOR.cancel()
                 return self.send(200, status())
             if route == '/api/disconnect':
                 with LOCK:
                     API_KEY, REGION, VERIFIED = '', '', False
                     GENERATION += 1
                     LIVE.cancel('disconnected')
+                    CREATOR.cancel()
                 return self.send(200, status())
             if route in ('/api/live/start', '/api/live/audio', '/api/live/events', '/api/live/stop', '/api/live/cancel'):
                 return self.send(200, live_request(route, body))
+            if route in ('/api/creator/extract','/api/creator/translate','/api/creator/render','/api/creator/status','/api/creator/cancel'):
+                return self.send(200, creator_request(route,body))
             if route == '/api/assess-recording':
                 expected_provider = body.get('provider')
                 if not isinstance(expected_provider,str) or expected_provider not in SUPPORTED_PROVIDERS:
@@ -238,7 +272,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(200, assess_recording(data, body.get('text'), expected_provider=expected_provider))
             return self.send(404, {'error': 'Not found'})
         except AssessmentError as exc:
-            code = 429 if exc.code == 'local_rate_limit' else 409 if exc.code in ('busy', 'not_configured', 'configuration_changed','provider_changed','live_busy','live_session','live_closed','live_sequence') else 502 if exc.code.startswith(('http_', 'network_', 'malformed_', 'redirect_', 'live_connection', 'live_provider', 'live_timeout')) else 400
+            code = 429 if exc.code in ('local_rate_limit','creator_rate_limit') else 409 if exc.code in ('busy', 'not_configured', 'configuration_changed','provider_changed','live_busy','live_session','live_closed','live_sequence','creator_busy','creator_job') else 502 if exc.code.startswith(('http_', 'network_', 'malformed_', 'redirect_', 'live_connection', 'live_provider', 'live_timeout','creator_http_','creator_network')) else 400
             return self.send(code, {'error': exc.message, 'code': exc.code})
         except (ValueError, TypeError, binascii.Error, UnicodeError):
             return self.send(400, {'error': '請求格式不正確。', 'code': 'invalid_request'})
@@ -263,6 +297,7 @@ def main():
         server.serve_forever()
     finally:
         LIVE.cancel('server_closed')
+        CREATOR.cancel()
         API_KEY = ''
         server.server_close()
 
