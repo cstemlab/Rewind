@@ -946,9 +946,9 @@ SOFTWARE.
   <section id="creator-panel" class="insert-panel creator-sheet" data-panel="creator" aria-label="Create a practice tape" hidden>
   <div class="creator-heading"><span id="creator-step">01 · Script</span><button id="creator-reset" class="creator-text-button" title="Start a new draft">New draft</button></div>
   <div id="creator-source-view" class="creator-view">
-    <div class="creator-title-row"><input id="creator-title" aria-label="Tape title" placeholder="Tape title" maxlength="120"><label id="creator-file-button" class="creator-file-button" aria-label="Import a script file" title="選擇 TXT、DOCX 或 PDF，選好後自動讀入"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M245,110.64A16,16,0,0,0,232,104H216V88a16,16,0,0,0-16-16H130.67L102.94,51.2a16.14,16.14,0,0,0-9.6-3.2H40A16,16,0,0,0,24,64V208h0a8,8,0,0,0,8,8H211.1a8,8,0,0,0,7.59-5.47l28.49-85.47A16.05,16.05,0,0,0,245,110.64ZM93.34,64,123.2,86.4A8,8,0,0,0,128,88h72v16H69.77a16,16,0,0,0-15.18,10.94L40,158.7V64Zm112,136H43.1l26.67-80H232Z"/></svg><input id="creator-file" type="file" accept=".txt,.docx,.pdf,.doc,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"></label></div>
+    <div class="creator-title-row"><input id="creator-title" aria-label="Tape title" placeholder="Tape title" maxlength="120"><label id="creator-file-button" class="creator-file-button" aria-label="Import a text or Markdown script" title="選擇 .txt 或 .md，選好後自動讀入"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M245,110.64A16,16,0,0,0,232,104H216V88a16,16,0,0,0-16-16H130.67L102.94,51.2a16.14,16.14,0,0,0-9.6-3.2H40A16,16,0,0,0,24,64V208h0a8,8,0,0,0,8,8H211.1a8,8,0,0,0,7.59-5.47l28.49-85.47A16.05,16.05,0,0,0,245,110.64ZM93.34,64,123.2,86.4A8,8,0,0,0,128,88h72v16H69.77a16,16,0,0,0-15.18,10.94L40,158.7V64Zm112,136H43.1l26.67-80H232Z"/></svg><input id="creator-file" type="file" accept=".txt,.md,.markdown,.text,text/plain,text/markdown"></label></div>
     <textarea id="creator-source" aria-label="Original script" placeholder="Paste or type your script…" maxlength="12000" spellcheck="false"></textarea>
-    <div class="creator-source-meta"><span id="creator-file-name">TXT · DOCX · PDF</span><span id="creator-count">0 / 12,000</span></div>
+    <div class="creator-source-meta"><span id="creator-file-name">TXT · Markdown</span><span id="creator-count">0 / 12,000</span></div>
     <div class="creator-modes" role="group" aria-label="Cantonese translation mode"><button id="creator-faithful" aria-pressed="true" data-mode="faithful">Faithful</button><button id="creator-beginner" aria-pressed="false" data-mode="beginner">Beginner</button></div>
     <p id="creator-mode-note" class="creator-note">保留原意、細節與語氣，轉成自然粵語口語。</p>
     <div class="creator-action-row"><p id="creator-provider-note" class="creator-note">文字會交給 AI 服務轉換；下一步可先修改。</p><button id="creator-translate" class="creator-primary">轉成粵語</button></div>
@@ -1013,7 +1013,7 @@ SOFTWARE.
 <p>IN-SMART 是內置的練習之一。在 Library 按 Open，可載入包含錄音、講稿、粵拼和時間資料的 <code>.rewind.json</code> 練習檔；也可匯出目前的練習，留待日後使用。</p>
 <p>載入的練習會保留在這次開啟的練習庫中，可在 Library 查看。重新開啟後，可再次載入。新練習製作完成後，也會保留在這次開啟的練習庫中。請用 Export 保存，重新開啟後可用 Open 載入。</p>
 <h2>從講稿製作新練習</h2>
-<p>連接 AI 服務後，打開 ⋯ → Library → New。可貼上或輸入簡體中文、繁體中文或英文，也可匯入 TXT、DOCX 或有文字層的 PDF。檔案上限 5 MB，原稿上限 12,000 字。舊式 DOC 請另存為 DOCX；掃描 PDF 請先作文字辨識。</p>
+<p>連接 AI 服務後，打開 ⋯ → Library → New。可貼上或輸入簡體中文、繁體中文或英文，也可匯入 .txt 或 .md。檔案上限 5 MB，原稿上限 12,000 字。Word 和 PDF 目前不能匯入，請先另存為 .txt 或 .md，或直接貼上文字。</p>
 <p>Faithful 保留原意、細節與語氣，轉成自然粵語口語；Beginner 保留重要內容，使用常見詞和短句。按「轉成粵語」後，稿件會傳送到畫面顯示的 AI 服務。請檢查並修改返回的粵語稿，再按「製作錄音」。分享網頁的服務由分享者提供。</p>
 <p>錄音由 AI 生成，並非真人錄製。每句錄音長度會實測；句內的逐字與短句時間目前按字詞估算，點字或拖選時可能有切音誤差。粵拼與讀音也需人工核對。錄音完成後按「開始練習」才會替換目前磁帶；封面標題跟隨新稿，Rewind 標誌保持不變。原有練習仍可在 Library 找回。取消或失敗會保留原稿。</p>
 <p>完成的練習可匯出為一個 <code>.rewind.json</code> 檔，在另一個 Rewind 頁面匯入。檔案包含這份練習的稿件、粵拼、錄音和時間資料，不包含 access code、API key 或你自己的練習錄音。</p>
@@ -3087,7 +3087,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  }
  function base64(bytes){let out='';for(let i=0;i<bytes.length;i+=32768)out+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(out);}
  async function readTextFile(file){const bytes=new Uint8Array(await file.arrayBuffer());let encoding='utf-8';if(bytes[0]===255&&bytes[1]===254)encoding='utf-16le';else if(bytes[0]===254&&bytes[1]===255)encoding='utf-16be';return new TextDecoder(encoding,{fatal:true}).decode(bytes).replace(/^\uFEFF/,'');}
- function blankCreator(){pendingSession=null;error();warning();el('creator-source').value='';el('creator-title').value='';el('creator-draft').value='';el('creator-draft-title').value='';el('creator-file-name').textContent='TXT · DOCX · PDF';el('creator-file-name').classList.remove('is-busy');count();paint('source');connectionNote();}
+ function blankCreator(){pendingSession=null;error();warning();el('creator-source').value='';el('creator-title').value='';el('creator-draft').value='';el('creator-draft-title').value='';el('creator-file-name').textContent='TXT · Markdown';el('creator-file-name').classList.remove('is-busy');count();paint('source');connectionNote();}
  el('create-button').onclick=()=>{if(view==='ready'||pendingSession)blankCreator();rewindPanels.open('creator');};
  el('creator-source').addEventListener('input',count);
  for(const button of el('creator-panel').querySelectorAll('[data-mode]'))button.onclick=()=>{mode=button.dataset.mode;for(const item of el('creator-panel').querySelectorAll('[data-mode]'))item.setAttribute('aria-pressed',String(item===button));el('creator-mode-note').textContent=modes[mode];};
@@ -3098,15 +3098,14 @@ loadSession(defaultSession);requestAnimationFrame(frame);
    try{
      if(file.size>5000000)throw Error('請使用小於 5 MB 的講稿檔。');
      const ext=(file.name.split('.').pop()||'').toLowerCase();
-     if(ext==='doc')throw Error('這是舊版 Word（.doc）。請在 Word 另存為 .docx，或直接貼上文字。');
-     if(!['txt','docx','pdf'].includes(ext))throw Error('請選擇 TXT、DOCX 或 PDF。');
-     const bytes=new Uint8Array(await file.arrayBuffer());input.value='';
-     let result;if(ext==='txt')result={text:await readTextFile(new File([bytes],file.name)),title:file.name.replace(/\.txt$/i,''),warnings:[]};
-     else{fileStatus('正在上傳 '+file.name+'…',true);result=await request('/api/creator/extract',{filename:file.name,data:base64(bytes)});}
-     if(mine!==ticket)return;if(!result.text?.trim())throw Error('沒有找到可讀文字；掃描頁面請先轉成文字。');if(Array.from(result.text).length>12000)throw Error('講稿超過 12,000 字，請分成幾份；沒有截斷或替換目前內容。');
-     el('creator-source').value=result.text;el('creator-title').value=(result.title||file.name).slice(0,120);
-     const chars=Array.from(result.text).length.toLocaleString('en');
-     fileStatus('已讀入 '+file.name+' · '+chars+' 字',false);count();warning((result.warnings||[]).join(' ')||'講稿已放入文字框，可以按「轉成粵語」。');
+     const textFile=['txt','md','markdown','text'].includes(ext)||(file.type||'').toLowerCase().startsWith('text/');
+     if(['doc','docx','pdf'].includes(ext))throw Error('Word 和 PDF 目前不能匯入。請把講稿另存為 .txt 或 .md，或直接貼上文字。');
+     if(!textFile)throw Error('請選擇 .txt 或 .md 文字檔，或直接貼上講稿。');
+     const text=await readTextFile(file);input.value='';
+     if(mine!==ticket)return;if(!text.trim())throw Error('這個檔案沒有可讀文字。');if(Array.from(text).length>12000)throw Error('講稿超過 12,000 字，請分成幾份；沒有截斷或替換目前內容。');
+     el('creator-source').value=text;el('creator-title').value=file.name.replace(/\.(txt|md|markdown|text)$/i,'').slice(0,120);
+     const chars=Array.from(text).length.toLocaleString('en');
+     fileStatus('已讀入 '+file.name+' · '+chars+' 字',false);count();warning('講稿已放入文字框，可以按「轉成粵語」。');
    }catch(err){if(mine===ticket){input.value='';fileStatus(file.name+' · 未能讀入',false);error(err instanceof TypeError?'無法讀取檔案，請另存為 UTF-8 文字再試。':err.message);el('creator-error').scrollIntoView({block:'nearest'});}}
    finally{if(mine===ticket)fileStatus(el('creator-file-name').textContent,false);}
  });
