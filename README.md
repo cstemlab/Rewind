@@ -94,3 +94,8 @@ The local and hosted versions use the same recording and cassette controls. Neit
 Mocked tests cover hosted authentication and expiration, local CSRF compatibility, creator jobs and cancellation, both translation modes, provider-specific live routing, recording feedback and preservation of the reviewed draft. They test integration and interaction, **not pronunciation accuracy**. Real iPhone Safari and Mac-device testing remain pending.
 
 Icons: [Phosphor](https://github.com/phosphor-icons/core), with its MIT licence embedded. Cassette and label artwork is original; see [Material references](Material%20references.md).
+
+
+### Script files
+
+Library → Open accepts TXT, Markdown, Word (.docx), text PDFs and prepared Rewind tapes. New → Import uses the same reader. Documents are read locally in your browser; an AI connection is only needed when you choose to convert the reviewed script. Drag a file into the script or library panel, or use the keyboard-accessible Import button. Empty, corrupt, scanned and oversized files show an explanation and preserve your draft. Limits: 5 MB and 12,000 characters; PDFs up to 100 pages. Scanned PDFs need OCR; legacy .doc files need saving as .docx.

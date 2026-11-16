@@ -104,3 +104,8 @@ Windows 也可開啟 `Open Rewind.cmd`；Mac 可使用 `python3` 或 `Open Rewin
 原有版本、IN-SMART 講稿和示範錄音均保留；這次服務接入保持既有磁帶外觀和比例。
 
 回聽鍵是主播放鍵下方的實心小三角形，沿用主播放箭頭的顏色。新錄音備妥時輕柔縮放三次；開始回聽便停止提示。
+
+
+### 匯入講稿
+
+Library → Open 可讀入 TXT、Markdown、Word（.docx）、有文字層的 PDF 及已製作的 Rewind 練習；New → Import 使用同一讀檔功能。讀檔在瀏覽器內完成，不需先連接 AI。檢查稿件後，按「轉成粵語」才會交給 AI。也可把檔案拖進講稿或 Library 區域。讀取失敗會保留原稿。上限為 5 MB、12,000 字及 100 頁 PDF。掃描 PDF 請先作 OCR；舊式 .doc 請另存為 .docx。
