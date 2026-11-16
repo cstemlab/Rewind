@@ -571,8 +571,13 @@ body{--tape-w:min(960px,calc(100vw - 48px),calc((100dvh - 56px)*1.58));display:b
 #app .creator-sheet textarea{min-height:94px;resize:vertical}
 .creator-source-meta{font-size:10px;color:var(--muted)}
 #creator-file-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%}
-.creator-file-button{display:grid;place-items:center;width:28px;height:28px;padding:3px;flex:none;color:var(--muted)}
+.creator-file-button{position:relative;display:grid;place-items:center;width:28px;height:28px;padding:3px;flex:none;color:var(--muted);overflow:hidden;cursor:pointer}
 .creator-file-button svg{width:20px;height:20px}
+.creator-file-button input{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0}
+.creator-file-button.is-busy{pointer-events:none;opacity:.55}
+#creator-file-name.is-busy::before{content:"";display:inline-block;width:10px;height:10px;margin-right:6px;border:2px solid color-mix(in srgb,var(--ink) 16%,transparent);border-top-color:var(--accent);border-radius:50%;vertical-align:-1px;animation:creator-spin .8s linear infinite}
+.creator-voice{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted)}
+.creator-voice select{font:inherit;color:var(--ink);background:transparent;border:0;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent);padding:4px 0;max-width:70%}
 .creator-text-button{font:inherit;font-size:11px;color:var(--muted);background:none;padding:4px 2px;border:0;white-space:nowrap}
 .creator-text-button:hover,.creator-file-button:hover{color:var(--accent);background:none}
 .creator-modes{display:flex;width:max-content;border-radius:7px;background:color-mix(in srgb,var(--ink) 6%,var(--label));padding:3px;gap:3px}
@@ -940,7 +945,7 @@ SOFTWARE.
   <section id="creator-panel" class="insert-panel creator-sheet" data-panel="creator" aria-label="Create a practice tape" hidden>
   <div class="creator-heading"><span id="creator-step">01 · Script</span><button id="creator-reset" class="creator-text-button" title="Start a new draft">New draft</button></div>
   <div id="creator-source-view" class="creator-view">
-    <div class="creator-title-row"><input id="creator-title" aria-label="Tape title" placeholder="Tape title" maxlength="120"><button id="creator-file-button" class="creator-file-button" aria-label="Import a script file" title="TXT · DOCX · PDF"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M245,110.64A16,16,0,0,0,232,104H216V88a16,16,0,0,0-16-16H130.67L102.94,51.2a16.14,16.14,0,0,0-9.6-3.2H40A16,16,0,0,0,24,64V208h0a8,8,0,0,0,8,8H211.1a8,8,0,0,0,7.59-5.47l28.49-85.47A16.05,16.05,0,0,0,245,110.64ZM93.34,64,123.2,86.4A8,8,0,0,0,128,88h72v16H69.77a16,16,0,0,0-15.18,10.94L40,158.7V64Zm112,136H43.1l26.67-80H232Z"/></svg></button></div>
+    <div class="creator-title-row"><input id="creator-title" aria-label="Tape title" placeholder="Tape title" maxlength="120"><label id="creator-file-button" class="creator-file-button" aria-label="Import a script file" title="選擇 TXT、DOCX 或 PDF，選好後自動讀入"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M245,110.64A16,16,0,0,0,232,104H216V88a16,16,0,0,0-16-16H130.67L102.94,51.2a16.14,16.14,0,0,0-9.6-3.2H40A16,16,0,0,0,24,64V208h0a8,8,0,0,0,8,8H211.1a8,8,0,0,0,7.59-5.47l28.49-85.47A16.05,16.05,0,0,0,245,110.64ZM93.34,64,123.2,86.4A8,8,0,0,0,128,88h72v16H69.77a16,16,0,0,0-15.18,10.94L40,158.7V64Zm112,136H43.1l26.67-80H232Z"/></svg><input id="creator-file" type="file" accept=".txt,.docx,.pdf,.doc,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"></label></div>
     <textarea id="creator-source" aria-label="Original script" placeholder="Paste or type your script…" maxlength="12000" spellcheck="false"></textarea>
     <div class="creator-source-meta"><span id="creator-file-name">TXT · DOCX · PDF</span><span id="creator-count">0 / 12,000</span></div>
     <div class="creator-modes" role="group" aria-label="Cantonese translation mode"><button id="creator-faithful" aria-pressed="true" data-mode="faithful">Faithful</button><button id="creator-beginner" aria-pressed="false" data-mode="beginner">Beginner</button></div>
@@ -950,13 +955,13 @@ SOFTWARE.
   <div id="creator-draft-view" class="creator-view" hidden>
     <input id="creator-draft-title" aria-label="Cantonese tape title" placeholder="Tape title" maxlength="120">
     <textarea id="creator-draft" aria-label="Review Cantonese script" spellcheck="false" maxlength="6000"></textarea>
+    <label class="creator-voice" for="creator-voice">示範聲音<select id="creator-voice" aria-label="示範朗讀聲音"><option value="yue-HK-Standard-A">女聲 A · 預設</option><option value="yue-HK-Standard-C">女聲 C</option><option value="yue-HK-Standard-B">男聲 B</option><option value="yue-HK-Standard-D">男聲 D</option></select></label>
     <div class="creator-action-row"><button id="creator-edit-source" class="creator-text-button">原稿</button><span class="creator-note">可修改粵語稿，再製作 AI 示範錄音。</span><button id="creator-render" class="creator-primary">製作錄音</button></div>
   </div>
   <div id="creator-progress-view" class="creator-progress-view" hidden><span class="creator-spinner" aria-hidden="true"></span><p id="creator-progress-message" role="status">準備中…</p><progress id="creator-progress" max="1" value="0" aria-label="Creation progress"></progress><button id="creator-cancel" class="creator-text-button">Cancel</button></div>
   <div id="creator-ready-view" class="creator-ready-view" hidden><span class="creator-ready-symbol" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48ZM80,192l12-16h72l12,16Zm144,0H196l-21.6-28.8A8,8,0,0,0,168,160H88a8,8,0,0,0-6.4,3.2L60,192H32V64H224V192ZM176,80H80a32,32,0,0,0,0,64h96a32,32,0,0,0,0-64ZM148.3,96a31.92,31.92,0,0,0,0,32H107.7a31.92,31.92,0,0,0,0-32ZM64,112a16,16,0,1,1,16,16A16,16,0,0,1,64,112Zm112,16a16,16,0,1,1,16-16A16,16,0,0,1,176,128Z"/></svg></span><h3 id="creator-ready-title"></h3><p id="creator-ready-meta"></p><p class="creator-note">AI 粵語示範 · 字詞時間為近似定位，可先聽一遍確認讀音。</p><div class="creator-action-row"><button id="creator-revise" class="creator-text-button">修改講稿</button><button id="creator-use" class="creator-primary">開始練習</button></div></div>
   <p id="creator-warning" class="creator-note" role="status" hidden></p><p id="creator-error" class="creator-error" role="alert" hidden></p>
   <div id="creator-service-note" class="creator-service-note" hidden><span id="creator-service-message"></span><button id="creator-connect" class="creator-text-button">Connect</button><a id="creator-local-guide" href="https://github.com/cstemlab/Rewind#online-and-local-use" target="_blank" rel="noopener" hidden>本機版設定</a></div>
-  <input id="creator-file" type="file" accept=".txt,.docx,.pdf,text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
 </section>
 
   <section id="library-panel" class="insert-panel" data-panel="library" aria-label="Practice library" hidden><div class="library-actions"><button id="create-button" title="Create from a script" aria-label="Create from a script"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg><span>New</span></button><button id="import" title="Load prepared practice" aria-label="Load practice"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M245,110.64A16,16,0,0,0,232,104H216V88a16,16,0,0,0-16-16H130.67L102.94,51.2a16.14,16.14,0,0,0-9.6-3.2H40A16,16,0,0,0,24,64V208h0a8,8,0,0,0,8,8H211.1a8,8,0,0,0,7.59-5.47l28.49-85.47A16.05,16.05,0,0,0,245,110.64ZM93.34,64,123.2,86.4A8,8,0,0,0,128,88h72v16H69.77a16,16,0,0,0-15.18,10.94L40,158.7V64Zm112,136H43.1l26.67-80H232Z"/></svg><span>Open</span></button><button id="export" title="Export practice" aria-label="Export practice"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg><span>Export</span></button></div><div id="library"></div></section>
@@ -1029,18 +1034,28 @@ SOFTWARE.
   'use strict';
   function create({location=root.location,history=root.history,storage,fetch:send=root.fetch?.bind(root),localToken='',configFile='rewind-cloud.json'}={}){
     const local=location?.protocol==='http:'&&['127.0.0.1','localhost'].includes(location.hostname)&&!!localToken&&!localToken.startsWith('__');
-    let mode=local?'local':'offline',apiBase='',token='',storageKey='',currentStatus=null,message='',connecting=false;
+    let mode=local?'local':'offline',apiBase='',token='',storageKey='',accessCode='',currentStatus=null,message='',connecting=false;
     const listeners=new Set();
     if(storage===undefined){try{storage=root.sessionStorage;}catch{storage=null;}}
     const info=()=>Object.freeze({local,mode,available:local||!!apiBase,authenticated:local||!!token,connecting,status:currentStatus,message});
     const notify=()=>{const value=info();for(const listener of listeners){try{listener(value);}catch{}}};
     const error=(text,code='service_unavailable',status=0)=>Object.assign(new Error(text),{code,status});
     function remember(value){token=value;try{if(value)storage?.setItem(storageKey,value);else storage?.removeItem(storageKey);}catch{}}
+    function rememberAccess(value,persist){
+      accessCode=typeof value==='string'?value.trim():'';
+      if(!persist||!storageKey)return;
+      try{if(accessCode)storage?.setItem(storageKey+':access',accessCode);else storage?.removeItem(storageKey+':access');}catch{}
+    }
+    function recallAccess(){
+      if(accessCode)return accessCode;
+      try{const stored=storageKey?storage?.getItem(storageKey+':access'):'';if(typeof stored==='string'&&stored.length>=1&&stored.length<=200)accessCode=stored;}catch{}
+      return accessCode;
+    }
     function ended(text='練習連線已到期，請在 Speech 重新輸入 access code。'){
-      remember('');currentStatus={configured:false,mode:'hosted-trial',requires_access_code:true};message=text;notify();
+      remember('');rememberAccess('',true);currentStatus={configured:false,mode:'hosted-trial',requires_access_code:true};message=text;notify();
     }
     function validRoute(path){return typeof path==='string'&&/^\/api\/(?:status|session(?:\/(?:end|provider))?|config|disconnect|assess-recording|live\/(?:start|audio|events|stop|cancel)|creator\/(?:extract|translate|render|status|cancel))$/.test(path);}
-    async function request(path,{body,signal,publicRequest=false}={}){
+    async function request(path,{body,signal,publicRequest=false,retried=false}={}){
       if(!validRoute(path))throw error('Unknown Rewind service route.','invalid_route');
       if(mode==='offline')throw error(message||'AI 服務尚未啟用。可以播放練習及錄音回聽；不會提供發音評測。');
       if(!local&&['/api/config','/api/disconnect'].includes(path))throw error('服務設定由分享者管理。','owner_only',403);
@@ -1057,12 +1072,17 @@ SOFTWARE.
       if(!response.ok){
         const code=data?.code||'request_failed';
         const text=code==='session_expired'||code==='session_required'?'練習連線已到期，請在 Speech 重新輸入 access code。':code==='access_denied'?'Access code 不正確或已失效，請向分享者確認。':code==='rate_limited'?'請稍候片刻再試；這次尚未完成。':typeof data?.error==='string'?data.error:'處理未完成，請稍後再試。';
-        if(!local&&response.status===401&&usedToken===token&&!publicRequest)ended(text);
+        const sameSession=!local&&response.status===401&&usedToken===token&&!publicRequest;
+        if(sameSession&&!retried&&recallAccess()){
+          try{await exchange(recallAccess(),true);return request(path,{body,signal,publicRequest,retried:true});}
+          catch(cause){ended(text);throw cause?.status?cause:error(text,code,response.status);}
+        }
+        if(sameSession)ended(text);
         throw error(text,code,response.status);
       }
       return data;
     }
-    async function exchange(code){
+    async function exchange(code,persist=false){
       if(local||!apiBase)throw error('此版本未設定分享用 AI 服務。','service_unavailable');
       const accessCode=typeof code==='string'?code.trim():'';
       if(!accessCode||accessCode.length>512)throw error('請輸入分享者提供的 access code。','access_code_required');
@@ -1070,7 +1090,7 @@ SOFTWARE.
       try{
         const data=await request('/api/session',{body:{access_code:accessCode},publicRequest:true});
         if(typeof data.token!=='string'||data.token.length<16||data.token.length>4096)throw error('服務未建立有效的練習連線。','invalid_response');
-        remember(data.token);currentStatus=null;message='';notify();return {ok:true,expires_in:data.expires_in,absolute_expires_in:data.absolute_expires_in};
+        remember(data.token);rememberAccess(accessCode,persist);message='';notify();return {ok:true,expires_in:data.expires_in,absolute_expires_in:data.absolute_expires_in};
       }catch(cause){message=cause.message;notify();throw cause;}finally{connecting=false;notify();}
     }
     function takeInvite(){
@@ -1111,7 +1131,7 @@ SOFTWARE.
       currentStatus=data;if(local||token)message='';notify();return data;
     }
     async function post(path,body,signal){await ready;return request(path,{body,signal});}
-    async function connectAccessCode(code){await ready;await exchange(code);return status();}
+    async function connectAccessCode(code){await ready;await exchange(code,true);return status();}
     async function disconnect(){
       await ready;
       if(local)return post('/api/disconnect',{});
@@ -2116,6 +2136,15 @@ function stopThrough(){
 }
 function toggleThrough(){if(continuous)stopThrough();else startThrough();}
 
+function addLibrary(candidate){
+  const verified=refineGeneratedPhrases(validateSession(candidate));
+  const existing=library.findIndex(item=>item.id&&item.id===verified.id);
+  if(existing>=0)library[existing]=verified;
+  else library.push(verified);
+  renderLibrary();
+  return verified;
+}
+window.rewindLibrary=Object.freeze({add:addLibrary});
 function renderLibrary(){
   $('library').replaceChildren();
   library.forEach((s,i)=>{
@@ -2286,7 +2315,11 @@ async function loadSession(candidate,{add=false}={}){
     const verified=refineGeneratedPhrases(validateSession(candidate)),buffer=await decodeSession(verified);
     if(token!==loadGeneration)return false;
     session=verified;decoded=buffer;grain='phrases';index=0;selection=null;phase='ready';
-    if(add&&!library.includes(session))library.push(session);
+    if(add){
+      const existing=library.findIndex(item=>item.id&&item.id===session.id);
+      if(existing>=0)library[existing]=session;
+      else if(!library.includes(session))library.push(session);
+    }
     renderLibrary();renderSections();activate(0);renderOutline();return true;
   }catch(e){if(token!==loadGeneration)return false;phase=decoded?(oldPhase==='playing'||oldPhase==='rewinding'?'paused':oldPhase):'loading';updateStatus();error(e.message||'未能載入這份練習。');return false;}
 }
@@ -2732,7 +2765,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     byId('speech-details').hidden=true;
     byId('speech-setting-state').textContent=!chosen?'Choose mode':compare?'Record & compare':configured?providerName():available?'Connect':'Playback only';
     byId('speech-provider-name').textContent=compare?'錄音對照 · 粵語':(configured?providerName():'Speech')+' · 粵語'+(['openai','gemini'].includes(service?.provider)?' · Experimental':'');
-    byId('speech-service-note').textContent=!chosen?'選擇 AI 回饋，或只錄音對照。':compare?'不需要 AI 連線。錄完可回聽自己的聲音，再按倒帶聽示範。':link.message||(!available?'此版本尚未設定 AI 服務。請開啟網頁版並輸入存取碼。':configured?(service.connection_verified?'已連接 · 錄一小段試試。':'已連接 · 首次評測後確認語音服務。'):local?'輸入服務密鑰，即可連接 AI 練習。':'輸入分享者提供的存取碼，即可開啟 AI 練習。');
+    byId('speech-service-note').textContent=!chosen?'選擇 AI 回饋，或只錄音對照。':compare?'不需要 AI 連線。錄完可回聽自己的聲音，再按倒帶聽示範。':link.message||(!available?'此版本尚未設定 AI 服務。請開啟網頁版並輸入存取碼。':configured?(service.connection_verified?'已連接。這個存取碼同時用於錄音回饋和新講稿轉換，不用再輸入。':'已連接。錄音回饋和新講稿轉換都用這次連線，不用再輸入。'):local?'輸入服務密鑰，即可連接 AI 練習。':'輸入分享者提供的存取碼。一次開啟錄音回饋，以及新講稿的粵語轉換。');
     byId('speech-online-link').hidden=!chosen||compare||local||available;
     const uploadNote=service?.provider==='azure'?'停止錄音後，這段錄音與文字會傳送至 Azure 做發音評測和字詞核對（兩次處理）。':`停止錄音後，這段錄音與文字會傳送至 ${providerName()}，提供發音回饋。`;
     byId('speech-disclosure').textContent=compare?'錄音留在這個分頁，不會傳送或評分；切換練習、重新錄音或離開時清除。':configured?uploadNote+'實心圓點表示通過，空心圓點表示接近。這是試驗回饋；此頁的錄音會在離開或清除後移除。':'';
@@ -2764,7 +2797,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     else{key.name='rewind-access-code';key.setAttribute('data-1p-ignore','true');key.setAttribute('data-lpignore','true');}
     key.hidden=byId('speech-key-label').hidden=chooseProvider;key.required=!chooseProvider;
     byId('speech-config').querySelector('button').textContent=chooseProvider?'Use provider':!local&&connectionFromRecord?'連接並開始':'Connect';
-    byId('speech-config').querySelector('.speech-footnote').textContent=local?'密鑰只保留在本機服務的記憶體，關閉服務後清除。':chooseProvider?'由分享者提供。切換後需重新同意傳送錄音。':connectionFromRecord?'輸入一次即可。連接後開始錄音；停止時這段錄音會送到 AI 取得回饋。':'AI 服務由分享者提供，無需自己的 API key。連線只保留在這個分頁。';
+    byId('speech-config').querySelector('.speech-footnote').textContent=local?'密鑰只保留在本機服務的記憶體，關閉服務後清除。':chooseProvider?'由分享者提供。切換後需重新同意傳送錄音。':connectionFromRecord?'輸入一次即可。這組存取碼會開啟錄音回饋，以及把新講稿轉成粵語練習。這個分頁會記住連線。':'輸入一次即可。這組存取碼會開啟兩項功能：錄音後的 AI 回饋，以及把新講稿轉成粵語練習。這個分頁會記住連線，不用再輸入。';
   }
   async function checkService(){
     try{service=await connection.status();}
@@ -3008,7 +3041,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
    const provider=({openai:'OpenAI',gemini:'Google Gemini',azure:'Azure'})[service?.provider]||'AI 服務';
    el('creator-provider-note').textContent=`文字會交給 ${provider} 轉換；下一步可先修改。`;
    el('creator-service-note').hidden=!!available||view!=='source';
-   el('creator-service-message').textContent=link.message||(!link.available?'AI 製作服務尚未啟用。你貼上的稿件會保留。':service?.configured?'這個語音服務暫未提供新練習製作。':local?'連接 OpenAI 後，即可製作新練習。':'在 Speech 輸入分享者提供的 access code，即可製作新練習。');
+   el('creator-service-message').textContent=link.message||(!link.available?'AI 製作服務尚未啟用。你貼上的稿件會保留。':service?.configured?'這個語音服務暫未提供新練習製作。':local?'連接 OpenAI 後，即可製作新練習。':'沿用錄音時的存取碼即可。若尚未連接，在 Speech 輸入一次，就同時開啟錄音回饋和新講稿轉換。');
    el('creator-connect').hidden=!link.available;el('creator-local-guide').hidden=link.available;return !!available;
  }
  async function refresh(){try{service=await connection.status();}catch{service=null;}connectionNote();}
@@ -3031,7 +3064,12 @@ loadSession(defaultSession);requestAnimationFrame(frame);
        if(status.state==='completed'){
          const result=status.result||status;busy=false;job=null;abort=null;
          if(result.draft){const draft=result.draft;el('creator-draft-title').value=draft.title||el('creator-title').value;el('creator-draft').value=draft.text||'';paint('draft');}
-         else if(result.session){pendingSession=refineGeneratedPhrases(validateSession(result.session));el('creator-ready-title').textContent=pendingSession.title;el('creator-ready-meta').textContent=`${pendingSession.sentences.length} 句 · ${pendingSession.phrases.length} 小段 · ${stamp(pendingSession.duration||0)}`;paint('ready');}
+         else if(result.session){
+           pendingSession=rewindLibrary.add(result.session);
+           const wanted=el('creator-voice')?.value,used=pendingSession.source?.voice;
+           el('creator-ready-title').textContent=pendingSession.title;el('creator-ready-meta').textContent=`${pendingSession.sentences.length} 句 · ${pendingSession.phrases.length} 小段 · ${stamp(pendingSession.duration||0)}`;paint('ready');
+           if(wanted&&used&&used!==wanted)warning('這份示範仍使用服務預設的聲音。所選聲音要等雲端服務更新後，再生一次才會換成那一個聲音。');
+         }
          else throw Error('製作結果不完整，尚未更換目前練習。');return;
        }
        if(status.state==='failed')throw Error(typeof status.error==='string'?status.error:status.error?.message||'製作未完成，原稿仍保留。');
@@ -3042,28 +3080,35 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  }
  function base64(bytes){let out='';for(let i=0;i<bytes.length;i+=32768)out+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(out);}
  async function readTextFile(file){const bytes=new Uint8Array(await file.arrayBuffer());let encoding='utf-8';if(bytes[0]===255&&bytes[1]===254)encoding='utf-16le';else if(bytes[0]===254&&bytes[1]===255)encoding='utf-16be';return new TextDecoder(encoding,{fatal:true}).decode(bytes).replace(/^\uFEFF/,'');}
- el('create-button').onclick=()=>{rewindPanels.open('creator');};
+ function blankCreator(){pendingSession=null;error();warning();el('creator-source').value='';el('creator-title').value='';el('creator-draft').value='';el('creator-draft-title').value='';el('creator-file-name').textContent='TXT · DOCX · PDF';el('creator-file-name').classList.remove('is-busy');count();paint('source');connectionNote();}
+ el('create-button').onclick=()=>{if(view==='ready'||pendingSession)blankCreator();rewindPanels.open('creator');};
  el('creator-source').addEventListener('input',count);
  for(const button of el('creator-panel').querySelectorAll('[data-mode]'))button.onclick=()=>{mode=button.dataset.mode;for(const item of el('creator-panel').querySelectorAll('[data-mode]'))item.setAttribute('aria-pressed',String(item===button));el('creator-mode-note').textContent=modes[mode];};
- el('creator-file-button').onclick=()=>el('creator-file').click();
- el('creator-file').onchange=async e=>{
-   const file=e.target.files?.[0];e.target.value='';if(!file)return;error();warning();
-   const mine=++ticket;const button=el('creator-file-button');button.disabled=true;
+ function fileStatus(text,busy){const name=el('creator-file-name');name.textContent=text;name.classList.toggle('is-busy',!!busy);el('creator-file-button').classList.toggle('is-busy',!!busy);el('creator-translate').disabled=!!busy;}
+ el('creator-file').addEventListener('change',async e=>{
+   const input=e.target,file=input.files?.[0];if(!file){input.value='';return;}
+   error();warning();const mine=++ticket;fileStatus('正在讀取 '+file.name+'…',true);
    try{
      if(file.size>5000000)throw Error('請使用小於 5 MB 的講稿檔。');
-     const ext=file.name.split('.').pop().toLowerCase();if(!['txt','docx','pdf'].includes(ext))throw Error('請選擇 TXT、DOCX 或 PDF；舊式 DOC 請先另存為 DOCX。');
-     let result;if(ext==='txt')result={text:await readTextFile(file),title:file.name.replace(/\.txt$/i,''),warnings:[]};
-     else result=await request('/api/creator/extract',{filename:file.name,data:base64(new Uint8Array(await file.arrayBuffer()))});
+     const ext=(file.name.split('.').pop()||'').toLowerCase();
+     if(ext==='doc')throw Error('這是舊版 Word（.doc）。請在 Word 另存為 .docx，或直接貼上文字。');
+     if(!['txt','docx','pdf'].includes(ext))throw Error('請選擇 TXT、DOCX 或 PDF。');
+     const bytes=new Uint8Array(await file.arrayBuffer());input.value='';
+     let result;if(ext==='txt')result={text:await readTextFile(new File([bytes],file.name)),title:file.name.replace(/\.txt$/i,''),warnings:[]};
+     else{fileStatus('正在上傳 '+file.name+'…',true);result=await request('/api/creator/extract',{filename:file.name,data:base64(bytes)});}
      if(mine!==ticket)return;if(!result.text?.trim())throw Error('沒有找到可讀文字；掃描頁面請先轉成文字。');if(Array.from(result.text).length>12000)throw Error('講稿超過 12,000 字，請分成幾份；沒有截斷或替換目前內容。');
-     el('creator-source').value=result.text;el('creator-title').value=(result.title||file.name).slice(0,120);el('creator-file-name').textContent=file.name;count();warning((result.warnings||[]).join(' '));
-   }catch(err){if(mine===ticket)error(err instanceof TypeError?'無法讀取檔案，請另存為 UTF-8 文字再試。':err.message);}finally{button.disabled=false;}
- };
+     el('creator-source').value=result.text;el('creator-title').value=(result.title||file.name).slice(0,120);
+     const chars=Array.from(result.text).length.toLocaleString('en');
+     fileStatus('已讀入 '+file.name+' · '+chars+' 字',false);count();warning((result.warnings||[]).join(' ')||'講稿已放入文字框，可以按「轉成粵語」。');
+   }catch(err){if(mine===ticket){input.value='';fileStatus(file.name+' · 未能讀入',false);error(err instanceof TypeError?'無法讀取檔案，請另存為 UTF-8 文字再試。':err.message);el('creator-error').scrollIntoView({block:'nearest'});}}
+   finally{if(mine===ticket)fileStatus(el('creator-file-name').textContent,false);}
+ });
  el('creator-translate').onclick=()=>{const text=el('creator-source').value.trim();if(!text){error('請先貼上或匯入講稿。');el('creator-source').focus();return;}run('/api/creator/translate',{text,title:el('creator-title').value.trim(),mode},'source');};
- el('creator-render').onclick=()=>{const text=el('creator-draft').value.trim();if(!text){error('請先填寫粵語講稿。');return;}run('/api/creator/render',{draft:{title:el('creator-draft-title').value.trim(),text,mode}},'draft');};
+ el('creator-render').onclick=()=>{const text=el('creator-draft').value.trim();if(!text){error('請先填寫粵語講稿。');return;}run('/api/creator/render',{draft:{title:el('creator-draft-title').value.trim(),text,mode,voice:el('creator-voice').value}},'draft');};
  el('creator-edit-source').onclick=()=>{error();warning();paint('source');connectionNote();};
  el('creator-revise').onclick=()=>{pendingSession=null;paint('draft');};
  el('creator-cancel').onclick=()=>cancel();
- el('creator-reset').onclick=async()=>{await cancel(false);pendingSession=null;error();warning();el('creator-source').value='';el('creator-title').value='';el('creator-draft').value='';el('creator-draft-title').value='';el('creator-file-name').textContent='TXT · DOCX · PDF';count();paint('source');connectionNote();};
+ el('creator-reset').onclick=async()=>{await cancel(false);blankCreator();};
  el('creator-connect').onclick=()=>rewindSpeech.openSettings();
  el('creator-use').onclick=async()=>{if(!pendingSession)return;error();const candidate=pendingSession;el('creator-use').disabled=true;try{const loaded=await loadSession(candidate,{add:true});if(loaded){pendingSession=null;setFocus(true);}else error('這份練習未能載入，原練習保持不變。');}finally{el('creator-use').disabled=false;}};
  window.addEventListener('rewind:panel',e=>{if(e.detail==='creator'){refresh();}else if(busy)cancel(false);});
