@@ -45,7 +45,7 @@ After the ready cue, a gentle background fills each written character smoothly a
 
 Jyutping stays neutral. Several characters in a word may share one judgment. The final feedback is **not a validated Cantonese tone assessment**, and a model can miss a wrong syllable or tone. No calibrated proficiency score is claimed.
 
-After recording, a small tinted play arrow appears directly below the central Play key. It plays or pauses your own voice; its tooltip and accessible name identify it as My recording. There is no persistent text label. Use it to compare; use the existing **Rewind** key to replay the demonstration. The two never play together, and same-phrase Rewind preserves your clip. This also works while AI feedback is pending. A new attempt, different phrase/range, session change or page close clears the previous clip.
+After recording, a small solid play arrow appears directly below the central Play key, using the same theme colour as the outline demonstration arrow. It gently pulses three times when a new clip is ready, then settles; listening stops the cue immediately. It plays or pauses your own voice; its tooltip and accessible name identify it as My recording. There is no persistent text label. Use it to compare; use the existing **Rewind** key to replay the demonstration. The two never play together, and same-phrase Rewind preserves your clip. This also works while AI feedback is pending. A new attempt, different phrase/range, session change or page close clears the previous clip.
 
 ## Make a tape from your script
 
