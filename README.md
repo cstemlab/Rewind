@@ -29,7 +29,7 @@ Click a character to hear from there, or drag across words to hear just that ran
 
 While the demonstration plays, its highlight also surrounds only the written character; Jyutping stays neutral.
 
-On a phone, turn the screen sideways: the cassette automatically fits the visible area while preserving its 1.58:1 proportions. The small fullscreen icon in the sticker header enters or exits fullscreen where the browser supports it. On iPhone Safari, if fullscreen is unavailable, use **Share → Add to Home Screen** and enable **Open as Web App** when offered, then launch Rewind from the home screen. Real-device behavior remains to be tested; browser simulation does not verify iPhone compatibility.
+Tap the small landscape icon at the top right of the sticker: the cassette immediately turns and fills the available screen area, keeping its 1.58:1 proportions. Rewind also requests native fullscreen and landscape orientation when the browser allows them. If iPhone Safari does not offer native fullscreen, the cassette still turns within the page; Rewind cannot force Safari’s address and navigation bars to disappear. For a separate app window, use **Share → Add to Home Screen** and enable **Open as Web App** when offered, then launch Rewind from the home screen. Tap the icon again to leave landscape practice. Real-device behavior remains to be tested; browser simulation does not verify iPhone compatibility.
 
 ## Practise with your voice
 

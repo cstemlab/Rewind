@@ -209,7 +209,7 @@ body{display:grid;place-items:center}#app{width:100%}body>audio{display:none}
 #app .rewind-wordmark svg{display:block;width:100%;height:auto;overflow:visible}
 #app .label-header .tape-edition{position:static;display:block;min-width:0;margin:0;font-size:11px;line-height:1.25;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)}
 #app .label-header .tape-edition span{border:0;padding:0;font:inherit}
-#app .label-header .cassette-tools{position:static;display:flex;gap:12px;margin:0;align-items:center}
+#app .label-header .cassette-tools{grid-column:3;grid-row:1;justify-self:end;position:static;display:flex;gap:12px;margin:0;align-items:center}
 #app .label-header .scope-track{background:transparent;border-color:color-mix(in srgb,var(--muted) 23%,var(--label))}
 #app .label-header .scope-toggle:active{transform:none}
 #app .label-header .scope-track i{opacity:.8}
@@ -244,6 +244,12 @@ body{display:grid;place-items:center}#app{width:100%}body>audio{display:none}
 
 /* Keep the smallest cassette's writing field and lower label clear of its controls. */
 @media(max-width:380px){#app .label-header{padding-top:0}#app .label-header .scope-toggle{min-height:20px}#app .label-header .quiet-more{height:20px;width:20px;padding:4px}#app .reading-sheet{height:18%}#app .caption{--zh-size:19px!important}#app .tape-album{font-size:10px;bottom:2.5%}}
+
+/* Transport sits directly in the lower shell; captions provide playback progress. */
+#app .player-controls{top:79%;height:18%;padding-top:0}
+#app .player-controls .transport-row{margin-top:0}
+#app .label-header .rewind-wordmark{grid-column:1;grid-row:1}
+#app .label-header .tape-edition{grid-column:2;grid-row:1}
 
 /* A temporary printed surface inside one fixed cassette. */
 html{scrollbar-gutter:auto}
@@ -782,8 +788,10 @@ body.display-immersive #app #display-toggle{display:grid}
 #app #display-tip-close{position:absolute;right:4px;top:4px;width:12px;min-width:12px;height:12px;min-height:12px;padding:2px;background:none;color:var(--muted);border:0;border-radius:2px}
 #app #display-tip-close svg{width:8px;height:8px;display:block}
 #app #display-tip-close:hover{background:none;color:var(--ink)}
-body.display-immersive{--display-edge:8px;--tape-w:min(calc(var(--display-width,100vw) - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px) - var(--display-edge)*2),calc((var(--display-height,100dvh) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - var(--display-edge)*2)*1.58));box-sizing:border-box;display:grid;place-items:center;width:var(--display-width,100vw);height:var(--display-height,100dvh);min-height:0;padding:calc(env(safe-area-inset-top,0px) + var(--display-edge)) calc(env(safe-area-inset-right,0px) + var(--display-edge)) calc(env(safe-area-inset-bottom,0px) + var(--display-edge)) calc(env(safe-area-inset-left,0px) + var(--display-edge));overflow:hidden}
-body.display-immersive #app,body.display-immersive #app.focus,body.display-immersive #app.sidebar-hidden{width:var(--tape-w);max-width:var(--tape-w);margin:0;min-height:0}
+body.display-immersive{--display-edge:8px;--display-axis-width:var(--display-width,100vw);--display-axis-height:var(--display-height,100dvh);--display-safe-inline:calc(env(safe-area-inset-left,0px) + env(safe-area-inset-right,0px));--display-safe-block:calc(env(safe-area-inset-top,0px) + env(safe-area-inset-bottom,0px));--tape-w:min(calc(var(--display-axis-width) - var(--display-safe-inline) - var(--display-edge)*2),calc((var(--display-axis-height) - var(--display-safe-block) - var(--display-edge)*2)*1.58));box-sizing:border-box;width:var(--display-width,100vw);height:var(--display-height,100dvh);min-height:0;margin:0;padding:0;overflow:hidden}
+body.display-rotated{--display-axis-width:var(--display-height,100dvh);--display-axis-height:var(--display-width,100vw);--display-safe-inline:calc(env(safe-area-inset-top,0px) + env(safe-area-inset-bottom,0px));--display-safe-block:calc(env(safe-area-inset-left,0px) + env(safe-area-inset-right,0px))}
+body.display-immersive #app,body.display-immersive #app.focus,body.display-immersive #app.sidebar-hidden{position:fixed;left:calc(var(--display-left,0px) + var(--display-width,100vw)/2 + (env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px))/2);top:calc(var(--display-top,0px) + var(--display-height,100dvh)/2 + (env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))/2);width:var(--tape-w);max-width:var(--tape-w);margin:0;min-height:0;transform:translate(-50%,-50%);transform-origin:center;transition:none}
+body.display-rotated #app,body.display-rotated #app.focus,body.display-rotated #app.sidebar-hidden{transform:translate(-50%,-50%) rotate(90deg)}
 html:fullscreen,html:-webkit-full-screen{background:var(--page)}
 /* Phone-like cassette dimensions also apply on a wide, short landscape viewport. */
 body.compact-tape #app .cassette{border-width:1px;border-radius:7px}
@@ -806,11 +814,8 @@ body.compact-tape #app .caption .reading{font-size:calc(var(--zh-size)*.5);min-h
 body.compact-tape #app .caption .han{line-height:1.12}
 body.compact-tape #app .mechanics{border-width:1px;border-radius:5px}
 /* The two play keys scale together and keep their complete hit areas above the shell edge. */
-body.compact-tape #app .player-controls{--compact-key-height:clamp(21px,7.3cqw,40px);left:13%;right:13%;top:71.5%;height:26.5%}
-body.compact-tape #app .progress-meta{height:clamp(6px,1.9cqw,11px);min-height:0;margin-bottom:clamp(1px,.4cqw,2px)}
-body.compact-tape #app .time{font-size:clamp(6px,1.8cqw,10px);line-height:1}
-body.compact-tape #app .seek{display:block;height:2px;margin:0}
-body.compact-tape #app .transport-row{margin-top:clamp(2px,.8cqw,5px);gap:0}
+body.compact-tape #app .player-controls{--compact-key-height:clamp(21px,7.3cqw,40px);left:13%;right:13%;top:78%;height:20%}
+body.compact-tape #app .transport-row{margin-top:0;gap:0}
 body.compact-tape #app .transport .icon-button,body.compact-tape #app .play-options .icon-button{width:clamp(23px,7.8cqw,44px);min-width:0;height:var(--compact-key-height);min-height:0;padding:0;border-radius:4px}
 body.compact-tape #app .transport .icon-button svg,body.compact-tape #app .play-options .icon-button svg{width:clamp(14px,4.4cqw,23px);height:clamp(14px,4.4cqw,23px)}
 body.compact-tape #app .play-button{width:clamp(26px,8.6cqw,48px);height:var(--compact-key-height);min-height:0;padding:0;border-radius:4px}
@@ -877,8 +882,7 @@ SOFTWARE.
 <div id="practice-tip" role="note" hidden><span>點字聽 · 拖選重聽</span><button id="dismiss-tip" aria-label="關閉提示" title="Close"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></div>
 <div class="mechanics" aria-hidden="true"><div class="coil left-coil"><div class="reel"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="var(--hub)" stroke="#888c86" stroke-width="1.2"/><circle cx="50" cy="50" r="39" fill="none" stroke="#aeb0a7" stroke-width=".8"/><circle cx="50" cy="50" r="18" fill="#343835"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(0 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(60 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(120 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(180 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(240 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(300 50 50)"/></svg></div></div><div class="tape-window"><span class="tape-guide"></span></div><div class="coil right-coil"><div class="reel"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="var(--hub)" stroke="#888c86" stroke-width="1.2"/><circle cx="50" cy="50" r="39" fill="none" stroke="#aeb0a7" stroke-width=".8"/><circle cx="50" cy="50" r="18" fill="#343835"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(0 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(60 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(120 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(180 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(240 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(300 50 50)"/></svg></div></div></div>
 <div class="moulded-foot" aria-hidden="true"><i></i><i></i></div><section class="player-controls" aria-label="播放控制">
-        <div class="progress-meta"><span id="status" class="sr-only" role="status" aria-live="polite">準備好。每段讀一次，然後停下。</span><span class="time"><span id="elapsed">0:00</span><span class="time-slash">/</span><span id="duration">0:00</span></span></div>
-        <input id="seek" class="range seek" type="range" min="0" max="1" step="0.01" value="0" aria-label="本段播放位置">
+        <span id="status" class="sr-only" role="status" aria-live="polite">準備好。每段讀一次，然後停下。</span>
         <div class="transport-row">
           
           <div class="transport"><button id="loop" class="icon-button" aria-label="循環播放這一段" title="循環播放這一段" aria-pressed="false"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M24,128A72.08,72.08,0,0,1,96,56H204.69L194.34,45.66a8,8,0,0,1,11.32-11.32l24,24a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L204.69,72H96a56.06,56.06,0,0,0-56,56,8,8,0,0,1-16,0Zm200-8a8,8,0,0,0-8,8,56.06,56.06,0,0,1-56,56H51.31l10.35-10.34a8,8,0,0,0-11.32-11.32l-24,24a8,8,0,0,0,0,11.32l24,24a8,8,0,0,0,11.32-11.32L51.31,200H160a72.08,72.08,0,0,0,72-72A8,8,0,0,0,224,120Z"/></svg></button><button id="previous" class="icon-button" aria-label="選擇上一段，不播放" title="Previous · no playback (←)"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M199.81,34a16,16,0,0,0-16.24.43L64,109.23V40a8,8,0,0,0-16,0V216a8,8,0,0,0,16,0V146.77l119.57,74.78A15.95,15.95,0,0,0,208,208.12V47.88A15.86,15.86,0,0,0,199.81,34ZM192,208,64.16,128,192,48.07Z"/></svg></button><button id="rewind" class="icon-button" aria-label="倒帶重播這一段" title="倒帶重播（R）"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M223.77,58a16,16,0,0,0-16.25.53L128,109.14V71.84A15.91,15.91,0,0,0,103.52,58.5L15.33,114.66a15.8,15.8,0,0,0,0,26.68l88.19,56.16A15.91,15.91,0,0,0,128,184.16v-37.3l79.52,50.64A15.91,15.91,0,0,0,232,184.16V71.84A15.83,15.83,0,0,0,223.77,58ZM112,183.93,24.18,128,112,72.06Zm104,0L128.18,128,216,72.06Z"/></svg></button><div class="play-control"><button id="play" class="play-button" aria-label="播放這一段" title="播放／暫停（空白鍵）" disabled><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></svg></button><span id="play-label" aria-hidden="true">播放</span><button id="speech-listen" class="speech-listen" aria-label="回聽我的錄音" title="My recording" hidden><span class="speech-listen-icon" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27Z"/></svg>
@@ -1002,7 +1006,7 @@ SOFTWARE.
 <p>錄音由 AI 生成，並非真人錄製。每句錄音長度會實測；句內的逐字與短句時間目前按字詞估算，點字或拖選時可能有切音誤差。粵拼與讀音也需人工核對。錄音完成後按「開始練習」才會替換目前磁帶；封面標題跟隨新稿，Rewind 標誌保持不變。原有練習仍可在 Library 找回。取消或失敗會保留原稿。</p>
 <p>完成的練習可匯出為一個 <code>.rewind.json</code> 檔，在另一個 Rewind 頁面匯入。檔案包含這份練習的稿件、粵拼、錄音和時間資料，不包含 access code、API key 或你自己的練習錄音。</p>
 <h2>離線使用與分享</h2>
-<p>手機請開啟分享網頁，橫放後卡帶會按螢幕大小放大，字體及按鍵跟著調整。貼紙頂部的小全螢幕圖示可在支援的瀏覽器隱藏瀏覽器介面；再按一次退出。若 iPhone Safari 不支援，可從分享選單加入主畫面，開啟「Open as Web App」，再從主畫面進入。系統旋轉鎖定須關閉。</p>
+<p>手機請開啟分享網頁，按貼紙右上角的小橫屏圖示，卡帶會立即轉為橫向並配合可見畫面放大。瀏覽器允許時，會同時進入系統全螢幕及請求橫屏方向；再按圖示退出。若 iPhone Safari 未提供系統全螢幕，卡帶仍會在網頁內轉向，但 Rewind 無法強制隱藏 Safari 的網址列和導覽列。需要獨立視窗時，可從分享選單加入主畫面；如有「Open as Web App」選項，將它開啟，再從主畫面進入。</p>
 <p><code>Rewind.html</code> 已包含錄音、講稿、粵拼、時間資料及這份說明。分享時只需傳送這一個檔案，對方下載後用瀏覽器開啟即可，不需要附上 Source 資料夾，也不需要連線。</p>
 <p>Windows 版可直接開啟 EXE。Mac 版請先解壓縮對應 Apple Silicon 或 Intel 的 ZIP，再開啟 Rewind.app。桌面版同樣內置播放器與練習內容。這些桌面套件未作開發者簽署；Mac 版未經 Apple 公證，亦未在 Mac 實機測試，系統可能阻止首次開啟。</p>
 <h2>這次練習的內容</h2>
@@ -1867,6 +1871,7 @@ const REWIND_SKINS = [
 
 'use strict';
 const $=id=>document.getElementById(id);
+const cassetteRect=element=>window.rewindDisplay?.rect(element)||element.getBoundingClientRect();
 const audio=$('audio');
 const defaultSession=JSON.parse($('session-data').textContent);
 const library=[defaultSession];
@@ -2030,8 +2035,7 @@ function prepareTrack(bounds=playbackBounds(),kind=selection?'selection':'group'
   objectURL=URL.createObjectURL(wav.blob);resources.add(objectURL);
   track={...bounds,...wav,kind};
   audio.src=objectURL;audio.loop=repeat&&!continuous;audio.playbackRate=rate;audio.preservesPitch=true;audio.volume=volume;audio.muted=muted;audio.load();
-  $('seek').max=String(wav.duration);$('seek').value='0';$('duration').textContent=stamp(wav.duration);$('elapsed').textContent='0:00';
-  $('seek').style.setProperty('--pct','0%');lastActive=-1;
+  lastActive=-1;
 }
 
 async function playCurrent(){
@@ -2188,11 +2192,11 @@ function paintSelection(preview=null){
 function positionSelectionClear(){
   if(window.RewindSelection){window.RewindSelection.position();return;}
   if(!selection||$('clear-selection').hidden)return;
-  const viewport=$('caption').getBoundingClientRect();
-  const rects=tokenNodes.filter(t=>t.index>=selection.from&&t.index<selection.to).map(t=>t.element.getBoundingClientRect()).filter(r=>r.bottom>viewport.top+4&&r.top<viewport.bottom-4&&r.right>viewport.left&&r.left<viewport.right);
+  const viewport=cassetteRect($('caption'));
+  const rects=tokenNodes.filter(t=>t.index>=selection.from&&t.index<selection.to).map(t=>cassetteRect(t.element)).filter(r=>r.bottom>viewport.top+4&&r.top<viewport.bottom-4&&r.right>viewport.left&&r.left<viewport.right);
   $('clear-selection').style.visibility=rects.length?'visible':'hidden';
   if(!rects.length)return;
-  const host=$('transcript').getBoundingClientRect(),top=Math.min(...rects.map(r=>r.top));
+  const host=cassetteRect($('transcript')),top=Math.min(...rects.map(r=>r.top));
   const right=Math.min(viewport.right,Math.max(...rects.filter(r=>Math.abs(r.top-top)<5).map(r=>r.right)));
   const x=clamp(right-host.left-8,Math.max(0,viewport.left-host.left),host.width-28),y=Math.max(viewport.top-host.top,top-host.top-20);
   $('clear-selection').style.left=x+'px';$('clear-selection').style.top=y+'px';
@@ -2258,10 +2262,6 @@ function updateFrame(){
     const done=!speechOwnsText&&inRange&&(phase==='done'||global>=unit.end)&&phase!=='ready'&&phase!=='rewinding';
     element.classList.toggle('active',active);element.classList.toggle('done',done);
   }
-  if(!$('seek').matches(':active'))$('seek').value=String(pos);
-  $('seek').style.setProperty('--pct',`${clamp(pos/track.duration*100,0,100)}%`);
-  $('elapsed').textContent=stamp(pos);
-  $('seek').setAttribute('aria-valuetext',`${pos.toFixed(1)} 秒，共 ${track.duration.toFixed(1)} 秒`);
 }
 function frame(){updateFrame();raf=requestAnimationFrame(frame);}
 audio.addEventListener('play',()=>{phase='playing';updateStatus();});
@@ -2366,7 +2366,6 @@ $('loop').onclick=()=>{
   sound();updateStatus();
 };
 $('speed').onchange=e=>{rate=Number(e.target.value);audio.playbackRate=rate;audio.preservesPitch=true;};
-$('seek').oninput=e=>{if(!track)return;const atEnd=Number(e.target.value)>=track.duration-.011,target=atEnd?track.duration:Number(e.target.value);if(phase==='rewinding'){stopAction();phase='paused';}audio.currentTime=target;if(atEnd){audio.pause();phase='done';}else if(phase==='done'||phase==='ready'){phase=target>0?'paused':'ready';}updateStatus();updateFrame();};
 $('volume').oninput=e=>{volume=Number(e.target.value)/100;audio.volume=volume;muted=volume===0;audio.muted=muted;updateVolume();};
 function updateVolume(){setIcon($('mute'),muted?'speaker-slash':'speaker-high');$('mute').setAttribute('aria-pressed',String(muted));$('mute').setAttribute('aria-label',muted?'取消靜音':'靜音');$('mute').title=muted?'Unmute':'Mute';$('volume').style.setProperty('--pct',`${volume*100}%`);}
 $('mute').onclick=()=>{muted=!muted;audio.muted=muted;cancelFx();updateVolume();setFocus(true);};
@@ -2415,7 +2414,9 @@ loadSession(defaultSession);requestAnimationFrame(frame);
 /* Label themes and caption layout are independent of playback. */
 (()=>{
  const root=document.documentElement,caption=document.getElementById('caption'),grid=document.getElementById('skin-grid'),filters=document.getElementById('skin-filters'),cassette=document.getElementById('cassette');
- const anchorCassette=()=>document.body.style.setProperty('--cassette-top',Math.max(28,(innerHeight-cassette.getBoundingClientRect().height)/2)+'px');
+ const rect=element=>window.rewindDisplay?.rect(element)||element.getBoundingClientRect();
+ const point=event=>window.rewindDisplay?.point(event.clientX,event.clientY)||{x:event.clientX,y:event.clientY};
+ const anchorCassette=()=>document.body.style.setProperty('--cassette-top',Math.max(28,(innerHeight-cassette.offsetHeight)/2)+'px');
  new ResizeObserver(anchorCassette).observe(cassette);window.addEventListener('resize',anchorCassette);anchorCassette();
  let currentSkin=REWIND_SKINS[0],filter='All',fitPending=false;
  const skinNames=['Archive orange','Navy label','Sunset stripes','Marine lines','Studio yellow','Red header','Mint side','Blue spine','Orange corner','Plum corner','School blue','Notebook red','Forest frame','Wine frame','Plain ivory','Monochrome','Varsity navy','Varsity cream','Teal geometry','Coral geometry','Clear blue','Clear graphite','Clear amber','Clear mint'];
@@ -2432,9 +2433,9 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  REWIND_SKINS.filter(s=>filter==='All'||s.era===filter).forEach(s=>{const b=document.createElement('button');b.className='skin-choice';b.dataset.skin=s.id;b.setAttribute('aria-pressed',s.id===currentSkin.id);b.setAttribute('aria-label',skinName(s));const tape=document.createElement('span');tape.className='mini-tape';tape.setAttribute('aria-hidden','true');Object.entries(s.colors).forEach(([k,v])=>tape.style.setProperty('--'+k,v));
  const label=document.createElement('span');label.className='label-surface';paintLabel(label,s);label.append(art());const window=document.createElement('span');window.className='mini-window';window.append(document.createElement('i'),document.createElement('i'));const foot=document.createElement('span');foot.className='mini-foot';tape.append(label,window,foot);const name=document.createElement('span');name.textContent=skinName(s);b.append(tape,name);b.onclick=()=>{applySkin(s.id);globalThis.rewindPanels.close();};grid.append(b);});}
  let saved;try{saved=localStorage.getItem('rewind-skin-v05');}catch{}applySkin(saved);renderSkins();
- function fit(){fitPending=false;if(!caption.clientWidth||!caption.childElementCount)return;const mobile=cassette.getBoundingClientRect().width<=600,preferred=Number(document.getElementById('font-size').value)||34,whole=window.rewind?.getState().grain==='sentences';
+ function fit(){fitPending=false;if(!caption.clientWidth||!caption.childElementCount)return;const mobile=cassette.offsetWidth<=600,preferred=Number(document.getElementById('font-size').value)||34,whole=window.rewind?.getState().grain==='sentences';
  caption.dataset.flow=mobile?'horizontal':'wrap';caption.dataset.compact=String(!mobile&&whole);
- if(mobile){const size=Math.max(18,Math.min(32,cassette.getBoundingClientRect().width*20/370));caption.style.setProperty('--zh-size',size+'px');caption.style.setProperty('--row-gap','0px');caption.dataset.scrollable=String(caption.scrollWidth>caption.clientWidth+1);return;}
+ if(mobile){const size=Math.max(18,Math.min(32,cassette.offsetWidth*20/370));caption.style.setProperty('--zh-size',size+'px');caption.style.setProperty('--row-gap','0px');caption.dataset.scrollable=String(caption.scrollWidth>caption.clientWidth+1);return;}
  let size=Math.min(preferred,34),min=whole?16:22;caption.style.setProperty('--row-gap',whole?'0px':'2px');
  for(;size>=min;size--){caption.style.setProperty('--zh-size',size+'px');if(caption.scrollHeight<=caption.clientHeight&&caption.scrollWidth<=caption.clientWidth+1)break;}
  if(size<min){
@@ -2446,9 +2447,10 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  function schedule(){if(!fitPending){fitPending=true;requestAnimationFrame(fit);}}
  new ResizeObserver(schedule).observe(caption);new MutationObserver(()=>{caption.scrollTop=0;caption.scrollLeft=0;schedule();}).observe(caption,{childList:true});document.getElementById('font-size').addEventListener('input',schedule);
  caption.addEventListener('wheel',e=>{if(caption.dataset.flow==='horizontal'&&caption.scrollWidth>caption.clientWidth){e.preventDefault();caption.scrollLeft+=e.deltaY+e.deltaX;}},{passive:false});
- let lastActive=null,dragging=false,dragX=0,dragY=0;caption.addEventListener('pointerdown',e=>{dragging=true;dragX=e.clientX;dragY=e.clientY;});caption.addEventListener('pointermove',e=>{dragX=e.clientX;dragY=e.clientY;});window.addEventListener('pointerup',()=>{dragging=false;});window.addEventListener('pointercancel',()=>{dragging=false;});
- function follow(){const heard=caption.querySelectorAll('.token.speech-live'),active=caption.querySelector('.token.speech-preparing')||caption.querySelector('.token.speech-guide')||caption.querySelector('.token.active')||heard[heard.length-1],v=caption.getBoundingClientRect();if(dragging){if(caption.dataset.flow==='horizontal'){if(dragX>v.right-20)caption.scrollLeft+=4;else if(dragX<v.left+20)caption.scrollLeft-=4;}else{if(dragY>v.bottom-15)caption.scrollTop+=3;else if(dragY<v.top+15)caption.scrollTop-=3;}}
- else if(active&&active!==lastActive){const r=active.getBoundingClientRect();if(r.left<v.left+3)caption.scrollLeft-=v.left-r.left+8;else if(r.right>v.right-3)caption.scrollLeft+=r.right-v.right+8;if(caption.dataset.flow!=='horizontal'){if(r.top<v.top+2)caption.scrollTop-=v.top-r.top+5;else if(r.bottom>v.bottom-2)caption.scrollTop+=r.bottom-v.bottom+5;}lastActive=active;}requestAnimationFrame(follow);}
+ let lastActive=null,dragging=false,dragX=0,dragY=0;caption.addEventListener('pointerdown',e=>{dragging=true;const p=point(e);dragX=p.x;dragY=p.y;});caption.addEventListener('pointermove',e=>{const p=point(e);dragX=p.x;dragY=p.y;});window.addEventListener('pointerup',()=>{dragging=false;});window.addEventListener('pointercancel',()=>{dragging=false;});
+ function follow(){const heard=caption.querySelectorAll('.token.speech-live'),active=caption.querySelector('.token.speech-preparing')||caption.querySelector('.token.speech-guide')||caption.querySelector('.token.active')||heard[heard.length-1],v=rect(caption);if(dragging){if(caption.dataset.flow==='horizontal'){if(dragX>v.right-20)caption.scrollLeft+=4;else if(dragX<v.left+20)caption.scrollLeft-=4;}else{if(dragY>v.bottom-15)caption.scrollTop+=3;else if(dragY<v.top+15)caption.scrollTop-=3;}}
+ else if(active&&active!==lastActive){const r=rect(active);if(r.left<v.left+3)caption.scrollLeft-=v.left-r.left+8;else if(r.right>v.right-3)caption.scrollLeft+=r.right-v.right+8;if(caption.dataset.flow!=='horizontal'){if(r.top<v.top+2)caption.scrollTop-=v.top-r.top+5;else if(r.bottom>v.bottom-2)caption.scrollTop+=r.bottom-v.bottom+5;}lastActive=active;}requestAnimationFrame(follow);}
+ window.addEventListener('rewind:displaychange',()=>{dragging=false;lastActive=null;schedule();});
  requestAnimationFrame(follow);schedule();window.rewindTheme=Object.freeze({apply:applySkin,get:()=>currentSkin.id,list:()=>REWIND_SKINS.map(s=>({id:s.id,name:s.name,artwork:s.artwork})),fit});
 })();
 
@@ -2571,6 +2573,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   const connection=RewindConnection, byId=id=>document.getElementById(id);
   const providerName=()=>({openai:'OpenAI',gemini:'Google Gemini',azure:'Azure'})[service?.provider]||'AI';
   const record=byId('speech-record'), bar=byId('speech-bar'), replay=new Audio();
+  const displayRect=element=>window.rewindDisplay?.rect(element)||element.getBoundingClientRect();
   const recordSVG='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="12" cy="12" r="4.4"/></svg>';
   const stopSVG='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>';
   const checkingSVG='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 1 9 9M12 21a9 9 0 0 1-9-9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
@@ -2760,7 +2763,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   function openSettings({fromRecord=false}={}){closeConsent();panelError();connectionFromRecord=fromRecord;syncSettings();rewindPanels.open('speech');const key=byId('speech-key');if(!byId('speech-config').hidden&&!key.hidden)key.focus({preventScroll:true});}
   function openConnectionSettings(){openSettings({fromRecord:true});}
   function closeConsent(){byId('speech-popover').hidden=true;byId('speech-mode-choice-compare').hidden=true;consentAction=null;record.removeAttribute('aria-expanded');}
-  function positionConsent(){const box=byId('speech-popover');if(box.hidden)return;const tape=byId('cassette').getBoundingClientRect(),button=record.getBoundingClientRect(),width=box.offsetWidth;box.style.left=Math.max(10,Math.min(tape.width-width-10,button.left+button.width/2-tape.left-width/2))+'px';box.style.bottom=Math.max(8,tape.bottom-button.top+9)+'px';}
+  function positionConsent(){const box=byId('speech-popover');if(box.hidden)return;const tape=displayRect(byId('cassette')),button=displayRect(record),width=box.offsetWidth;box.style.left=Math.max(10,Math.min(tape.width-width-10,button.left+button.width/2-tape.left-width/2))+'px';box.style.bottom=Math.max(8,tape.bottom-button.top+9)+'px';}
   function openConnectionPrompt(){
     pauseForOptions();stopAction();setFocus(true);dismissTip();consentAction=openConnectionSettings;
     byId('speech-mode-choice-compare').hidden=true;
@@ -2924,6 +2927,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   byId('speech-popover-start').onclick=()=>{const action=consentAction;if(!action)return;if(action===startRecording||action===submit){if(!service?.configured){openConnectionPrompt();return;}consent=service.provider;}closeConsent();return action();};
   byId('speech-popover-close').onclick=()=>{closeConsent();record.focus({preventScroll:true});};
   window.addEventListener('resize',positionConsent);
+  window.addEventListener('rewind:displaychange',positionConsent);
   document.addEventListener('pointerdown',e=>{if(!byId('speech-popover').hidden&&!byId('speech-popover').contains(e.target)&&!record.contains(e.target))closeConsent();});
   byId('speech-again').onclick=prepare;
   function showDetails(){
@@ -3126,6 +3130,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  const caption=document.getElementById('caption'),host=document.getElementById('transcript'),clear=document.getElementById('clear-selection');
  if(!caption||!host||!clear)return;
  let queued=false,signature='';
+ const rect=element=>window.rewindDisplay?.rect(element)||element.getBoundingClientRect();
  // The painted mark is 10px inside a transparent 14px hit target.
  const overlap=(a,b)=>a.x+2<b.right+.75&&a.x+12>b.left-.75&&a.y+2<b.bottom+.75&&a.y+12>b.top-.75;
  const visible=(r,v)=>r.bottom>v.top&&r.top<v.bottom&&r.right>v.left&&r.left<v.right;
@@ -3135,16 +3140,16 @@ loadSession(defaultSession);requestAnimationFrame(frame);
    const selected=[...caption.querySelectorAll('.token.selected')],nextSignature=selected.map(x=>x.dataset.unit).join(',');
    if(!selected.length)return;
    if(signature!==nextSignature){signature=nextSignature;if(caption.dataset.clearGutter)delete caption.dataset.clearGutter;}
-   const h=host.getBoundingClientRect(),v=caption.getBoundingClientRect();
-   const selectedRects=selected.map(x=>x.querySelector('.han').getBoundingClientRect()).filter(r=>visible(r,v));
+   const h=rect(host),v=rect(caption);
+   const selectedRects=selected.map(x=>rect(x.querySelector('.han'))).filter(r=>visible(r,v));
    if(!selectedRects.length){if(clear.style.visibility!=='hidden')clear.style.visibility='hidden';return;}
    if(clear.style.visibility!=='visible')clear.style.visibility='visible';
    let candidate;
    if(caption.dataset.clearGutter==='true')candidate={x:v.right+3,y:Math.max(v.top,selectedRects[0].top-15)};
    else{
      const firstTop=Math.min(...selectedRects.map(r=>r.top)),row=selectedRects.filter(r=>Math.abs(r.top-firstTop)<5),right=Math.min(v.right,Math.max(...row.map(r=>r.right)));
-     const occupied=[...caption.querySelectorAll('.han,.reading')].map(x=>x.getBoundingClientRect()).filter(r=>visible(r,v));
-     const readings=selected.map(x=>x.querySelector('.reading').getBoundingClientRect()).filter(r=>visible(r,v));
+     const occupied=[...caption.querySelectorAll('.han,.reading')].map(rect).filter(r=>visible(r,v));
+     const readings=selected.map(x=>rect(x.querySelector('.reading'))).filter(r=>visible(r,v));
      const readingTop=Math.min(...readings.map(r=>r.top)),anchor={x:right+3,y:readingTop-15};
      const rows=[readingTop-15,h.top,firstTop-17,firstTop,firstTop+row[0].height/2-7,v.bottom-15];
      let best=Infinity;
@@ -3160,92 +3165,119 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  new MutationObserver(schedule).observe(clear,{attributes:true,attributeFilter:['hidden','style']});
  new ResizeObserver(schedule).observe(host);
  caption.addEventListener('scroll',schedule,{passive:true});
+ window.addEventListener('rewind:displaychange',()=>{signature='';delete caption.dataset.clearGutter;schedule();});
  window.addEventListener('resize',schedule);window.addEventListener('rewind:materialchange',schedule);
  window.RewindSelection=Object.freeze({position:paint});
  schedule();
 })();
 
-/* Fit the physical cassette to a landscape screen without rotating its contents. */
+/* Landscape practice has a useful viewport fallback when native fullscreen is unavailable. */
 (()=>{
-  const body=document.body,root=document.documentElement,cassette=document.getElementById('cassette');
+  const body=document.body,root=document.documentElement,app=document.getElementById('app'),cassette=document.getElementById('cassette');
   const button=document.getElementById('display-toggle'),status=document.getElementById('display-status');
   const tip=document.getElementById('display-tip'),tipText=document.getElementById('display-tip-text'),tipClose=document.getElementById('display-tip-close');
-  if(!button||!cassette)return;
+  if(!button||!cassette||!app)return;
   const enterIcon='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const exitIcon='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none"><path d="M4 8h4V4m12 4h-4V4M8 20v-4H4m12 4v-4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  let pending=false,frame=null,lastCompact=null,orientationOwned=false,lastIcon=null,pageActive=true;
+  let wanted=false,frame=null,lastCompact=null,orientationOwned=false,lastIcon=null,pageActive=true,nativeSeen=false,intent=0,lastGeometry='';
   const full=()=>document.fullscreenElement===root||document.webkitFullscreenElement===root;
   const request=()=>root.requestFullscreen||root.webkitRequestFullscreen;
   const supported=()=>!!request()&&(document.fullscreenEnabled!==false||!!root.webkitRequestFullscreen);
+  const active=()=>wanted||full();
   function hideTip(){if(tip)tip.hidden=true;button.removeAttribute('aria-describedby');}
   function showTip(message){
-    const tutorial=document.getElementById('practice-tip');
-    if(tutorial&&!tutorial.hidden)document.getElementById('dismiss-tip')?.click();
     if(status)status.textContent=message;
     if(tip&&tipText){tipText.textContent=message;tip.hidden=false;button.setAttribute('aria-describedby','display-tip-text');}
   }
   function paint(){
-    const active=full();if(active!==lastIcon){button.innerHTML=active?exitIcon:enterIcon;lastIcon=active;}
-    button.setAttribute('aria-pressed',String(active));button.setAttribute('aria-label',active?'退出全螢幕':supported()?'全螢幕練習':'橫屏練習');
-    button.title=active?'Exit fullscreen':supported()?'Fullscreen':'Landscape view';
-    button.disabled=pending;
+    const on=active();if(on!==lastIcon){button.innerHTML=on?exitIcon:enterIcon;lastIcon=on;}
+    button.setAttribute('aria-pressed',String(on));
+    button.setAttribute('aria-label',on?'退出橫屏練習':supported()?'橫屏全螢幕練習':'橫屏練習');
+    button.title=on?'Exit landscape view':supported()?'Landscape fullscreen':'Landscape view';
+    button.disabled=false;
   }
   function measure(){
     frame=null;
     const vv=window.visualViewport,useVisual=vv&&Math.abs((vv.scale||1)-1)<.01;
     const width=Math.max(1,useVisual?vv.width:innerWidth),height=Math.max(1,useVisual?vv.height:innerHeight);
     body.style.setProperty('--display-width',width+'px');body.style.setProperty('--display-height',height+'px');
-    const immersive=full()||(width>height&&height<=600);
-    body.classList.toggle('display-immersive',immersive);
-    const compact=cassette.getBoundingClientRect().width<=600;
+    body.style.setProperty('--display-left',(useVisual?vv.offsetLeft||0:0)+'px');body.style.setProperty('--display-top',(useVisual?vv.offsetTop||0:0)+'px');
+    // A CSS turn is used only while the device viewport itself is portrait.
+    const rotated=active()&&matchMedia('(orientation: portrait)').matches;
+    body.classList.toggle('display-rotated',rotated);
+    body.classList.toggle('display-active',active());
+    body.classList.toggle('display-immersive',active()||(width>height&&height<=600));
+    // offsetWidth describes the cassette's physical design width, before rotation.
+    const compact=cassette.offsetWidth<=600;
     body.classList.toggle('compact-tape',compact);
     if(compact!==lastCompact){lastCompact=compact;window.rewindTheme?.fit();}
     paint();
+    const geometry=[width,height,rotated,cassette.offsetWidth,body.style.getPropertyValue('--display-left'),body.style.getPropertyValue('--display-top')].join('|');
+    if(geometry!==lastGeometry){lastGeometry=geometry;window.dispatchEvent(new Event('rewind:displaychange'));}
   }
   function schedule(){if(frame===null)frame=requestAnimationFrame(measure);}
   function unlockOrientation(){try{screen.orientation?.unlock?.();}catch{}orientationOwned=false;}
-  function lockOrientation(){
+  function lockOrientation(ticket){
     if(!full()||!matchMedia('(pointer: coarse)').matches||!screen.orientation?.lock)return;
     try{
       Promise.resolve(screen.orientation.lock('landscape')).then(()=>{
-        if(full()&&pageActive)orientationOwned=true;
+        if(full()&&wanted&&pageActive&&ticket===intent)orientationOwned=true;
         else unlockOrientation();
-      },()=>{/* Physical rotation remains available. */});
-    }catch{/* Some browsers expose the API but do not allow locking. */}
+      },()=>{schedule();});
+    }catch{schedule();}
+  }
+  async function exitNative(){
+    const exit=document.exitFullscreen||document.webkitExitFullscreen;
+    if(!full()||!exit)return;
+    try{await exit.call(document);}catch{showTip('請使用瀏覽器的退出全螢幕按鈕。');}
+  }
+  async function leave(){
+    ++intent;wanted=false;hideTip();if(orientationOwned)unlockOrientation();
+    measure();await exitNative();measure();
+    if(status&&!full())status.textContent='已退出橫屏練習。';
   }
   async function toggle(){
-    if(pending)return;
-    hideTip();
-    if(full()){
-      const exit=document.exitFullscreen||document.webkitExitFullscreen;
-      if(!exit)return;
-      pending=true;paint();
-      try{await exit.call(document);}catch{showTip('未能退出全螢幕，請使用瀏覽器的退出鍵。');}
-      finally{pending=false;paint();schedule();}
-      return;
-    }
-    if(!supported()){
-      showTip(innerWidth>innerHeight?'已按橫屏放大。可從瀏覽器選單「加入主畫面」，以獨立視窗開啟。':'請將手機橫放。也可從瀏覽器選單「加入主畫面」，以獨立視窗開啟。');
-      return;
-    }
-    pending=true;paint();
+    if(active()){await leave();return;}
+    const ticket=++intent;wanted=true;hideTip();measure();
+    if(status)status.textContent='已開啟橫屏練習。再次按角落圖示可退出。';
+    if(!supported())return;
     try{
       await request().call(root,{navigationUI:'hide'});
-      lockOrientation();
-      if(status&&full())status.textContent='已進入全螢幕。再次按角落圖示可退出。';
-    }catch{showTip('瀏覽器未能開啟全螢幕。將手機橫放，仍可放大練習。');}
-    finally{pending=false;paint();schedule();}
+      if(ticket!==intent||!wanted||!pageActive){await exitNative();return;}
+      nativeSeen=full();lockOrientation(ticket);
+    }catch{
+      // Keep the immediately available landscape view, including on iPhone Safari.
+      if(ticket===intent&&wanted&&status)status.textContent='已開啟橫屏檢視；瀏覽器工具列由瀏覽器控制。';
+    }finally{schedule();}
   }
   function changed(){
-    if(!full()&&orientationOwned)unlockOrientation();
-    hideTip();paint();schedule();
+    if(full()){
+      if(wanted)nativeSeen=true;
+      else void exitNative();
+    }else if(nativeSeen){
+      nativeSeen=false;wanted=false;++intent;if(orientationOwned)unlockOrientation();
+    }
+    hideTip();measure();
   }
+  // Selection handles, caption following and consent popovers share the same
+  // inverse transform. DOM hit testing (elementFromPoint) still uses real points.
+  function point(x,y){
+    if(!body.classList.contains('display-rotated'))return {x,y};
+    const r=app.getBoundingClientRect();return {x:y-r.top,y:r.right-x};
+  }
+  function rect(element){
+    const r=element.getBoundingClientRect();
+    if(!body.classList.contains('display-rotated'))return r;
+    const a=point(r.right,r.top),b=point(r.left,r.bottom);
+    return {x:a.x,y:a.y,left:a.x,top:a.y,right:b.x,bottom:b.y,width:b.x-a.x,height:b.y-a.y};
+  }
+  window.rewindDisplay=Object.freeze({rect,point,isRotated:()=>body.classList.contains('display-rotated')});
   button.addEventListener('click',toggle);tipClose?.addEventListener('click',hideTip);
   document.addEventListener('fullscreenchange',changed);document.addEventListener('webkitfullscreenchange',changed);
-  window.addEventListener('resize',schedule);window.visualViewport?.addEventListener('resize',schedule);
+  window.addEventListener('resize',schedule);window.visualViewport?.addEventListener('resize',schedule);window.visualViewport?.addEventListener('scroll',schedule);
   screen.orientation?.addEventListener?.('change',()=>{hideTip();schedule();});
   new ResizeObserver(schedule).observe(cassette);
-  document.addEventListener('keydown',event=>{if(event.key==='Escape')hideTip();});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'){hideTip();if(active())void leave();}});
   window.addEventListener('pagehide',()=>{pageActive=false;if(orientationOwned)unlockOrientation();});
   window.addEventListener('pageshow',()=>{pageActive=true;schedule();});
   measure();
