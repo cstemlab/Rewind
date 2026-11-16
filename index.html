@@ -131,11 +131,13 @@ body{background:var(--page);color:var(--panelText);padding:clamp(20px,7vh,76px) 
 #app .transport,#app .play-options{display:flex;align-items:center;gap:12px}
 #app .transport .icon-button,#app .play-options .icon-button{width:40px;height:40px;min-width:40px;min-height:40px;border-radius:6px;color:var(--controlInk);background:none}
 #app .transport .icon-button svg,#app .play-options .icon-button svg{width:21px;height:21px}
-#app #rewind{background:var(--accent);color:var(--accentInk);box-shadow:none}
+#app #rewind{background:color-mix(in srgb,var(--controlInk) 12%,transparent);color:var(--controlInk);box-shadow:none}
 #app .play-control{margin:0}#app .play-button{width:44px;height:40px;border:1px solid #ffffff18;border-radius:6px;background:var(--hub);color:#292d29;box-shadow:0 1px 0 #0005}
 #app .play-button svg{width:23px;height:23px}#app #play-label,#app .control-caption{display:none}#app .through-icon{display:flex;transform:scaleX(-1)}
 #app .icon-button[aria-pressed=true]{color:var(--accentInk);background:var(--accent)}
-#app .transport .icon-button:hover:not(:disabled),#app .play-options .icon-button:hover:not(:disabled){background:#ffffff14}#app #rewind:hover{background:var(--accent);filter:brightness(1.08)}
+#app .transport .icon-button:hover:not(:disabled),#app .play-options .icon-button:hover:not(:disabled){background:#ffffff14}#app #rewind:hover:not(:disabled){background:color-mix(in srgb,var(--controlInk) 20%,transparent);filter:none}
+#app #rewind:active:not(:disabled){background:color-mix(in srgb,var(--controlInk) 20%,transparent)}
+#app #rewind:focus-visible{outline-color:var(--controlInk)}
 #app .extra-options{display:flex;align-items:center;gap:9px;margin-top:16px;padding:7px 12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;color:var(--panelText)}#app.focus .extra-options{display:none}
 #app .extra-options .icon-button,#app .extra-options select{color:var(--panelText)}#app .extra-options #toggle-sidebar{display:inline-flex}#app .extra-speed{display:flex;align-items:center;gap:12px;margin-left:auto}#app .volume-control .range{display:block;width:65px}
 #app #error{position:absolute;bottom:0;left:8%;right:8%;z-index:9;font-size:11px}
