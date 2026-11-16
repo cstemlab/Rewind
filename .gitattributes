@@ -1,5 +1,8 @@
 index.html -text
+rewind-cloud.json -text
 *.py text eol=lf
 *.md text eol=lf
 *.command text eol=lf
 *.cmd text eol=crlf
+# Preserve the verified cloud deployment bundle, including HTTP fixture bytes.
+cloud/** -text

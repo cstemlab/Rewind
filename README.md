@@ -4,7 +4,15 @@ A cassette-inspired app for listening, repeating and practising spoken language.
 
 **[Open Rewind](https://cstemlab.github.io/Rewind/)** · [繁體中文使用說明](Getting%20started.zh-Hant.md)
 
-The included IN-SMART Cantonese practice has Traditional Chinese, Jyutping above each character, short phrases and complete sentences. Playback, captions and temporary options remain inside a fixed cassette.
+The included IN-SMART Cantonese practice has Traditional Chinese, Jyutping above the text, short phrases and complete sentences. Playback, captions and temporary options stay inside the cassette. The hosted preview adds AI practice and script creation while keeping the existing cassette design and controls.
+
+## Start practising
+
+Open the link in your browser. The included practice works without an AI connection. To use AI features, open **⋯ → Settings → Speech**, enter the private tester phrase supplied by the organiser in **Access code**, then press **Connect**. An invitation link can connect the same way.
+
+The hosted preview uses **Google Gemini**, with API costs covered by the organiser. Testers do not need a Google Cloud account or an API key. The connection is kept in the current browser tab; if it expires, reconnect with the tester phrase. Please keep the phrase private.
+
+**OpenAI remains available in the optional local companion. It is not configured on this hosted preview.** The app does not automatically switch providers or send a recording to a fallback service.
 
 | Control | Action |
 | --- | --- |
@@ -15,43 +23,68 @@ The included IN-SMART Cantonese practice has Traditional Chinese, Jyutping above
 | Through | Listen continuously |
 | Loop | Repeat the current unit |
 | Short / Long | Switch between phrases and sentences |
-| ⋯ | Temporary options inside the cassette |
+| ⋯ | Open temporary options inside the cassette |
 
-Click a character to hear from there, or drag across words to hear just that range. Selection surrounds the written text, leaving Jyutping unchanged. The small × clears selection without an oversized hover background.
+Click a character to hear from there, or drag across words to hear just that range. Selection surrounds the written text, leaving Jyutping unchanged. The small × clears the selection.
+
+## Practise with your voice
+
+Press **Record**. A small on-tape notice explains the active service and when audio will be sent. Allow microphone access, read the current phrase or selected words, then press again to stop. Each recording is limited to 25 seconds.
+
+When live recognition is available, the faint background behind characters tracks words the service appears to have heard. **This is provisional recognition, not a pronunciation verdict.** After you stop, an audio model evaluates the clip directly and returns experimental practice feedback:
+
+- **Teal text with a small filled round marker:** passed this attempt.
+- **A hollow round marker:** close; worth practising again.
+- **No marker:** needs another attempt or could not be confirmed. Open the result summary for the distinction.
+
+Jyutping stays neutral. Several characters in a word may share one judgment. The final feedback is **not a validated Cantonese tone assessment**, and a model can miss a wrong syllable or tone. No calibrated proficiency score is claimed.
+
+Without an AI connection, the record button offers recording and replay only. It explains this before recording and does not show a simulated assessment. Existing recordings are never sent automatically when you connect later.
 
 ## Make a tape from your script
 
-In the **local companion**, connect OpenAI in **⋯ → Settings → Speech**, then choose **Library → New**. Paste/type Chinese or English, or import TXT, DOCX or a text-based PDF. Files are limited to 5 MB and source text to 12,000 characters. Scanned PDFs need OCR first; legacy DOC files should be saved as DOCX.
+After connecting, choose **⋯ → Library → New**. Paste/type Chinese or English, or import TXT, DOCX or a PDF containing selectable text. Files are limited to 5 MB and source text to 12,000 characters. Scanned PDFs need OCR first; save legacy DOC files as DOCX.
 
-- **Faithful** asks for natural spoken Cantonese while preserving meaning, details and register.
-- **Beginner** asks for familiar words and shorter clauses while preserving substantive content.
+1. Choose **Faithful** to preserve meaning, details and register, or **Beginner** for familiar words and shorter clauses. Both aim to preserve the substantive content.
+2. Press **轉成粵語** to convert the script into spoken Cantonese.
+3. Review and edit the Cantonese draft, then press **製作錄音** to generate the AI demonstration voice.
+4. Press **開始練習** to load the finished tape. Its title and sections follow your script; the Rewind logo stays the same.
+5. Use **Library → Export** to save a `.rewind.json` file containing the script, Jyutping, timing and demonstration audio.
 
-Review and edit the Cantonese draft before generating an AI voice. Only **開始練習 / Use** replaces the active tape. Its title and section information follow the new script; Rewind branding remains unchanged. Cancelled/failed jobs preserve the draft and current tape. Export the completed `.rewind.json` session to retain or share it; the file includes its audio.
-
-AI creation uses your API quota and sends the relevant text to OpenAI after you request conversion or narration. Document extraction itself is local. The planner cannot rewrite the reviewed text: it receives immutable source token IDs for Jyutping. Pronunciation and Jyutping still need review. Whole-sentence WAV durations are measured; **within-sentence character/phrase times are estimated**, so a selected character may have an imperfect audio boundary. See the [creator contract](service/Creator%20API%20contract.md).
+Cancelled or failed creation leaves the draft and current tape intact. Review the generated wording, Jyutping and voice before relying on them. Whole-sentence audio lengths are measured; **within-sentence character and phrase boundaries are estimated**, so selecting one character can include a little adjacent sound.
 
 ## Materials and labels
 
-**Skin** provides independent Material (Matte, Smoked, Clear), Case colour, Sticker colour, Pattern and three Print colours. The original 24 designs remain under Presets. Transparent plastic exposes restrained internal supports, lower tape guides and the tape path; the paper sticker stays opaque. Changing appearance never moves the reels or changes the cassette proportions. Text and controls adapt to light and dark colours.
+**⋯ → Skin** provides independent **Material, Case, Sticker, Pattern** and **Print** controls. Choose Matte, Smoked or Clear plastic, customise the colours, or start from one of the 24 presets. Transparent materials expose interior supports and the tape path while the sticker stays opaque. Changing appearance preserves the cassette proportions and reel positions.
 
-## Online and local use
+## What is sent and saved
 
-**GitHub Pages provides playback, prepared-session import/export, and local microphone recording/replay.** It does not host an AI server, contain an API key, or send recordings to an AI service. Imported sessions and learner recordings stay in the current page unless a session is explicitly exported; learner microphone recordings are never included in session exports.
+- Ordinary playback and importing a prepared `.rewind.json` do not send the practice to an AI service.
+- TXT files are read in the browser. DOCX and PDF files go to the Rewind backend for text extraction. Pressing the conversion or narration button sends the relevant text to the displayed AI service.
+- Voice practice sends audio according to the on-tape notice: during recording for enabled live recognition, and after stopping for final feedback.
+- Learner recordings are temporary in the current page and are cleared when you leave or clear the attempt. They are **not included** in exported practice files. Clearing the page does not undo audio already sent for processing.
+- Provider credentials stay on the backend. The public HTML contains no API key or tester phrase; only the temporary session token is stored in the current tab.
 
-**AI creation and pronunciation feedback use the optional local companion.** Download or clone this repository, install Python 3.10 or later, then run:
+For phones, share the **web link**. A downloaded HTML file may not open as an interactive app in a phone's file preview. Prepared practice files can be imported from **Library → Open**. Playback of an already downloaded complete HTML remains available offline; AI functions need an internet connection and an active service.
+
+## Optional local companion
+
+OpenAI is retained as a local option. Download or clone this repository, install Python 3.10 or later, then run:
 
 ```sh
 python service/server.py --open-browser
 ```
 
-Windows also has `Open Rewind.cmd`; macOS has `Open Rewind.command`. Runtime dependencies and licenses are bundled in `service/vendor`. The server binds only to `127.0.0.1`. In the opened page, choose **⋯ → Settings → Speech** and connect your own OpenAI or Azure key. Keys remain in process memory, outside the repository and browser storage. Restarting requires reconnecting. Creation uses OpenAI; pronunciation practice supports either provider.
+Windows also includes `Open Rewind.cmd`; on macOS, use `python3` or `Open Rewind.command`. Runtime dependencies and licences are bundled in `service/vendor`. The service binds only to `127.0.0.1`.
 
-OpenAI can stream recording audio for provisional transcription progress and assess the finished clip after the first-use disclosure. Azure assesses after recording stops. Live recognition is a faint character-only wash; it is not a pronunciation verdict. Final passed groups use fresh teal text and a filled miniature marker; a hollow marker means close, with room to improve. Wrong/unmatched/uncertain groups have no marker, and result details distinguish them. Jyutping remains neutral. A multi-character word group may share one judgment.
+In the local page, choose **⋯ → Settings → Speech → OpenAI**, enter your API key and connect. The key stays in the local service's memory; restarting requires reconnecting. Local usage is charged to that API account. The existing Azure Speech option is also retained for local pronunciation practice; script creation uses OpenAI in this companion.
 
-This is a practice aid, **not a validated Cantonese tone examiner**. Model judgments can be wrong; an earlier 買／賣 contrast was missed. Azure's close range is a UI heuristic (60–79 plus a matching independent transcript and no explicit mispronunciation), not a calibrated proficiency standard. OpenAI provides experimental coaching without invented numeric scores. See [speech setup](service/API%20contract.md) and the [live contract](service/Live%20API%20contract.md).
+The local and hosted versions use the same recording and cassette controls. Neither silently transfers an attempt to a different provider. See the local [speech contract](service/API%20contract.md), [live contract](service/Live%20API%20contract.md) and [creator contract](service/Creator%20API%20contract.md).
 
-## Version and source
+## Source and testing
 
-Version **r11 / 0.11.0**. `index.html` is the complete browser app with embedded demo audio, timing, icons and Help. Previous releases remain in Git history. No API keys or learner recordings are published.
+`index.html` contains the browser app, demo audio, timing, icons and Help. `rewind-cloud.json` supplies the public backend address only. Hosted source is in `cloud/`, with an [API contract](cloud/API.md) and [deployment notes](cloud/DEPLOY.md); `service/` retains the local companion. Previous versions remain in Git history.
 
-Tests cover parsing, jobs/cancellation, exact reviewed-text preservation, marker semantics, selection, transport, custom materials and fixed geometry. Simulated recordings test interaction, not pronunciation accuracy. Real iPhone Safari and Mac-device testing remain pending. Icons: [Phosphor](https://github.com/phosphor-icons/core), MIT license embedded. Cassette and label artwork is original; material references are recorded in [Material references](Material%20references.md).
+Mocked tests cover hosted authentication and expiration, local CSRF compatibility, creator jobs and cancellation, both translation modes, provider-specific live routing, recording feedback and preservation of the reviewed draft. They test integration and interaction, **not pronunciation accuracy**. Real iPhone Safari and Mac-device testing remain pending.
+
+Icons: [Phosphor](https://github.com/phosphor-icons/core), with its MIT licence embedded. Cassette and label artwork is original; see [Material references](Material%20references.md).
