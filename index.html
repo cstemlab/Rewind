@@ -549,14 +549,15 @@ body{--tape-w:min(960px,calc(100vw - 48px),calc((100dvh - 56px)*1.58));display:b
  #app .play-control #speech-listen svg{width:12px;height:12px}
 }
 
-/* The new recording key keeps expanding until that recording is replaced. Only the glyph moves. */
+/* The play glyph grows until it is just smaller than the demonstration key. Pause stays still. */
 #app .play-control #speech-listen .speech-listen-icon{transform-origin:50% 50%;transform:scale(1)}
-#app .play-control #speech-listen.recording-fresh .speech-listen-icon{animation:recording-ready 1.15s ease-in-out infinite}
+#app .play-control #speech-listen.recording-fresh:not([aria-pressed=true]) .speech-listen-icon{animation:recording-ready 1.15s ease-in-out infinite}
+#app .play-control #speech-listen[aria-pressed=true] .speech-listen-icon{animation:none;transform:scale(1);filter:none}
 #app #speech-replay{color:var(--controlInk)}
-@keyframes recording-ready{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 transparent)}42%{transform:scale(2.05);filter:drop-shadow(0 0 6px color-mix(in srgb,currentColor 65%,white))}}
+@keyframes recording-ready{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 transparent)}42%{transform:scale(var(--listen-peak,1.28));filter:drop-shadow(0 0 3px color-mix(in srgb,currentColor 50%,transparent))}}
 @keyframes recording-ready-reduced{0%,100%{opacity:1}50%{opacity:.45}}
 @media(prefers-reduced-motion:reduce){
- #app .play-control #speech-listen.recording-fresh .speech-listen-icon{animation:recording-ready-reduced 1.15s ease-in-out infinite}
+ #app .play-control #speech-listen.recording-fresh:not([aria-pressed=true]) .speech-listen-icon{animation:recording-ready-reduced 1.15s ease-in-out infinite}
 }
 
 /* A draft on the same paper label; it never changes the cassette's footprint. */
@@ -2928,14 +2929,23 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   }
   record.addEventListener('click',prepare);
   byId('speech-clear').onclick=()=>{cancel();rewindPanels.close();};
+  function fitPulse(button){
+    const play=byId('play'),icon=button.querySelector('.speech-listen-icon'),svg=icon?.querySelector('svg');
+    if(!play||!icon)return;
+    const playBox=play.getBoundingClientRect(),size=Math.max(svg?.offsetWidth||icon.offsetWidth,svg?.offsetHeight||icon.offsetHeight,1);
+    const limit=Math.min(playBox.width,playBox.height)*0.88;
+    icon.style.setProperty('--listen-peak',Math.max(1.08,limit/size).toFixed(3));
+  }
   function syncReplayAttention(){
     const button=byId('speech-listen');
     const on=replayNeedsAttention&&!!recording&&!button.hidden;
     if(!on){button.classList.remove('recording-fresh');return;}
+    fitPulse(button);
     if(button.classList.contains('recording-fresh'))return;
     // Start on the next frame so the cue runs after the key becomes visible.
     requestAnimationFrame(()=>{
       if(!(replayNeedsAttention&&recording&&!button.hidden))return;
+      fitPulse(button);
       button.classList.remove('recording-fresh');
       void button.offsetWidth;
       button.classList.add('recording-fresh');
@@ -2943,9 +2953,9 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   }
   function syncReplayControls(){
     const playing=!replay.paused&&!replay.ended,next=playing?'pause':'play-filled';
+    for(const id of ['speech-replay','speech-listen']){const button=byId(id);button.setAttribute('aria-pressed',String(playing));button.setAttribute('aria-label',playing?'暫停我的錄音':'回聽我的錄音');button.title=playing?'Pause my recording':'Listen to my recording';}
     syncReplayAttention();
     if(next!==paintedReplayIcon){byId('speech-replay').innerHTML=icon(next);byId('speech-listen').querySelector('.speech-listen-icon').innerHTML=icon(next);paintedReplayIcon=next;}
-    for(const id of ['speech-replay','speech-listen']){const button=byId(id);button.setAttribute('aria-label',playing?'暫停我的錄音':'回聽我的錄音');button.setAttribute('aria-pressed',String(playing));button.title=playing?'Pause my recording':'Listen to my recording';}
   }
   function syncReplayVolume(){replay.volume=volume;replay.muted=muted;}
   function pauseOwnRecording(){replayTicket++;replay.pause();syncReplayControls();}
@@ -2977,7 +2987,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   byId('speech-start').onclick=prepare;
   byId('speech-popover-start').onclick=()=>{const action=consentAction;if(!action)return;if(action===startRecording||action===submit){if(!service?.configured){if(!local&&connection.getInfo().available){openSettings({fromRecord:true});return;}openConnectionPrompt();return;}consent=service.provider;}closeConsent();return action();};
   byId('speech-popover-close').onclick=()=>{closeConsent();record.focus({preventScroll:true});};
-  window.addEventListener('resize',positionConsent);
+  window.addEventListener('resize',()=>{positionConsent();const button=byId('speech-listen');if(button.classList.contains('recording-fresh'))fitPulse(button);});
   window.addEventListener('rewind:displaychange',positionConsent);
   document.addEventListener('pointerdown',e=>{if(!byId('speech-popover').hidden&&!byId('speech-popover').contains(e.target)&&!record.contains(e.target))closeConsent();});
   byId('speech-again').onclick=prepare;
