@@ -31,7 +31,14 @@ def audio_info(audio):
 
 try:
     request('POST', '/api/creator/preview', {'voice': 'yue-HK-Chirp3-HD-Aoede', 'consent': True}, authenticated=False, expected=401)
-    code = subprocess.run(['gcloud', 'secrets', 'versions', 'access', '1', '--secret=rewind-demo-access', '--project=rewind-514904', '--quiet'], capture_output=True, check=True).stdout.decode().strip()
+    # Follow the deployed numeric reference after owner rotations; never use an
+    # old guessed version or print the service environment/credential values.
+    service = json.loads(subprocess.check_output(['gcloud', 'run', 'services', 'describe', 'rewind-api', '--project=rewind-514904', '--region=asia-east2', '--format=json']))
+    env = service['spec']['template']['spec']['containers'][0]['env']
+    reference = next(item['valueFrom']['secretKeyRef'] for item in env if item['name'] == 'REWIND_ACCESS_CODE')
+    version = reference['key']
+    assert reference['name'] == 'rewind-demo-access' and version.isdigit()
+    code = subprocess.run(['gcloud', 'secrets', 'versions', 'access', version, '--secret=rewind-demo-access', '--project=rewind-514904', '--quiet'], capture_output=True, check=True).stdout.decode().strip()
     client.token = request('POST', '/api/session', {'access_code': code}, authenticated=False)['token']
     code = ''
     status = request('GET', '/api/status')
