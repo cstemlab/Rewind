@@ -636,15 +636,20 @@ body #app .cassette[data-material]{background:var(--materialSurface);border-colo
 #app .cassette[data-material] .token.speech-live:not(.speech-pass){color:#174d8a;background:#d8ebff}
 #app .cassette[data-material] .token.speech-live:not(.speech-pass) .reading{color:#174d8a}
 
-/* The writing strip remains plain and fully opaque in every material/pattern. */
-#app .cassette[data-custom-pattern]:not([data-custom-pattern=preset]) .label-art{inset:0;border:0;border-radius:0}
-#app .cassette[data-custom-pattern]:not([data-custom-pattern=preset]) .label-art i{display:none}
-#app .cassette[data-custom-pattern]:not([data-custom-pattern=preset]) .label-art:before{top:49%;height:38%;left:0;right:0;border:0;clip-path:none}
-#app .cassette[data-custom-pattern=plain] .label-art:before{background:none}
-#app .cassette[data-custom-pattern=ruled] .label-art:before{background:repeating-linear-gradient(0deg,var(--band1) 0 1px,transparent 1px 10px);border-top:2px solid var(--band2);border-bottom:2px solid var(--band3)}
-#app .cassette[data-custom-pattern=stripes] .label-art:before{background:linear-gradient(0deg,var(--band1) 0 29%,var(--label) 29% 35%,var(--band2) 35% 64%,var(--label) 64% 70%,var(--band3) 70%)}
-#app .cassette[data-custom-pattern=blocks] .label-art:before{background:linear-gradient(90deg,var(--band1) 0 30%,var(--band2) 30% 70%,var(--band3) 70%)}
-#app .cassette[data-custom-pattern=ruled] .label-art i:nth-child(1),#app .cassette[data-custom-pattern=stripes] .label-art i:nth-child(1),#app .cassette[data-custom-pattern=blocks] .label-art i:nth-child(1){display:block;left:0;right:0;top:0;height:3%;background:var(--band1);width:auto;bottom:auto;clip-path:none}
+/* Paper is either one flat color or three complete regions. Legacy preset
+   stripes, rules, frames and masking layers must never reappear, even in previews. */
+#app .label-surface .label-art{inset:0;border:0;border-radius:0;clip-path:none;background:none}
+#app .label-surface .label-art i{display:none}
+#app .label-surface .label-art:before,#app .label-surface .label-art:after,#app .label-surface:after{content:none;display:none;border:0;background:none;clip-path:none}
+/* Label bounds are 7–72% of the cassette. The upper fill ends at 18%,
+   after every header control; the lower fill starts at 60.3%, above album text.
+   The central window covers the seam, while all text stays on a single color. */
+#app .cassette[data-custom-pattern=regions] .label-art{background:linear-gradient(180deg,var(--regionTop) 0 16.923077%,var(--regionMiddle) 16.923077% 82%,var(--regionBottom) 82% 100%)}
+#app .cassette[data-custom-pattern] .reading-sheet{background:transparent}
+#app .cassette[data-custom-pattern] .label-header{--label:var(--regionTop);--ink:var(--regionTopInk);--muted:var(--regionTopMuted);--accent:var(--regionTopAccent);border-bottom:0;color:var(--ink)}
+#app .cassette[data-custom-pattern] .speech-bar{--label:var(--regionBottom);--ink:var(--regionBottomInk);--muted:var(--regionBottomMuted);--accent:var(--regionBottomAccent)}
+#app .cassette[data-custom-pattern] .tape-album{color:var(--regionBottomInk)}
+#app .cassette[data-custom-pattern] .tape-label-bottom{color:var(--regionBottomMuted)}
 
 #app #skin-filters[hidden]{display:none!important}
 #app .material-customizer{position:relative;max-width:620px;margin:0 auto;color:var(--ink)}
@@ -690,7 +695,7 @@ body #app .cassette[data-material]{background:var(--materialSurface);border-colo
 #app .material-presets[open]>summary:before{transform:rotate(45deg)}
 #app .material-presets>summary::-webkit-details-marker{display:none}
 #app .material-presets .skin-grid{padding-top:7px}
-#app .material-print-colors[hidden]{display:none}
+#app .material-control[hidden]{display:none}
 @media(max-width:700px){
  #app .material-control{grid-template-columns:52px minmax(0,1fr);gap:10px;min-height:35px;padding:6px 0}
  #app .material-editor-top{font-size:10px;top:6px;padding:0}
@@ -981,7 +986,7 @@ SOFTWARE.
 <h2>磁帶內的臨時選項</h2>
 <p>點貼紙右上角的 ⋯，選項會暫時出現在同一張貼紙內。磁帶的大小、比例和位置保持不變。打開時先暫停朗讀，關閉後不會自動繼續；按播放便可繼續。</p>
 <p>Chapters 顯示目前練習的章節；Full script 顯示完整講稿，可搜尋。點章節或句子後會回到練習畫面，但不會自動播放。Short / Long 的選擇保持不變。</p>
-<p>Skin 可分別調整塑料材質、外殼顏色、貼紙顏色、圖案及三種印刷色。Matte 隱藏內部結構，Smoked 和 Clear 顯示不同程度的帶輪、導帶和支架。Presets 保留 24 款完整設計。調整後點 × 返回練習，卡帶比例與帶輪位置保持不變。Settings 可調整音量、語速、字體、按鍵音效及循環間隔。點選數值後返回；拖動滑桿時可先調整，放開後返回。鍵盤可用方向鍵調整滑桿，再按 Enter 完成。</p>
+<p>Skin 可分別調整塑料材質、外殼及貼紙顏色。Plain 使用單一貼紙色；Regions 可分別設定 Top、Middle、Bottom 三個完整區域的純色，不再使用裝飾細條。Matte 隱藏內部結構，Smoked 和 Clear 顯示不同程度的帶輪、導帶和支架。Presets 保留 24 款配色。調整後點 × 返回練習，卡帶比例與帶輪位置保持不變。Settings 可調整音量、語速、字體、按鍵音效及循環間隔。點選數值後返回；拖動滑桿時可先調整，放開後返回。鍵盤可用方向鍵調整滑桿，再按 Enter 完成。</p>
 <p>選項內容較多時，只在貼紙內捲動。左上角的小箭頭回到選項目錄；右上角的 × 或 Esc 關閉。沒有自動消失的倒數計時。需要點字練習提示時，可在 Help 選 Selection tips。</p>
 <h2>錄音跟讀 · 試驗功能</h2>
 <p>錄音備妥後，主播放鍵下方會出現同色的實心小箭頭，輕柔縮放三次。按它回聽自己的錄音，提示動畫便會停止。</p>
@@ -1125,7 +1130,7 @@ SOFTWARE.
 const REWIND_SKINS = [
   {
     "id": "archive-orange",
-    "name": "橙邊錄音",
+    "name": "橙色典藏",
     "era": "經典",
     "pattern": "none",
     "transparent": false,
@@ -1156,7 +1161,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "navy-footer",
-    "name": "海軍藍標",
+    "name": "海軍藍",
     "era": "經典",
     "pattern": "none",
     "transparent": false,
@@ -1187,7 +1192,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "sunset-stripes",
-    "name": "日落雙線",
+    "name": "日落",
     "era": "經典",
     "pattern": "none",
     "transparent": false,
@@ -1218,7 +1223,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "marine-lines",
-    "name": "航海細線",
+    "name": "航海藍",
     "era": "經典",
     "pattern": "none",
     "transparent": false,
@@ -1249,7 +1254,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "studio-yellow",
-    "name": "黃黑工作室",
+    "name": "工作室黃",
     "era": "經典",
     "pattern": "none",
     "transparent": false,
@@ -1280,7 +1285,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "red-header",
-    "name": "紅色片頭",
+    "name": "朱紅",
     "era": "經典",
     "pattern": "none",
     "transparent": false,
@@ -1311,7 +1316,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "mint-side",
-    "name": "薄荷側標",
+    "name": "薄荷",
     "era": "現代",
     "pattern": "none",
     "transparent": false,
@@ -1342,7 +1347,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "blue-spine",
-    "name": "藍色書脊",
+    "name": "藍",
     "era": "現代",
     "pattern": "none",
     "transparent": false,
@@ -1373,7 +1378,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "sport-orange",
-    "name": "橙色斜角",
+    "name": "暖橙",
     "era": "現代",
     "pattern": "none",
     "transparent": false,
@@ -1404,7 +1409,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "plum-corner",
-    "name": "梅紫折角",
+    "name": "梅紫",
     "era": "現代",
     "pattern": "none",
     "transparent": false,
@@ -1435,7 +1440,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "school-blue",
-    "name": "藍線習作",
+    "name": "學院藍",
     "era": "書寫",
     "pattern": "none",
     "transparent": false,
@@ -1466,7 +1471,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "notebook-red",
-    "name": "紅線筆記",
+    "name": "筆記紅",
     "era": "書寫",
     "pattern": "none",
     "transparent": false,
@@ -1497,7 +1502,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "forest-frame",
-    "name": "森林細框",
+    "name": "森林綠",
     "era": "經典",
     "pattern": "none",
     "transparent": false,
@@ -1528,7 +1533,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "wine-frame",
-    "name": "酒紅雙框",
+    "name": "酒紅",
     "era": "經典",
     "pattern": "none",
     "transparent": false,
@@ -1559,7 +1564,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "plain-ivory",
-    "name": "白紙原帶",
+    "name": "象牙白",
     "era": "書寫",
     "pattern": "none",
     "transparent": false,
@@ -1590,7 +1595,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "monochrome-label",
-    "name": "黑白索引",
+    "name": "黑白",
     "era": "現代",
     "pattern": "none",
     "transparent": false,
@@ -1621,7 +1626,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "varsity-navy",
-    "name": "學院藍橙",
+    "name": "學院海軍藍",
     "era": "圖案",
     "pattern": "none",
     "transparent": false,
@@ -1652,7 +1657,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "varsity-cream",
-    "name": "校刊拼貼",
+    "name": "學院米色",
     "era": "圖案",
     "pattern": "none",
     "transparent": false,
@@ -1683,7 +1688,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "teal-geometry",
-    "name": "青綠幾何",
+    "name": "青綠",
     "era": "圖案",
     "pattern": "none",
     "transparent": false,
@@ -1714,7 +1719,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "coral-geometry",
-    "name": "珊瑚拼色",
+    "name": "珊瑚",
     "era": "圖案",
     "pattern": "none",
     "transparent": false,
@@ -1745,7 +1750,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "clear-blue",
-    "name": "透明藍標",
+    "name": "透明藍",
     "era": "透明",
     "pattern": "none",
     "transparent": true,
@@ -1776,7 +1781,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "clear-graphite",
-    "name": "透明白標",
+    "name": "透明石墨",
     "era": "透明",
     "pattern": "none",
     "transparent": true,
@@ -1807,7 +1812,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "clear-amber",
-    "name": "琥珀色帶",
+    "name": "透明琥珀",
     "era": "透明",
     "pattern": "none",
     "transparent": true,
@@ -1838,7 +1843,7 @@ const REWIND_SKINS = [
   },
   {
     "id": "clear-mint",
-    "name": "透明薄荷標",
+    "name": "透明薄荷",
     "era": "透明",
     "pattern": "none",
     "transparent": true,
@@ -2419,7 +2424,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  const anchorCassette=()=>document.body.style.setProperty('--cassette-top',Math.max(28,(innerHeight-cassette.offsetHeight)/2)+'px');
  new ResizeObserver(anchorCassette).observe(cassette);window.addEventListener('resize',anchorCassette);anchorCassette();
  let currentSkin=REWIND_SKINS[0],filter='All',fitPending=false;
- const skinNames=['Archive orange','Navy label','Sunset stripes','Marine lines','Studio yellow','Red header','Mint side','Blue spine','Orange corner','Plum corner','School blue','Notebook red','Forest frame','Wine frame','Plain ivory','Monochrome','Varsity navy','Varsity cream','Teal geometry','Coral geometry','Clear blue','Clear graphite','Clear amber','Clear mint'];
+ const skinNames=['Archive orange','Navy','Sunset','Marine blue','Studio yellow','Red','Mint','Blue','Warm orange','Plum','School blue','Notebook red','Forest','Wine','Ivory','Monochrome','Varsity navy','Varsity cream','Teal','Coral','Clear blue','Clear graphite','Clear amber','Clear mint'];
  const skinName=s=>skinNames[REWIND_SKINS.indexOf(s)]||s.name;
  function paintLabel(el,s){el.dataset.layout=s.artwork.layout;el.dataset.variant=s.artwork.variant;el.dataset.labelLayout=s.artwork.layout;el.dataset.labelVariant=s.artwork.variant;Object.entries({band1:'band1',band2:'band2',band3:'band3',labelFrame:'frame'}).forEach(([k,v])=>el.style.setProperty('--'+k,s.artwork[v]));}
  function applySkin(id){currentSkin=REWIND_SKINS.find(s=>s.id===id)||REWIND_SKINS[0];Object.entries(currentSkin.colors).forEach(([k,v])=>root.style.setProperty('--'+k,v));
@@ -3045,7 +3050,8 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  'use strict';
  const root=document.documentElement,cassette=document.getElementById('cassette'),panel=document.getElementById('skins-dialog'),grid=document.getElementById('skin-grid'),label=cassette?.querySelector('.label-surface');
  if(!root||!cassette||!panel||!grid||!label||!window.rewindTheme)return;
- const STORAGE='rewind-materials-v1',materials=['matte','smoke','clear'],patterns=['preset','plain','ruled','stripes','blocks'];
+ const STORAGE='rewind-materials-v1',materials=['matte','smoke','clear'],patterns=['plain','regions'];
+ const legacyPatterns={preset:'plain',ruled:'regions',stripes:'regions',blocks:'regions'};
  const hex=x=>typeof x==='string'&&/^#[0-9a-f]{6}$/i.test(x);
  const rgb=x=>x.slice(1).match(/../g).map(n=>parseInt(n,16));
  const color=x=>'#'+x.map(n=>Math.max(0,Math.min(255,Math.round(n))).toString(16).padStart(2,'0')).join('');
@@ -3060,10 +3066,11 @@ loadSession(defaultSession);requestAnimationFrame(frame);
    return contrast(result,bg)>=4.5?result:target;
  };
  function validate(input){
-   if(!input||input.version!==1||!materials.includes(input.material)||!patterns.includes(input.pattern)||!hex(input.caseColor)||!hex(input.stickerColor)||!Array.isArray(input.bands)||input.bands.length!==3||!input.bands.every(hex)||!REWIND_SKINS.some(s=>s.id===input.presetId))return null;
-   return {version:1,material:input.material,caseColor:input.caseColor.toLowerCase(),stickerColor:input.stickerColor.toLowerCase(),pattern:input.pattern,bands:input.bands.map(x=>x.toLowerCase()),presetId:input.presetId};
+   const pattern=legacyPatterns[input?.pattern]||input?.pattern;
+   if(!input||input.version!==1||!materials.includes(input.material)||!patterns.includes(pattern)||!hex(input.caseColor)||!hex(input.stickerColor)||!Array.isArray(input.bands)||input.bands.length!==3||!input.bands.every(hex)||!REWIND_SKINS.some(s=>s.id===input.presetId))return null;
+   return {version:1,material:input.material,caseColor:input.caseColor.toLowerCase(),stickerColor:input.stickerColor.toLowerCase(),pattern,bands:input.bands.map(x=>x.toLowerCase()),presetId:input.presetId};
  }
- function fromPreset(id){const s=REWIND_SKINS.find(s=>s.id===id)||REWIND_SKINS[0];return {version:1,material:s.transparent?'clear':'matte',caseColor:s.colors.shell.toLowerCase(),stickerColor:s.colors.label.toLowerCase(),pattern:'preset',bands:[s.artwork.band1,s.artwork.band2,s.artwork.band3].map(x=>x.toLowerCase()),presetId:s.id};}
+ function fromPreset(id){const s=REWIND_SKINS.find(s=>s.id===id)||REWIND_SKINS[0];return {version:1,material:s.transparent?'clear':'matte',caseColor:s.colors.shell.toLowerCase(),stickerColor:s.colors.label.toLowerCase(),pattern:'plain',bands:[s.artwork.band1,s.artwork.band2,s.artwork.band3].map(x=>x.toLowerCase()),presetId:s.id};}
  let state=fromPreset(window.rewindTheme.get());
  try{const saved=validate(JSON.parse(localStorage.getItem(STORAGE)));if(saved){window.rewindTheme.apply(saved.presetId);state=saved;}}catch{}
 
@@ -3082,17 +3089,17 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  editor.innerHTML=`<div class="material-editor-top"><button id="material-reset" title="Reset to preset" aria-label="Reset appearance to preset"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11a8 8 0 1 1 1.8 6M4 5v6h6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
  <div class="material-control"><span id="material-label" class="material-label">Material</span><div id="material-row" class="material-choices" role="group" aria-labelledby="material-label"></div></div>
  <div class="material-control"><label class="material-label" for="case-color">Case</label><div class="material-colors"><div id="case-swatches" class="material-swatches" role="group" aria-label="Case colors"></div><label class="material-custom-color" title="Custom case color"><input id="case-color" type="color" aria-label="Custom case color"><span aria-hidden="true">+</span></label></div></div>
- <div class="material-control"><label class="material-label" for="sticker-color">Sticker</label><div class="material-colors"><div id="sticker-swatches" class="material-swatches" role="group" aria-label="Sticker colors"></div><label class="material-custom-color" title="Custom sticker color"><input id="sticker-color" type="color" aria-label="Custom sticker color"><span aria-hidden="true">+</span></label></div></div>
- <div class="material-control"><span id="pattern-label" class="material-label">Pattern</span><div id="pattern-row" class="material-patterns" role="group" aria-labelledby="pattern-label"></div></div>
- <div id="pattern-colors-row" class="material-control material-print-colors"><span class="material-label">Print</span><div class="material-print-inputs"><label title="First print color"><input id="pattern-color-1" type="color" aria-label="First print color"><span>01</span></label><label title="Second print color"><input id="pattern-color-2" type="color" aria-label="Second print color"><span>02</span></label><label title="Third print color"><input id="pattern-color-3" type="color" aria-label="Third print color"><span>03</span></label></div></div>
+ <div id="sticker-color-row" class="material-control"><label class="material-label" for="sticker-color">Sticker</label><div class="material-colors"><div id="sticker-swatches" class="material-swatches" role="group" aria-label="Sticker colors"></div><label class="material-custom-color" title="Custom sticker color"><input id="sticker-color" type="color" aria-label="Custom sticker color"><span aria-hidden="true">+</span></label></div></div>
+ <div class="material-control"><span id="pattern-label" class="material-label">Layout</span><div id="pattern-row" class="material-patterns" role="group" aria-labelledby="pattern-label"></div></div>
+ <div id="pattern-colors-row" class="material-control material-print-colors"><span class="material-label">Colors</span><div class="material-print-inputs"><label title="Top region color"><input id="pattern-color-1" type="color" aria-label="Top region color"><span>Top</span></label><label title="Middle region color"><input id="pattern-color-2" type="color" aria-label="Middle region color"><span>Middle</span></label><label title="Bottom region color"><input id="pattern-color-3" type="color" aria-label="Bottom region color"><span>Bottom</span></label></div></div>
  <span id="material-announcement" class="sr-only" role="status" aria-live="polite"></span>`;
  const oldFilters=document.getElementById('skin-filters');if(oldFilters)oldFilters.hidden=true;
  panel.insertBefore(editor,grid);
  const presets=document.createElement('details');presets.id='material-presets';presets.className='material-presets';const summary=document.createElement('summary');summary.textContent='Presets';presets.append(summary);grid.before(presets);presets.append(grid);
- const names={matte:'Matte',smoke:'Smoked',clear:'Clear',preset:'Original',plain:'Plain',ruled:'Ruled',stripes:'Stripes',blocks:'Blocks'};
+ const names={matte:'Matte',smoke:'Smoked',clear:'Clear',plain:'Plain',regions:'Regions'};
  materials.forEach(m=>{const b=document.createElement('button');b.type='button';b.dataset.material=m;b.setAttribute('aria-label',names[m]+' plastic');b.className='material-choice';b.innerHTML=`<i class="material-sample ${m}" aria-hidden="true"><span></span><span></span></i><span>${names[m]}</span>`;b.onclick=()=>set({material:m});document.getElementById('material-row').append(b);});
- const motifs={preset:'<path d="M3 5h18M3 18h18"/>',plain:'<path d="M4 4h16v16H4Z"/>',ruled:'<path d="M4 6h16M4 12h16M4 18h16"/>',stripes:'<path stroke-width="3.5" d="M3 8h18M3 16h18"/>',blocks:'<path d="M3 5h11v7H3zM14 12h7v7h-7z"/>'};
- patterns.forEach(p=>{const b=document.createElement('button');b.type='button';b.dataset.pattern=p;b.className='material-pattern';b.setAttribute('aria-label',names[p]+' pattern');b.title=names[p];b.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true">${motifs[p]}</svg><span>${names[p]}</span>`;b.onclick=()=>set({pattern:p});document.getElementById('pattern-row').append(b);});
+ const motifs={plain:'<rect x="3" y="4" width="18" height="16" rx="2"/>',regions:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M3 16h18"/>'};
+ patterns.forEach(p=>{const b=document.createElement('button');b.type='button';b.dataset.pattern=p;b.className='material-pattern';b.setAttribute('aria-label',names[p]+' sticker layout');b.title=names[p];b.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true">${motifs[p]}</svg><span>${names[p]}</span>`;b.onclick=()=>set({pattern:p});document.getElementById('pattern-row').append(b);});
  const palettes={caseColor:[['Graphite','#282a29'],['Ivory','#e6e2d8'],['Navy','#344b58'],['Forest','#4b6255'],['Wine','#713e43'],['Amber','#be9452'],['Lilac','#a59bb3'],['Mist','#acc3c0']],stickerColor:[['Warm paper','#f8f4e7'],['White','#fffefd'],['Cream','#f5e6bd'],['Mint','#deece1'],['Blue','#e0eaf1'],['Blush','#f2ded8'],['Lilac','#e7e0ee'],['Ink','#303b41']]};
  function swatches(field,id){palettes[field].forEach(([name,value])=>{const b=document.createElement('button');b.type='button';b.className='material-swatch';b.dataset.color=value;b.dataset.colorField=field;b.style.setProperty('--swatch',value);b.setAttribute('aria-label',name+(field==='caseColor'?' case':' sticker'));b.title=name;b.onclick=()=>set({[field]:value});document.getElementById(id).append(b);});}
  swatches('caseColor','case-swatches');swatches('stickerColor','sticker-swatches');
@@ -3106,12 +3113,15 @@ loadSession(defaultSession);requestAnimationFrame(frame);
    document.getElementById('case-color').value=state.caseColor;document.getElementById('sticker-color').value=state.stickerColor;
    for(let i=0;i<3;i++)document.getElementById('pattern-color-'+(i+1)).value=state.bands[i];
    document.getElementById('pattern-colors-row').hidden=state.pattern==='plain';
+   document.getElementById('sticker-color-row').hidden=state.pattern==='regions';
    editor.querySelectorAll('.material-custom-color').forEach(l=>l.style.setProperty('--swatch',l.querySelector('input').value));
  }
  function apply(){
-   const ink=inkFor(state.stickerColor),page=mix(state.caseColor,'#f4f0e7',.09),shellSurface=state.material==='matte'?state.caseColor:mix(state.caseColor,page,state.material==='smoke'?.76:.37),controlInk=inkFor(shellSurface),accent=accentFor(state.bands[0],state.stickerColor);
-   const passBlue=accentFor(lum(ink)<.5?'#367f94':'#7ac5cd',state.stickerColor);
-   const props={shell:state.caseColor,shellDark:mix(state.caseColor,'#101412',.72),label:state.stickerColor,ink,muted:mutedFor(ink,state.stickerColor),page,panel:state.stickerColor,panelText:ink,line:mix(ink,state.stickerColor,.18),accent,accentInk:inkFor(accent),controlInk,recordInk:accentFor(lum(controlInk)<.5?'#a32624':'#f18b77',shellSurface),materialSurface:shellSurface,materialInterior:inkFor(shellSurface),materialEdge:mix(shellSurface,inkFor(shellSurface),.75),materialPass:passBlue};
+   const [top,middle,bottom]=state.pattern==='regions'?state.bands:[state.stickerColor,state.stickerColor,state.stickerColor];
+   const topInk=inkFor(top),bottomInk=inkFor(bottom);
+   const ink=inkFor(middle),page=mix(state.caseColor,'#f4f0e7',.09),shellSurface=state.material==='matte'?state.caseColor:mix(state.caseColor,page,state.material==='smoke'?.76:.37),controlInk=inkFor(shellSurface),accent=accentFor(state.bands[0],middle);
+   const passBlue=accentFor(lum(ink)<.5?'#367f94':'#7ac5cd',middle);
+   const props={shell:state.caseColor,shellDark:mix(state.caseColor,'#101412',.72),label:middle,ink,muted:mutedFor(ink,middle),page,panel:middle,panelText:ink,line:mix(ink,middle,.18),accent,accentInk:inkFor(accent),controlInk,recordInk:accentFor(lum(controlInk)<.5?'#a32624':'#f18b77',shellSurface),materialSurface:shellSurface,materialInterior:inkFor(shellSurface),materialEdge:mix(shellSurface,inkFor(shellSurface),.75),materialPass:passBlue,regionTop:top,regionTopInk:topInk,regionTopMuted:mutedFor(topInk,top),regionTopAccent:accentFor(state.bands[0],top),regionMiddle:middle,regionBottom:bottom,regionBottomInk:bottomInk,regionBottomMuted:mutedFor(bottomInk,bottom),regionBottomAccent:accentFor(state.bands[0],bottom)};
    Object.entries(props).forEach(([k,v])=>root.style.setProperty('--'+k,v));state.bands.forEach((c,i)=>{root.style.setProperty('--band'+(i+1),c);label.style.setProperty('--band'+(i+1),c);});root.style.setProperty('--labelFrame',state.bands[0]);label.style.setProperty('--labelFrame',state.bands[0]);
    cassette.dataset.material=state.material;cassette.dataset.customPattern=state.pattern;document.body.dataset.material=state.material;document.body.dataset.transparent=String(state.material!=='matte');
    try{localStorage.setItem(STORAGE,JSON.stringify(state));}catch{}

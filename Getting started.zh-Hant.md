@@ -69,7 +69,7 @@ AI 模式會先以小提示說明目前使用的服務及錄音傳送時機。�
 
 ## 外觀
 
-在 **⋯ → Skin** 分別調整 **Material、Case、Sticker、Pattern、Print**。Matte、Smoked、Clear 對應不同塑料透明程度；外殼、貼紙、圖案與三個印刷色可分開調整，也可選用 24 款 Presets。
+在 **⋯ → Skin** 分別調整塑料材質、外殼及貼紙配色。**Plain** 使用單一貼紙色；**Regions** 分別設定 **Top / Middle / Bottom** 三個完整區域的純色。24 款 Presets 和舊有儲存樣式均不再使用裝飾細條。Matte、Smoked、Clear 對應不同塑料透明程度。
 
 透明材質可見內部支架和帶路，貼紙保持不透明。外觀設定記在目前瀏覽器內，不會改變卡帶比例或卷軸位置。
 

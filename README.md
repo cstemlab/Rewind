@@ -61,7 +61,7 @@ Cancelled or failed creation leaves the draft and current tape intact. Review th
 
 ## Materials and labels
 
-**⋯ → Skin** provides independent **Material, Case, Sticker, Pattern** and **Print** controls. Choose Matte, Smoked or Clear plastic, customise the colours, or start from one of the 24 presets. Transparent materials expose interior supports and the tape path while the sticker stays opaque. Changing appearance preserves the cassette proportions and reel positions.
+**⋯ → Skin** provides independent material, case and sticker colours. Choose **Plain** for one sticker colour, or **Regions** for solid **Top / Middle / Bottom** sections. Decorative thin stripes are removed across all 24 presets, including saved styles. Choose Matte, Smoked or Clear plastic; transparent materials expose interior supports and the tape path while the sticker stays opaque. Changing appearance preserves the cassette proportions and reel positions.
 
 ## What is sent and saved
 
