@@ -27,13 +27,17 @@ The hosted preview uses **Google Gemini**, with API costs covered by the organis
 
 Click a character to hear from there, or drag across words to hear just that range. Selection surrounds the written text, leaving Jyutping unchanged. The small × clears the selection.
 
+While the demonstration plays, its highlight also surrounds only the written character; Jyutping stays neutral.
+
+On a phone, turn the screen sideways: the cassette automatically fits the visible area while preserving its 1.58:1 proportions. The small fullscreen icon in the sticker header enters or exits fullscreen where the browser supports it. On iPhone Safari, if fullscreen is unavailable, use **Share → Add to Home Screen** and enable **Open as Web App** when offered, then launch Rewind from the home screen. Real-device behavior remains to be tested; browser simulation does not verify iPhone compatibility.
+
 ## Practise with your voice
 
 The first press of Record offers **AI 回饋** (AI feedback) or **只錄音對照** (record and compare). Rewind remembers this choice in the current browser; change it under **Settings → Speech**. AI mode opens the access-code field when disconnected (a service API key in the local companion). Record-and-compare mode works without AI and never uploads that attempt, even if a service is connected. Connecting alone never starts the microphone.
 
-In AI mode, a small on-tape notice explains the active service and when audio will be sent. Allow microphone access, read the current phrase or selected words, then press again to stop. The recording window follows the selected example’s duration plus two seconds, up to 25 seconds. A soft ready cue and blinking text marker indicate when to begin; the cue respects mute. Stop immediately ends capture. Animated status dots and an inactive recording button indicate processing, so repeated clicks cannot cancel the result. Press Escape or navigate away to cancel deliberately.
+In AI mode, a small on-tape notice explains the active service and when audio will be sent. Allow microphone access, read the current phrase or selected words, then press again to stop. The recording window follows the selected example’s duration plus two seconds, up to 25 seconds. A longer soft cue is followed by two flashes on the first character. This 1.35-second preparation happens before the recording clock and captured samples begin; the cue respects mute. Stop immediately ends capture. Animated status dots and an inactive recording button indicate processing, so repeated clicks cannot cancel the result. Press Escape or navigate away to cancel deliberately.
 
-After the ready cue, a gentle highlight moves through the written characters at the demonstration’s pace and selected playback speed. It is a **rhythm guide, not speech recognition or a pronunciation verdict**. It does not wait for you or change the result if you fall behind. The guide ends before the two-second recording buffer (within the 25-second limit). Generated sessions may have estimated word timings. In AI mode, the clip is sent only after you stop, and the audio model returns experimental practice feedback:
+After the ready cue, a gentle background fills each written character smoothly at the demonstration’s pace and selected playback speed. Earlier characters keep their fill, so progress accumulates across the line. It is a **rhythm guide, not speech recognition or a pronunciation verdict**. It does not wait for you or change the result if you fall behind. The completed fill stays during the two-second recording buffer and clears when recording stops (within the 25-second limit). Generated sessions may have estimated word timings. In AI mode, the clip is sent only after you stop, and the audio model returns experimental practice feedback:
 
 - **Teal text with a small filled round marker:** passed this attempt.
 - **A hollow round marker:** close; worth practising again.
@@ -41,7 +45,7 @@ After the ready cue, a gentle highlight moves through the written characters at 
 
 Jyutping stays neutral. Several characters in a word may share one judgment. The final feedback is **not a validated Cantonese tone assessment**, and a model can miss a wrong syllable or tone. No calibrated proficiency score is claimed.
 
-After recording, **我的錄音** (My recording) appears on the cassette. Use it to play or pause your own voice; use the existing **Rewind** key to replay the demonstration. The two never play together, and same-phrase Rewind preserves your clip. This also works while AI feedback is pending. A new attempt, different phrase/range, session change or page close clears the previous clip.
+After recording, a small tinted play arrow appears directly below the central Play key. It plays or pauses your own voice; its tooltip and accessible name identify it as My recording. There is no persistent text label. Use it to compare; use the existing **Rewind** key to replay the demonstration. The two never play together, and same-phrase Rewind preserves your clip. This also works while AI feedback is pending. A new attempt, different phrase/range, session change or page close clears the previous clip.
 
 ## Make a tape from your script
 

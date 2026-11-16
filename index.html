@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Rewind</title><style>:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft JhengHei",sans-serif;color:#29302d;font-size:15px;line-height:1.45;font-optical-sizing:auto;--accent:#3269bb;--muted:#8b918c;--sidebar:#f3f4f1;--border:#e6e8e3;--zh-size:34px}
+<html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Rewind"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="color-scheme" content="light"><title>Rewind</title><style>:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft JhengHei",sans-serif;color:#29302d;font-size:15px;line-height:1.45;font-optical-sizing:auto;--accent:#3269bb;--muted:#8b918c;--sidebar:#f3f4f1;--border:#e6e8e3;--zh-size:34px}
 *{box-sizing:border-box}body{margin:0;background:#e9ece7;padding:36px 24px;min-height:100dvh}button,input,select{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{border:0;cursor:pointer;color:inherit;background:none;touch-action:manipulation}button:disabled{opacity:.36;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #91b3e5;outline-offset:3px}button:active:not(:disabled){transform:scale(.96)}button svg,a svg{width:21px;height:21px;fill:currentColor;flex-shrink:0}button,a,input,select{touch-action:manipulation}.app{display:grid;grid-template-columns:216px minmax(0,1fr);max-width:1120px;margin:0 auto;overflow:hidden;border-radius:17px;background:#fff;box-shadow:0 20px 60px #293a2520,0 2px 6px #293a2508;border:1px solid #d9ded5;min-height:680px}.sidebar{background:var(--sidebar);border-right:1px solid #e4e7df;display:flex;flex-direction:column;padding:26px 14px 16px;min-width:0}.brand{display:flex;align-items:center;gap:9px;margin:0 12px 35px}.brand-mark{display:flex;color:#3c4740}.brand-mark svg{width:27px;height:27px;fill:currentColor}h1{font-size:25px;letter-spacing:-.06em;font-weight:650;margin:0}.library-heading{display:flex;align-items:center;justify-content:space-between;color:#828b81;font-weight:600;font-size:12px;letter-spacing:.03em;margin:0 7px 4px 12px}.section-heading{color:#828b81;font-size:12px;font-weight:600;margin:28px 12px 11px}.library-item{display:flex;gap:10px;width:100%;text-align:left;align-items:center;border-radius:7px;padding:10px 11px;font-size:13px;line-height:1.45}.library-item svg{color:#67786c;width:21px;height:21px}.library-item[aria-current=true]{background:#e3e9df;color:#334c38;font-weight:600}.library-item span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.section-item{display:flex;align-items:center;gap:10px;padding:10px 12px;margin:2px 0;width:100%;border-radius:6px;text-align:left;font-size:13px;color:#697268;line-height:1.6}.section-item .number{font-size:11px;color:#91998f;font-variant-numeric:tabular-nums}.section-item[aria-current=true]{background:#fff;color:#2e3a31;box-shadow:0 1px 3px #00000007;font-weight:600}.section-item[aria-current=true] .number{color:var(--accent)}.sidebar-bottom{margin-top:auto;padding-top:42px;display:flex;flex-direction:column;gap:4px}.quiet-row{display:flex;align-items:center;gap:10px;padding:9px 12px;text-decoration:none;color:#7a8378;font-size:12px;min-height:40px}.quiet-row svg{width:17px;height:17px}.quiet-row:hover{color:#344233}.toolbar{height:76px;padding:14px 27px;display:flex;gap:11px;align-items:center}.session-heading{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;font-size:13px;font-weight:550}.session-heading span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#section-position{font-size:11px;color:#939a93;font-weight:400}.icon-button{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;flex-shrink:0;border-radius:9px;color:#798379;position:relative;transition:background 120ms,color 120ms,transform 100ms}.icon-button:hover{background:#edf0ea;color:#38473a}.icon-button[aria-pressed=true]{color:var(--accent);background:#e8effa}.icon-button.small{width:30px;height:30px}.icon-button.small svg{width:17px;height:17px}.sidebar-close{display:none;margin-left:auto}.practice{padding:5px 42px 28px;max-width:920px;margin:auto}.practice-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:5px 0 12px}h2{font-size:22px;line-height:1.3;letter-spacing:-.025em;font-weight:600;margin:0}.scope-switch{display:flex;border-radius:7px;padding:3px;background:#f0f2ee;flex-shrink:0}.scope-switch button{padding:5px 15px;border-radius:5px;color:#969e93;font-size:12px}.scope-switch button[aria-pressed=true]{background:#fff;box-shadow:0 1px 3px #172b1612;color:#354535;font-weight:600}.sentence-position{display:flex;justify-content:space-between;font-size:11px;color:#969d93;margin-bottom:17px;font-variant-numeric:tabular-nums}
 .cassette{position:relative;border-radius:14px;background:linear-gradient(145deg,#50544f,#343933 35%,#41463f 65%,#343932);border:2px solid #30372d;box-shadow:inset 0 1px 1px #ffffff70,inset 0 -3px 4px #17201380,0 12px 15px -12px #26302080,0 3px 5px #00000018;padding:17px 22px 9px;isolation:isolate}.cassette:before{content:"";position:absolute;inset:7px;border:1px solid #858c7a55;border-radius:8px;pointer-events:none}.screw{position:absolute;width:8px;height:8px;background:linear-gradient(135deg,#90988a,#4b5444);border:1px solid #202a1c;border-radius:50%;z-index:2;box-shadow:0 1px 0 #b1b6a844}.screw:after{content:"";position:absolute;width:5px;height:1px;top:3px;left:.5px;transform:rotate(-28deg);background:#222b1b}.tl{top:9px;left:9px}.tr{top:9px;right:9px}.bl{bottom:9px;left:9px}.br{bottom:9px;right:9px}.tape-label{background:linear-gradient(120deg,#f6f1df,#f3eddb);border-radius:8px 8px 3px 3px;border:1px solid #e2d9bf;box-shadow:0 1px 0 #ffffffc0;overflow:hidden;position:relative}.tape-label-head{display:flex;align-items:center;justify-content:space-between;margin:11px 18px 0;color:#8f876e;font-size:12px;font-weight:650;font-style:italic;letter-spacing:-.025em}.side-a{font-style:normal;font-size:12px;border:1px solid #b7ad91;border-radius:3px;padding:0px 5px}.caption{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-end;align-content:center;gap:13px 1px;min-height:137px;padding:24px 17px 28px;position:relative;touch-action:none;user-select:none;cursor:text}.word{display:inline-flex;align-items:flex-end;white-space:nowrap;margin-right:3px;max-width:100%}.token{display:inline-flex;flex-direction:column;align-items:center;justify-content:flex-end;position:relative;min-width:calc(var(--zh-size) + 3px);padding:3px 4px 4px;border-radius:4px;color:#45483d;cursor:pointer;outline-offset:1px;transition:background 65ms,color 65ms;isolation:isolate}.token .reading{font-size:calc(var(--zh-size)*.43);font-weight:450;line-height:1.35;min-height:calc(var(--zh-size)*.59);color:#8c856e;white-space:nowrap;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:0}.token .han{font-size:var(--zh-size);line-height:1.3;font-weight:400;white-space:nowrap}.token.latin .han{font-size:calc(var(--zh-size)*.76);font-weight:550}.token.active{background:#d9e6d3;color:#245936}.token.active .reading{color:#245936;font-weight:600}.token.done{color:#6d8664}.token.done .reading{color:#748569}.token.selected{background:#e1dfc8;box-shadow:inset 0 -2px #68895f}.token.selected.active{background:#cadfc1}.token:hover{background:#e7e4d0}.punctuation{font-size:calc(var(--zh-size)*.68);color:#8f8a73;align-self:flex-end;line-height:1.4;padding-bottom:10px;margin-left:-4px}.label-stripes{height:12px;display:flex;flex-direction:column}.label-stripes i:nth-child(1){height:4px;background:#b9704a}.label-stripes i:nth-child(2){height:4px;background:#d29a6d}.label-stripes i:nth-child(3){height:4px;background:#e3c294}.mechanics{display:flex;align-items:center;justify-content:space-around;height:99px;max-width:420px;margin:9px auto 0;border-radius:40px;background:linear-gradient(#192117,#4e5947 48%,#202a1c);border:1px solid #172110;box-shadow:inset 0 3px 6px #00000090,inset 0 -1px 0 #a6ad9b50;padding:2px 16px;gap:10px}.coil{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;background:repeating-radial-gradient(circle,#4c3c2e 0px,#4c3c2e 1px,#69523c 1.5px,#2b261d 2px,#4a3a2b 3px);box-shadow:0 0 0 1px #191e15,0 2px 2px #0009;flex-shrink:0}.right-coil{background:repeating-radial-gradient(circle,#3b3326 0px,#735c43 1px,#4b3c2d 1.6px,#31291e 3px)}.reel{width:53px;height:53px;border-radius:50%;background:linear-gradient(#e9e7d7,#bfc5b2);border:1px solid #1c2810;box-shadow:0 0 0 3px #e6e5cd33,inset 0 1px 2px white;display:grid;place-items:center}.reel svg{width:100%;height:100%;animation:spin 6s linear infinite;animation-play-state:paused;fill:#535d48}.cassette.playing .reel svg{animation-play-state:running}.cassette.rewinding .reel svg{animation:spin .18s linear reverse infinite}.tape-window{height:42px;flex:1;max-width:125px;display:flex;align-items:center;flex-direction:column;justify-content:center;gap:6px;color:#b3bca4;font-size:14px;font-family:ui-monospace,"Consolas",monospace;letter-spacing:4px;background:linear-gradient(130deg,#89998125,#172c0c30);box-shadow:inset 0 0 8px #0005;border:1px solid #89998130;border-radius:4px}.tape-guide{height:2px;background:#8c7253;width:88%;box-shadow:0 1px #211b11}.tape-foot{display:flex;align-items:center;justify-content:space-around;max-width:320px;margin:6px auto -1px;height:20px;border-top:1px solid #858d7c50;background:linear-gradient(100deg,#48543e70,#1d29162c);border-radius:4px 4px 0 0}.pin{width:9px;height:9px;border-radius:50%;background:#17200f;border:1px solid #6e7a5d}.head-gap{width:46px;height:8px;border:1px solid #6e7a5d;background:#1d2515;border-radius:2px}.selection-row{display:flex;align-items:center;min-height:38px;padding:4px 2px;gap:8px;justify-content:center;font-size:11px;color:#a0a59a}.selection-row button{display:flex;align-items:center;gap:6px;background:#eef2e9;color:#65745b;border-radius:5px;padding:3px 7px;font-size:11px}.selection-row button svg{width:13px;height:13px}.selection-row button[hidden]{display:none}.player-controls{padding:8px 4px 0}.progress-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:9px;font-size:12px;min-height:20px;color:#899282}.time{display:flex;gap:7px;color:#727e6b;font-variant-numeric:tabular-nums;white-space:nowrap}.time-slash{color:#b5bbaf}.range{-webkit-appearance:none;appearance:none;height:4px;border-radius:8px;background:linear-gradient(to right,#8b9a7b var(--pct,0%),#e6eae1 var(--pct,0%));cursor:pointer;accent-color:#8b9a7b;outline-offset:6px}.range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:11px;height:11px;border-radius:50%;background:#fff;box-shadow:0 0 0 1px #b8c1ad,0 1px 3px #25321d22}.range::-moz-range-thumb{width:11px;height:11px;border:1px solid #b8c1ad;border-radius:50%;background:#fff}.seek{display:block;width:100%;margin:0;height:4px;--pct:0%}.transport-row{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;margin-top:20px}.transport{display:flex;align-items:center;gap:12px}.transport .icon-button{width:40px;height:44px;color:#505d48}.transport .icon-button svg{width:23px;height:23px}.play-button{width:61px;height:53px;border-radius:13px;background:linear-gradient(#eff3e9,#e0e7d6);color:#435435;border:1px solid #cbd5c0;box-shadow:inset 0 1px 0 #fff,0 3px 0 #c7d0bb,0 5px 8px #34442712;display:grid;place-items:center;transition:transform 80ms,box-shadow 80ms}.play-button svg{width:27px;height:27px;fill:currentColor}.play-button:active{transform:translateY(2px) scale(.98)!important;box-shadow:inset 0 1px 0 #fff,0 1px 0 #c7d0bb}.volume-control,.play-options{display:flex;align-items:center;gap:4px}.volume-control .range{width:55px;--pct:85%}.volume-control .icon-button{width:34px}.play-options{justify-content:flex-end}.speed-control select{border:0;background:transparent;font-size:12px;color:#6b785f;padding:10px 0;cursor:pointer;min-width:45px}.practice-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:24px 3px 0;color:#a0a79a;font-size:10px}.keyboard-hint kbd{font-family:inherit;color:#8c9784;font-size:10px;padding:1px 4px;border:1px solid #e5e9df;border-radius:3px;margin-left:6px}#error{background:#fff2ed;color:#9e4b33;padding:12px;border-radius:6px;font-size:13px}#toggle-sidebar{display:none}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}[hidden]{display:none!important}dialog{border:1px solid #e4e8de;border-radius:17px;box-shadow:0 20px 90px #1e311a33;width:min(530px,calc(100vw - 32px));max-height:80dvh;padding:23px;background:#fcfdfb;color:inherit}dialog::backdrop{background:#2936223b;backdrop-filter:blur(3px)}.dialog-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.dialog-heading h2{font-size:20px}.setting-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:18px 0;border-top:1px solid #edf0e7}.setting-row strong{font-size:14px;font-weight:550}.setting-row p,.dialog-note{font-size:12px;color:#98a08f;margin:5px 0 0}.setting-row .range{width:100px;flex-shrink:0}.setting-row select{border:1px solid #e3e8dc;border-radius:6px;background:white;padding:7px;color:#6c775f}.switch{position:relative;width:35px;height:21px;flex-shrink:0}.switch input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer;z-index:2}.switch span{position:absolute;inset:0;border-radius:15px;background:#d9dfd1;transition:background 120ms}.switch span:after{content:"";width:17px;height:17px;position:absolute;top:2px;left:2px;border-radius:50%;background:white;box-shadow:0 1px 3px #0002;transition:transform 120ms}.switch input:checked+span{background:#7d9570}.switch input:checked+span:after{transform:translateX(14px)}.switch input:focus-visible+span{outline:3px solid #91b3e5;outline-offset:3px}.dialog-note{line-height:1.8;margin-top:20px}#outline-dialog{width:min(700px,calc(100vw - 32px))}#search{width:100%;border:1px solid #e1e6db;border-radius:8px;padding:10px 12px;background:white;font-size:13px;margin-bottom:12px}#outline h3{font-size:12px;color:#94a085;margin:22px 8px 8px}#outline .item{display:flex;align-items:center;gap:12px;width:100%;padding:10px 9px;text-align:left;border-radius:6px;font-size:14px;color:#57634b}#outline .item:hover{background:#eff3e8}#outline .item[aria-current=true]{background:#e6efdc;color:#3c5829}#outline .item small{font-size:10px;color:#9fa991;min-width:22px;font-variant-numeric:tabular-nums}.app.sidebar-hidden{grid-template-columns:minmax(0,1fr);max-width:910px}.app.sidebar-hidden .sidebar{display:none}.app.sidebar-hidden #toggle-sidebar{display:inline-flex}@keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:1024px){body{padding:22px 14px}.app{grid-template-columns:190px minmax(0,1fr)}.practice{padding:5px 26px 25px}.toolbar{padding:12px 20px}.transport{gap:5px}.transport-row{gap:5px}.volume-control .range{width:38px}.sidebar{padding:22px 10px 14px}.caption{padding-left:10px;padding-right:10px}}
@@ -530,6 +530,19 @@ body{--tape-w:min(960px,calc(100vw - 48px),calc((100dvh - 56px)*1.58));display:b
 #app #speech-mode-choice-compare:hover{background:none;color:var(--ink)}
 @media(max-width:600px){#app #speech-mode-choice-compare{font-size:11px}}
 
+/* Own voice is the small companion key directly under the demonstration key. */
+#app .play-control #speech-listen{position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);display:grid;place-items:center;width:28px;min-width:28px;height:24px;min-height:24px;padding:5px;border:0;border-radius:4px;background:none;color:var(--recordInk);opacity:.82;box-shadow:none;transition:opacity 120ms}
+#app .play-control #speech-listen svg{width:14px;height:14px}
+#app .play-control #speech-listen:hover,#app .play-control #speech-listen[aria-pressed=true]{color:var(--recordInk);opacity:1;background:none;box-shadow:none}
+#app .play-control #speech-listen:active{transform:translateX(-50%);background:none}
+#app .play-control #speech-listen:focus-visible{outline:1px solid var(--recordInk);outline-offset:0}
+#app:not(.focus) #speech-listen{visibility:hidden;pointer-events:none}
+@media(max-width:600px){
+ #app .player-controls{top:75%}
+ #app .play-control #speech-listen{top:calc(100% + 1px);width:24px;min-width:24px;height:18px;min-height:18px;padding:3px}
+ #app .play-control #speech-listen svg{width:12px;height:12px}
+}
+
 /* A draft on the same paper label; it never changes the cassette's footprint. */
 #app .creator-sheet{padding:0 7px 12px;scrollbar-gutter:stable}
 .creator-heading,.creator-title-row,.creator-source-meta,.creator-action-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -723,7 +736,7 @@ body #app .cassette[data-material]{background:var(--materialSurface);border-colo
 #app .cassette[data-material] .token.speech-live:not(.speech-pass):not(.speech-close){color:var(--ink);background:none;box-shadow:none}
 #app .cassette[data-material] .token.speech-live:not(.speech-pass):not(.speech-close) .han:before{content:"";position:absolute;inset:0;z-index:-1;background:color-mix(in srgb,var(--materialPass,#367f94) 8%,var(--label));border-radius:.14em;pointer-events:none}
 #app .cassette[data-material] .token.speech-live:not(.speech-pass):not(.speech-close) .han:after{content:none}
-#app .cassette[data-material] .token:is(.speech-pass,.speech-close,.speech-retry,.speech-uncertain,.speech-omitted).active:not(.selected) .han{color:var(--accentInk)}
+#app .cassette[data-material] .token:is(.speech-pass,.speech-close,.speech-retry,.speech-uncertain,.speech-omitted).active:not(.selected) .han{color:var(--ink)}
 @media(prefers-contrast:more){#app .cassette[data-material] .token:is(.speech-pass,.speech-close) .han:after{border-width:1.25px}}
 /* Reserve the mark's baseline on a phone without moving the fixed reel window. */
 @media(max-width:600px){
@@ -732,11 +745,82 @@ body #app .cassette[data-material]{background:var(--materialSurface);border-colo
  #app .cassette[data-material] .caption:has(.speech-pass,.speech-close) .han{font-size:calc(var(--zh-size)*.9);line-height:1.12}
  #app .cassette[data-material] .caption:has(.speech-pass,.speech-close) .token.latin .han{font-size:calc(var(--zh-size)*.7)}
 }
-/* A moving pace cue belongs only to the written character, never to the score. */
-#app .cassette[data-material] .token.speech-guide{color:var(--ink);background:none;box-shadow:none}
-#app .cassette[data-material] .token.speech-guide .reading{color:var(--muted);font-weight:450;background:none}
-#app .cassette[data-material] .token.speech-guide .han:before{content:"";position:absolute;inset:0 -.015em;z-index:-1;border-radius:.16em;background:color-mix(in srgb,var(--accent) 22%,var(--label));border:1px solid color-mix(in srgb,var(--accent) 18%,var(--label));pointer-events:none}
-#app .cassette[data-material] .token.speech-guide .han:after{content:none}
+/* Demonstration playback shades only the written character, never Jyutping. */
+#app .cassette[data-material] .token.active{background:transparent;box-shadow:none;color:var(--ink)}
+#app .cassette[data-material] .token:is(.active,.done) .reading{color:var(--muted);font-weight:450;background:none;box-shadow:none}
+#app .cassette[data-material] .token.active .han{color:var(--ink)}
+#app .cassette[data-material] .token.active .han:before{content:"";position:absolute;inset:0 -.015em;z-index:-1;border-radius:.16em;background:color-mix(in srgb,var(--accent) 22%,var(--label));border:0;pointer-events:none}
+/* The guide fills each character, preserving earlier progress until Stop. */
+#app .cassette[data-material] .token:is(.speech-guide,.speech-guided,.speech-preparing){color:var(--ink);background:none;box-shadow:none}
+#app .cassette[data-material] .token:is(.speech-guide,.speech-guided,.speech-preparing) .reading{color:var(--muted);font-weight:450;background:none}
+#app .cassette[data-material] .token:is(.speech-guide,.speech-guided,.speech-preparing) .han:before{content:"";position:absolute;inset:0 -.015em;z-index:-1;border-radius:.16em;border:0;background:linear-gradient(to right,color-mix(in srgb,var(--accent) 22%,var(--label)) var(--speech-fill,0%),transparent var(--speech-fill,0%));pointer-events:none}
+#app .cassette[data-material] .token.speech-guided .han:before{background:color-mix(in srgb,var(--accent) 22%,var(--label))}
+#app .cassette[data-material] .token.speech-preparing .han:before{background:color-mix(in srgb,var(--accent) 22%,var(--label));animation:rewind-prepare-fill .5s ease-in-out .3s 2 both}
+#app .cassette[data-material] .token:is(.speech-guide,.speech-guided,.speech-preparing) .han:after{content:none}
+#app .speech-ready-caret{display:none}
+@keyframes rewind-prepare-fill{0%,100%{opacity:0}25%,65%{opacity:1}}
+@media(prefers-reduced-motion:reduce){#app .cassette[data-material] .token.speech-preparing .han:before{animation:none;opacity:1}}
+
+/* A physical 1.58:1 cassette fits the safe visible area of a phone in landscape. */
+#app #display-toggle{display:none;place-items:center;width:20px;min-width:20px;height:20px;min-height:20px;padding:3px;border:0;border-radius:3px;background:none;color:var(--muted);opacity:.62;box-shadow:none}
+@media(max-width:600px),(orientation:landscape) and (max-height:600px){#app #display-toggle{display:grid}}
+body.display-immersive #app #display-toggle{display:grid}
+#app #display-toggle svg{width:14px;height:14px;display:block}
+#app #display-toggle:hover,#app #display-toggle[aria-pressed=true]{background:none;color:var(--ink);opacity:1}
+#app #display-toggle:focus-visible{outline:1px solid var(--accent);outline-offset:1px}
+#app #display-tip{position:absolute;z-index:14;left:12%;right:12%;top:58.5%;padding:6px 20px 6px 8px;background:var(--label);border:1px solid color-mix(in srgb,var(--ink) 12%,var(--label));border-radius:5px;color:var(--muted);font:10px/1.4 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;box-shadow:0 2px 8px #0000000a}
+#app #display-tip-close{position:absolute;right:4px;top:4px;width:12px;min-width:12px;height:12px;min-height:12px;padding:2px;background:none;color:var(--muted);border:0;border-radius:2px}
+#app #display-tip-close svg{width:8px;height:8px;display:block}
+#app #display-tip-close:hover{background:none;color:var(--ink)}
+body.display-immersive{--display-edge:8px;--tape-w:min(calc(var(--display-width,100vw) - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px) - var(--display-edge)*2),calc((var(--display-height,100dvh) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - var(--display-edge)*2)*1.58));box-sizing:border-box;display:grid;place-items:center;width:var(--display-width,100vw);height:var(--display-height,100dvh);min-height:0;padding:calc(env(safe-area-inset-top,0px) + var(--display-edge)) calc(env(safe-area-inset-right,0px) + var(--display-edge)) calc(env(safe-area-inset-bottom,0px) + var(--display-edge)) calc(env(safe-area-inset-left,0px) + var(--display-edge));overflow:hidden}
+body.display-immersive #app,body.display-immersive #app.focus,body.display-immersive #app.sidebar-hidden{width:var(--tape-w);max-width:var(--tape-w);margin:0;min-height:0}
+html:fullscreen,html:-webkit-full-screen{background:var(--page)}
+/* Phone-like cassette dimensions also apply on a wide, short landscape viewport. */
+body.compact-tape #app .cassette{border-width:1px;border-radius:7px}
+body.compact-tape #app .label-header{top:9%;height:8%;padding:0 1%}
+body.compact-tape #app .label-header .rewind-wordmark{width:23cqw}
+body.compact-tape #app .tape-edition{display:none}
+body.compact-tape #app .label-header .scope-toggle{height:16px;min-height:16px;padding-top:0;padding-bottom:0}
+body.compact-tape #app .label-header .quiet-more{width:clamp(16px,4.3cqw,22px);height:clamp(16px,4.3cqw,22px);min-width:0;min-height:0;padding:2px}
+body.compact-tape #app .scope-toggle{font-size:8px}
+body.compact-tape #app .scope-track{height:16px}
+body.compact-tape #app .scope-track i{height:8px;width:8px;top:3px}
+body.compact-tape #app #display-toggle{width:clamp(16px,4.3cqw,22px);min-width:0;height:clamp(16px,4.3cqw,22px);min-height:0;padding:2px}
+body.compact-tape #app #display-toggle svg,body.compact-tape #app .quiet-more svg{width:clamp(11px,3cqw,16px);height:clamp(11px,3cqw,16px)}
+body.compact-tape #app .cassette-tools{gap:clamp(5px,1.3cqw,8px)}
+body.compact-tape #app .reading-sheet{top:17%;height:15%}
+body.compact-tape #app .caption{flex-wrap:nowrap;justify-content:safe center;align-items:center;align-content:normal;gap:0;padding:0 2px;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;scrollbar-width:none}
+body.compact-tape #app .caption .word{flex-shrink:0;margin-right:1px}
+body.compact-tape #app .caption .token{padding:0 1px;min-width:calc(var(--zh-size) + 1px)}
+body.compact-tape #app .caption .reading{font-size:calc(var(--zh-size)*.5);min-height:calc(var(--zh-size)*.525);line-height:1.05}
+body.compact-tape #app .caption .han{line-height:1.12}
+body.compact-tape #app .mechanics{border-width:1px;border-radius:5px}
+/* The two play keys scale together and keep their complete hit areas above the shell edge. */
+body.compact-tape #app .player-controls{--compact-key-height:clamp(21px,7.3cqw,40px);left:13%;right:13%;top:71.5%;height:26.5%}
+body.compact-tape #app .progress-meta{height:clamp(6px,1.9cqw,11px);min-height:0;margin-bottom:clamp(1px,.4cqw,2px)}
+body.compact-tape #app .time{font-size:clamp(6px,1.8cqw,10px);line-height:1}
+body.compact-tape #app .seek{display:block;height:2px;margin:0}
+body.compact-tape #app .transport-row{margin-top:clamp(2px,.8cqw,5px);gap:0}
+body.compact-tape #app .transport .icon-button,body.compact-tape #app .play-options .icon-button{width:clamp(23px,7.8cqw,44px);min-width:0;height:var(--compact-key-height);min-height:0;padding:0;border-radius:4px}
+body.compact-tape #app .transport .icon-button svg,body.compact-tape #app .play-options .icon-button svg{width:clamp(14px,4.4cqw,23px);height:clamp(14px,4.4cqw,23px)}
+body.compact-tape #app .play-button{width:clamp(26px,8.6cqw,48px);height:var(--compact-key-height);min-height:0;padding:0;border-radius:4px}
+body.compact-tape #app .play-button svg{width:clamp(16px,4.9cqw,26px);height:clamp(16px,4.9cqw,26px)}
+body.compact-tape #app #speech-record svg{width:clamp(18px,6cqw,32px);height:clamp(18px,6cqw,32px)}
+body.compact-tape #app .play-control #speech-listen{top:calc(100% + 2px);width:clamp(22px,6.5cqw,38px);min-width:0;height:clamp(14px,4.6cqw,27px);min-height:0;padding:2px}
+body.compact-tape #app .play-control #speech-listen svg{width:clamp(10px,3.2cqw,17px);height:clamp(10px,3.2cqw,17px)}
+body.compact-tape #app .tape-album{font-size:12px;bottom:10%;right:54%}
+body.compact-tape #app .tape-label-bottom{font-size:8px;bottom:11%;left:45%;gap:7px}
+body.compact-tape #app #tape-counter{font-size:7px}
+body.compact-tape #app .speech-bar{font-size:9px;gap:6px}
+body.compact-tape #app .options-surface{top:20.5%;bottom:30%;padding:0 .8%}
+body.compact-tape #app .options-heading{flex-basis:20px;margin-bottom:3px;font-size:10px;line-height:1.1}
+body.compact-tape #app .options-back{width:22px}
+body.compact-tape #app .options-back svg{width:14px;height:14px}
+body.compact-tape #app .insert-panel{padding:0 3px 3px}
+body.compact-tape #app .insert-index{gap:0 12px;padding:1px 0}
+body.compact-tape #app .insert-tab{gap:3px;padding:2px 0;font-size:11px;line-height:1.1}
+body.compact-tape #app .insert-tab svg{width:18px;height:18px}
+body.compact-tape #app #display-tip{font-size:9px;line-height:1.3;padding:4px 18px 4px 6px}
 </style><!-- Phosphor Icons license
 MIT License
 
@@ -778,7 +862,7 @@ SOFTWARE.
     </g>
   </g>
 </svg>
-</div><div class="tape-edition"><span></span></div><div class="cassette-tools"><button id="scope-toggle" class="scope-toggle" role="switch" aria-checked="false" aria-label="整句模式" title="Short / Long"><span class="scope-track" aria-hidden="true"><i></i><span id="scope-name">Short</span></span></button><button id="short-mode" hidden aria-hidden="true">短句</button><button id="sentence-mode" hidden aria-hidden="true">整句</button><button id="focus-toggle" class="quiet-more" aria-label="展開更多選項" title="Options"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div></div>
+</div><div class="tape-edition"><span></span></div><div class="cassette-tools"><button id="scope-toggle" class="scope-toggle" role="switch" aria-checked="false" aria-label="整句模式" title="Short / Long"><span class="scope-track" aria-hidden="true"><i></i><span id="scope-name">Short</span></span></button><button id="short-mode" hidden aria-hidden="true">短句</button><button id="sentence-mode" hidden aria-hidden="true">整句</button><button id="display-toggle" class="display-toggle" aria-label="全螢幕" title="Fullscreen" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="focus-toggle" class="quiet-more" aria-label="展開更多選項" title="Options"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div></div>
 <section class="reading-sheet" aria-label="跟讀文字"><h2 id="section-title" class="sr-only"></h2><span id="position" class="sr-only"></span><span id="within-sentence" class="sr-only"></span><div class="transcript" id="transcript"><div class="caption" id="caption" role="group" aria-label="點字播放，拖選範圍"></div><button id="clear-selection" class="selection-clear" aria-label="清除選取" title="Clear selection (Esc)" hidden><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></div></section>
 <div id="practice-tip" role="note" hidden><span>點字聽 · 拖選重聽</span><button id="dismiss-tip" aria-label="關閉提示" title="Close"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></div>
 <div class="mechanics" aria-hidden="true"><div class="coil left-coil"><div class="reel"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="var(--hub)" stroke="#888c86" stroke-width="1.2"/><circle cx="50" cy="50" r="39" fill="none" stroke="#aeb0a7" stroke-width=".8"/><circle cx="50" cy="50" r="18" fill="#343835"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(0 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(60 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(120 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(180 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(240 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(300 50 50)"/></svg></div></div><div class="tape-window"><span class="tape-guide"></span></div><div class="coil right-coil"><div class="reel"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="var(--hub)" stroke="#888c86" stroke-width="1.2"/><circle cx="50" cy="50" r="39" fill="none" stroke="#aeb0a7" stroke-width=".8"/><circle cx="50" cy="50" r="18" fill="#343835"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(0 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(60 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(120 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(180 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(240 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(300 50 50)"/></svg></div></div></div>
@@ -787,14 +871,14 @@ SOFTWARE.
         <input id="seek" class="range seek" type="range" min="0" max="1" step="0.01" value="0" aria-label="本段播放位置">
         <div class="transport-row">
           
-          <div class="transport"><button id="loop" class="icon-button" aria-label="循環播放這一段" title="循環播放這一段" aria-pressed="false"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M24,128A72.08,72.08,0,0,1,96,56H204.69L194.34,45.66a8,8,0,0,1,11.32-11.32l24,24a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L204.69,72H96a56.06,56.06,0,0,0-56,56,8,8,0,0,1-16,0Zm200-8a8,8,0,0,0-8,8,56.06,56.06,0,0,1-56,56H51.31l10.35-10.34a8,8,0,0,0-11.32-11.32l-24,24a8,8,0,0,0,0,11.32l24,24a8,8,0,0,0,11.32-11.32L51.31,200H160a72.08,72.08,0,0,0,72-72A8,8,0,0,0,224,120Z"/></svg></button><button id="previous" class="icon-button" aria-label="選擇上一段，不播放" title="Previous · no playback (←)"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M199.81,34a16,16,0,0,0-16.24.43L64,109.23V40a8,8,0,0,0-16,0V216a8,8,0,0,0,16,0V146.77l119.57,74.78A15.95,15.95,0,0,0,208,208.12V47.88A15.86,15.86,0,0,0,199.81,34ZM192,208,64.16,128,192,48.07Z"/></svg></button><button id="rewind" class="icon-button" aria-label="倒帶重播這一段" title="倒帶重播（R）"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M223.77,58a16,16,0,0,0-16.25.53L128,109.14V71.84A15.91,15.91,0,0,0,103.52,58.5L15.33,114.66a15.8,15.8,0,0,0,0,26.68l88.19,56.16A15.91,15.91,0,0,0,128,184.16v-37.3l79.52,50.64A15.91,15.91,0,0,0,232,184.16V71.84A15.83,15.83,0,0,0,223.77,58ZM112,183.93,24.18,128,112,72.06Zm104,0L128.18,128,216,72.06Z"/></svg></button><div class="play-control"><button id="play" class="play-button" aria-label="播放這一段" title="播放／暫停（空白鍵）" disabled><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></svg></button><span id="play-label" aria-hidden="true">播放</span></div><button id="speech-record" class="icon-button speech-record" aria-label="錄音練習" title="Record practice" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="12" cy="12" r="4.4"/></svg></button><button id="next" class="icon-button" aria-label="選擇下一段，不播放" title="Next · no playback (→)"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M200,32a8,8,0,0,0-8,8v69.23L72.43,34.45A15.95,15.95,0,0,0,48,47.88V208.12a16,16,0,0,0,24.43,13.43L192,146.77V216a8,8,0,0,0,16,0V40A8,8,0,0,0,200,32ZM64,207.93V48.05l127.84,80Z"/></svg></button></div>
+          <div class="transport"><button id="loop" class="icon-button" aria-label="循環播放這一段" title="循環播放這一段" aria-pressed="false"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M24,128A72.08,72.08,0,0,1,96,56H204.69L194.34,45.66a8,8,0,0,1,11.32-11.32l24,24a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32-11.32L204.69,72H96a56.06,56.06,0,0,0-56,56,8,8,0,0,1-16,0Zm200-8a8,8,0,0,0-8,8,56.06,56.06,0,0,1-56,56H51.31l10.35-10.34a8,8,0,0,0-11.32-11.32l-24,24a8,8,0,0,0,0,11.32l24,24a8,8,0,0,0,11.32-11.32L51.31,200H160a72.08,72.08,0,0,0,72-72A8,8,0,0,0,224,120Z"/></svg></button><button id="previous" class="icon-button" aria-label="選擇上一段，不播放" title="Previous · no playback (←)"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M199.81,34a16,16,0,0,0-16.24.43L64,109.23V40a8,8,0,0,0-16,0V216a8,8,0,0,0,16,0V146.77l119.57,74.78A15.95,15.95,0,0,0,208,208.12V47.88A15.86,15.86,0,0,0,199.81,34ZM192,208,64.16,128,192,48.07Z"/></svg></button><button id="rewind" class="icon-button" aria-label="倒帶重播這一段" title="倒帶重播（R）"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M223.77,58a16,16,0,0,0-16.25.53L128,109.14V71.84A15.91,15.91,0,0,0,103.52,58.5L15.33,114.66a15.8,15.8,0,0,0,0,26.68l88.19,56.16A15.91,15.91,0,0,0,128,184.16v-37.3l79.52,50.64A15.91,15.91,0,0,0,232,184.16V71.84A15.83,15.83,0,0,0,223.77,58ZM112,183.93,24.18,128,112,72.06Zm104,0L128.18,128,216,72.06Z"/></svg></button><div class="play-control"><button id="play" class="play-button" aria-label="播放這一段" title="播放／暫停（空白鍵）" disabled><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></svg></button><span id="play-label" aria-hidden="true">播放</span><button id="speech-listen" class="speech-listen" aria-label="回聽我的錄音" title="My recording" hidden><span class="speech-listen-icon" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></svg></span></button></div><button id="speech-record" class="icon-button speech-record" aria-label="錄音練習" title="Record practice" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.35"/><circle cx="12" cy="12" r="4.4"/></svg></button><button id="next" class="icon-button" aria-label="選擇下一段，不播放" title="Next · no playback (→)"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M200,32a8,8,0,0,0-8,8v69.23L72.43,34.45A15.95,15.95,0,0,0,48,47.88V208.12a16,16,0,0,0,24.43,13.43L192,146.77V216a8,8,0,0,0,16,0V40A8,8,0,0,0,200,32ZM64,207.93V48.05l127.84,80Z"/></svg></button></div>
           <div class="play-options"><button id="through" class="icon-button through-button" aria-label="連續通讀" title="連續通讀" aria-pressed="false"><span class="through-icon"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M223.77,58a16,16,0,0,0-16.25.53L128,109.14V71.84A15.91,15.91,0,0,0,103.52,58.5L15.33,114.66a15.8,15.8,0,0,0,0,26.68l88.19,56.16A15.91,15.91,0,0,0,128,184.16v-37.3l79.52,50.64A15.91,15.91,0,0,0,232,184.16V71.84A15.83,15.83,0,0,0,223.77,58ZM112,183.93,24.18,128,112,72.06Zm104,0L128.18,128,216,72.06Z"/></svg></span><span class="control-caption">通讀</span></button></div>
         </div>
       </section>
-<div id="speech-bar" class="speech-bar" hidden><button id="speech-summary" class="speech-summary" aria-label="練習結果詳情"><span id="speech-status-text"></span></button><button id="speech-listen" class="speech-listen" aria-label="回聽我的錄音" title="My recording" hidden><span class="speech-listen-icon" aria-hidden="true"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M232.4,114.49,88.32,26.35a16,16,0,0,0-16.2-.3A15.86,15.86,0,0,0,64,39.87V216.13A15.94,15.94,0,0,0,80,232a16.07,16.07,0,0,0,8.36-2.35L232.4,141.51a15.81,15.81,0,0,0,0-27ZM80,215.94V40l143.83,88Z"/></svg></span><span>我的錄音</span></button></div><span id="speech-announcement" class="sr-only" role="status" aria-live="polite"></span>
+<div id="speech-bar" class="speech-bar" hidden><button id="speech-summary" class="speech-summary" aria-label="練習結果詳情"><span id="speech-status-text"></span></button></div><span id="speech-announcement" class="sr-only" role="status" aria-live="polite"></span>
 <section id="speech-popover" class="speech-popover" role="dialog" aria-label="開始語音練習" aria-describedby="speech-popover-text" hidden><button id="speech-popover-close" class="speech-popover-close" aria-label="關閉語音提示" title="Close"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button><p id="speech-popover-text"></p><div class="speech-popover-footer"><button id="speech-mode-choice-compare" hidden>只錄音對照</button><button id="speech-popover-start">開始</button></div></section>
 <div class="practice-footer sr-only"><span id="play-policy"></span></div><p id="error" role="alert" hidden></p>
-<section id="drawer" class="options-surface" aria-label="Practice options" hidden>
+<div id="display-tip" class="display-tip" role="note" hidden><span id="display-tip-text"></span><button id="display-tip-close" aria-label="關閉螢幕提示" title="Close"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></div><span id="display-status" class="sr-only" role="status" aria-live="polite"></span><section id="drawer" class="options-surface" aria-label="Practice options" hidden>
   <header class="options-heading"><button id="options-back" class="options-back" aria-label="Back to options" title="Back"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"><path d="m14 5-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span id="options-title">Options</span></header>
   <section id="options-home" class="insert-panel options-home" data-panel="home" aria-label="Options">
   <nav class="insert-index" aria-label="Practice options">
@@ -862,6 +946,7 @@ SOFTWARE.
 <p>預設每次只讀一個短句，讀完停下，讓你跟讀。再按播放，就讀下一段。想重聽，按有顏色的倒帶鍵。</p>
 <p>標籤上的小切換鈕只顯示目前的 Short（短句）或 Long（整句）。點一下即可切換，也可在按鈕取得鍵盤焦點時按左右鍵。兩者都在同一個磁帶內顯示，不會自動展開。卡帶比例固定；長句會調整字體與行距，必要時在文字區內捲動。窄視窗使用可左右捲動的一行文字，也可用滑鼠滾輪查看。播放時文字會跟隨移動；粵拼一直在中文字上方。</p>
 <h2>每個按鍵的用途</h2>
+<p>播放時，底色只標示正在讀的文字；粵拼保持原色。中文字的底色與錄音引導使用相同的範圍。</p>
 <table>
 <tr><th>播放／暫停</th><td>開始播放，或暫停、繼續目前的位置。這段讀完後，再按一次便讀下一段。選取範圍讀完後，若同一段還有文字，則先接著讀餘下部分。</td></tr>
 <tr><th>倒帶</th><td>從目前段落或選取範圍的開頭重播。可開關按鍵及倒帶音效。</td></tr>
@@ -883,15 +968,15 @@ SOFTWARE.
 <p>Skin 可分別調整塑料材質、外殼顏色、貼紙顏色、圖案及三種印刷色。Matte 隱藏內部結構，Smoked 和 Clear 顯示不同程度的帶輪、導帶和支架。Presets 保留 24 款完整設計。調整後點 × 返回練習，卡帶比例與帶輪位置保持不變。Settings 可調整音量、語速、字體、按鍵音效及循環間隔。點選數值後返回；拖動滑桿時可先調整，放開後返回。鍵盤可用方向鍵調整滑桿，再按 Enter 完成。</p>
 <p>選項內容較多時，只在貼紙內捲動。左上角的小箭頭回到選項目錄；右上角的 × 或 Esc 關閉。沒有自動消失的倒數計時。需要點字練習提示時，可在 Help 選 Selection tips。</p>
 <h2>錄音跟讀 · 試驗功能</h2>
-<p>播放鍵旁的圓點是錄音鍵。按一下開始，再按變成方形的同一個鍵停止；錄音時間按所選示範長度加 2 s 設定，上限為 25 s。麥克風就緒後，輕聲提示音及文字起點的閃動標記表示可以開始；倒數從提示結束後計算。停止後錄音鍵會改為處理中狀態，動畫圓點表示仍在等待回饋。預設練習目前短句；選取部分字詞後，也可以只練那一部分。播放示範會停止尚在收音的練習，但不會中斷已在處理的 AI 評測。切換內容、離開頁面或按 Esc，會取消目前練習。</p>
+<p>播放鍵旁的圓點是錄音鍵。按一下開始，再按變成方形的同一個鍵停止；錄音時間按所選示範長度加 2 s 設定，上限為 25 s。麥克風就緒後先發出較長的輕聲提示音，第一個字再閃兩次；準備共 1.35 秒，之後才開始倒數及保留錄音。停止後錄音鍵會改為處理中狀態，動畫圓點表示仍在等待回饋。預設練習目前短句；選取部分字詞後，也可以只練那一部分。播放示範會停止尚在收音的練習，但不會中斷已在處理的 AI 評測。切換內容、離開頁面或按 Esc，會取消目前練習。</p>
 <p>首次按錄音鍵，選擇「AI 回饋」或「只錄音對照」。選擇會記在這個瀏覽器，之後按錄音鍵就沿用；可在 ⋯ → Settings → Speech 更改。選 AI 而尚未連接時，直接輸入分享者提供的存取碼；本機配套版則輸入服務密鑰。選錄音對照便可直接錄音，不需要 AI 連線，即使已連接服務也不會傳送這次錄音。</p>
 <p>分享網頁若已啟用 AI，可使用分享者提供的邀請連結，或在 ⋯ → Settings → Speech → AI 回饋 輸入 access code，無需自己的 API key。連線只保留在這個分頁；到期後可重新連接。本機配套版本仍可在 Speech 設定自己的 OpenAI 或 Azure 服務，密鑰只保留在本機服務記憶體。</p>
 <p>已連接並選擇 AI 後，首次使用該服務會在磁帶上顯示小提示。錄音在停止後才傳送，以取得發音回饋。確認後可按圓點開始、方形停止。若分享者提供多項服務，可在 Speech 明確選擇，再重新確認錄音傳送；程式不會自動換服務。連線前留下的錄音不會因為之後連線而自動送出。</p>
-<p>提示音結束後，高亮按示範錄音的字詞時間和所選速度向前移動，只照亮中文字，粵拼保持原色。這是節奏引導，不是即時辨識或發音判定；沒有跟上也不會因此扣分。引導後保留兩秒緩衝，總錄音上限 25 秒。新建練習的句內時間可能是估算值。AI 回饋在停止後才提供。</p>
-<p>最後結果直接顯示在原來文字上：清新的藍綠字與字下實心小標記表示本次字詞組已通過；空心小標記表示接近、可以再練；無標記表示未通過或未能確認。粵拼保持原色，文字沒有評測下划線。點下方的小結果摘要可以回聽或清除。摘要分開列出通過、接近、待練和未能確認的組數；懸停或輔助閱讀標籤提供細節。詞組可能共用回饋，不代表每字聲調都已獨立驗證。OpenAI Audio 沒有標準化發音分數；結果只供試驗，不是經校準的診斷。</p>
+<p>準備結束後，背景按示範字詞時間和所選速度逐漸填滿文字；前面的填色保持，粵拼維持原色。這是節奏引導，不是即時辨識或發音判定；沒有跟上也不會因此扣分。完成填色後保留兩秒緩衝，停止時清除；總錄音上限 25 秒。新建練習的句內時間可能是估算值。AI 回饋在停止後才提供。</p>
+<p>最後結果直接顯示在原來文字上：清新的藍綠字與字下實心小標記表示本次字詞組已通過；空心小標記表示接近、可以再練；無標記表示未通過或未能確認。粵拼保持原色，文字沒有評測下划線。點下方的小結果摘要可查看細節或清除。摘要分開列出通過、接近、待練和未能確認的組數；懸停或輔助閱讀標籤提供細節。詞組可能共用回饋，不代表每字聲調都已獨立驗證。OpenAI Audio 沒有標準化發音分數；結果只供試驗，不是經校準的診斷。</p>
 <p>AI 功能需要可用的網路服務和有效的練習連線。AI 模式尚未啟用或連線到期時，錄音鍵會引導你完成連接；錄音對照模式則仍可使用。麥克風須由你在瀏覽器允許。</p>
 <h2>回聽自己的錄音</h2>
-<p>錄完後，磁帶下方的狀態列會出現「我的錄音」。點一下回聽，再點可暫停。按原有倒帶鍵，重聽同一段示範；兩種聲音不會重疊，同句倒帶也不會清除自己的錄音。AI 評測處理中仍可回聽和對照，不必等結果。音量和靜音沿用播放設定。</p>
+<p>錄完後，主播放鍵正下方會出現一個較小、帶錄音主題色的播放箭頭。點一下回聽，再點可暫停；懸停及輔助閱讀標籤說明它是自己的錄音。按原有倒帶鍵，重聽同一段示範；兩種聲音不會重疊，同句倒帶也不會清除自己的錄音。AI 評測處理中仍可回聽和對照，不必等結果。音量和靜音沿用播放設定。</p>
 <p>每次保留目前這段的最新錄音；開始重錄、切換句子或選取範圍、載入新練習、清除或離開頁面時會移除。自己的錄音不包含在匯出的練習檔案中。</p>
 <h2>快捷鍵</h2>
 <p><kbd>空白鍵</kbd> 播放／暫停　<kbd>R</kbd> 倒帶　<kbd>←</kbd> 上一段　<kbd>→</kbd> 下一段</p>
@@ -904,6 +989,7 @@ SOFTWARE.
 <p>錄音由 AI 生成，並非真人錄製。每句錄音長度會實測；句內的逐字與短句時間目前按字詞估算，點字或拖選時可能有切音誤差。粵拼與讀音也需人工核對。錄音完成後按「開始練習」才會替換目前磁帶；封面標題跟隨新稿，Rewind 標誌保持不變。原有練習仍可在 Library 找回。取消或失敗會保留原稿。</p>
 <p>完成的練習可匯出為一個 <code>.rewind.json</code> 檔，在另一個 Rewind 頁面匯入。檔案包含這份練習的稿件、粵拼、錄音和時間資料，不包含 access code、API key 或你自己的練習錄音。</p>
 <h2>離線使用與分享</h2>
+<p>手機請開啟分享網頁，橫放後卡帶會按螢幕大小放大，字體及按鍵跟著調整。貼紙頂部的小全螢幕圖示可在支援的瀏覽器隱藏瀏覽器介面；再按一次退出。若 iPhone Safari 不支援，可從分享選單加入主畫面，開啟「Open as Web App」，再從主畫面進入。系統旋轉鎖定須關閉。</p>
 <p><code>Rewind.html</code> 已包含錄音、講稿、粵拼、時間資料及這份說明。分享時只需傳送這一個檔案，對方下載後用瀏覽器開啟即可，不需要附上 Source 資料夾，也不需要連線。</p>
 <p>Windows 版可直接開啟 EXE。Mac 版請先解壓縮對應 Apple Silicon 或 Intel 的 ZIP，再開啟 Rewind.app。桌面版同樣內置播放器與練習內容。這些桌面套件未作開發者簽署；Mac 版未經 Apple 公證，亦未在 Mac 實機測試，系統可能阻止首次開啟。</p>
 <h2>這次練習的內容</h2>
@@ -2333,9 +2419,9 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  REWIND_SKINS.filter(s=>filter==='All'||s.era===filter).forEach(s=>{const b=document.createElement('button');b.className='skin-choice';b.dataset.skin=s.id;b.setAttribute('aria-pressed',s.id===currentSkin.id);b.setAttribute('aria-label',skinName(s));const tape=document.createElement('span');tape.className='mini-tape';tape.setAttribute('aria-hidden','true');Object.entries(s.colors).forEach(([k,v])=>tape.style.setProperty('--'+k,v));
  const label=document.createElement('span');label.className='label-surface';paintLabel(label,s);label.append(art());const window=document.createElement('span');window.className='mini-window';window.append(document.createElement('i'),document.createElement('i'));const foot=document.createElement('span');foot.className='mini-foot';tape.append(label,window,foot);const name=document.createElement('span');name.textContent=skinName(s);b.append(tape,name);b.onclick=()=>{applySkin(s.id);globalThis.rewindPanels.close();};grid.append(b);});}
  let saved;try{saved=localStorage.getItem('rewind-skin-v05');}catch{}applySkin(saved);renderSkins();
- function fit(){fitPending=false;if(!caption.clientWidth||!caption.childElementCount)return;const mobile=innerWidth<=600,preferred=Number(document.getElementById('font-size').value)||34,whole=window.rewind?.getState().grain==='sentences';
+ function fit(){fitPending=false;if(!caption.clientWidth||!caption.childElementCount)return;const mobile=cassette.getBoundingClientRect().width<=600,preferred=Number(document.getElementById('font-size').value)||34,whole=window.rewind?.getState().grain==='sentences';
  caption.dataset.flow=mobile?'horizontal':'wrap';caption.dataset.compact=String(!mobile&&whole);
- if(mobile){caption.style.setProperty('--zh-size','20px');caption.style.setProperty('--row-gap','0px');caption.dataset.scrollable=String(caption.scrollWidth>caption.clientWidth+1);return;}
+ if(mobile){const size=Math.max(18,Math.min(32,cassette.getBoundingClientRect().width*20/370));caption.style.setProperty('--zh-size',size+'px');caption.style.setProperty('--row-gap','0px');caption.dataset.scrollable=String(caption.scrollWidth>caption.clientWidth+1);return;}
  let size=Math.min(preferred,34),min=whole?16:22;caption.style.setProperty('--row-gap',whole?'0px':'2px');
  for(;size>=min;size--){caption.style.setProperty('--zh-size',size+'px');if(caption.scrollHeight<=caption.clientHeight&&caption.scrollWidth<=caption.clientWidth+1)break;}
  if(size<min){
@@ -2348,8 +2434,8 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  new ResizeObserver(schedule).observe(caption);new MutationObserver(()=>{caption.scrollTop=0;caption.scrollLeft=0;schedule();}).observe(caption,{childList:true});document.getElementById('font-size').addEventListener('input',schedule);
  caption.addEventListener('wheel',e=>{if(caption.dataset.flow==='horizontal'&&caption.scrollWidth>caption.clientWidth){e.preventDefault();caption.scrollLeft+=e.deltaY+e.deltaX;}},{passive:false});
  let lastActive=null,dragging=false,dragX=0,dragY=0;caption.addEventListener('pointerdown',e=>{dragging=true;dragX=e.clientX;dragY=e.clientY;});caption.addEventListener('pointermove',e=>{dragX=e.clientX;dragY=e.clientY;});window.addEventListener('pointerup',()=>{dragging=false;});window.addEventListener('pointercancel',()=>{dragging=false;});
- function follow(){const heard=caption.querySelectorAll('.token.speech-live'),active=caption.querySelector('.token.speech-guide')||caption.querySelector('.token.active')||heard[heard.length-1],v=caption.getBoundingClientRect();if(dragging){if(caption.dataset.flow==='horizontal'){if(dragX>v.right-20)caption.scrollLeft+=4;else if(dragX<v.left+20)caption.scrollLeft-=4;}else{if(dragY>v.bottom-15)caption.scrollTop+=3;else if(dragY<v.top+15)caption.scrollTop-=3;}}
- else if(active&&active!==lastActive){const r=active.getBoundingClientRect();if(r.left<v.left+3)caption.scrollLeft-=v.left-r.left+8;else if(r.right>v.right-3)caption.scrollLeft+=r.right-v.right+8;if(innerWidth>600){if(r.top<v.top+2)caption.scrollTop-=v.top-r.top+5;else if(r.bottom>v.bottom-2)caption.scrollTop+=r.bottom-v.bottom+5;}lastActive=active;}requestAnimationFrame(follow);}
+ function follow(){const heard=caption.querySelectorAll('.token.speech-live'),active=caption.querySelector('.token.speech-preparing')||caption.querySelector('.token.speech-guide')||caption.querySelector('.token.active')||heard[heard.length-1],v=caption.getBoundingClientRect();if(dragging){if(caption.dataset.flow==='horizontal'){if(dragX>v.right-20)caption.scrollLeft+=4;else if(dragX<v.left+20)caption.scrollLeft-=4;}else{if(dragY>v.bottom-15)caption.scrollTop+=3;else if(dragY<v.top+15)caption.scrollTop-=3;}}
+ else if(active&&active!==lastActive){const r=active.getBoundingClientRect();if(r.left<v.left+3)caption.scrollLeft-=v.left-r.left+8;else if(r.right>v.right-3)caption.scrollLeft+=r.right-v.right+8;if(caption.dataset.flow!=='horizontal'){if(r.top<v.top+2)caption.scrollTop-=v.top-r.top+5;else if(r.bottom>v.bottom-2)caption.scrollTop+=r.bottom-v.bottom+5;}lastActive=active;}requestAnimationFrame(follow);}
  requestAnimationFrame(follow);schedule();window.rewindTheme=Object.freeze({apply:applySkin,get:()=>currentSkin.id,list:()=>REWIND_SKINS.map(s=>({id:s.id,name:s.name,artwork:s.artwork})),fit});
 })();
 
@@ -2515,20 +2601,24 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     byId('speech-summary').disabled=!recording||busy;
     if(message!==undefined)byId('speech-status-text').textContent=message;
   }
-  function clearReadyMarker(){readyMarker?.remove();readyMarker=null;}
+  function clearReadyMarker(){readyMarker?.classList.remove('speech-preparing');readyMarker=null;}
   function clearGuide(){
     if(guideFrame!==null)cancelAnimationFrame(guideFrame);guideFrame=null;
-    for(const entry of tokenNodes)entry.element.classList.remove('speech-guide');
+    for(const entry of tokenNodes){entry.element.classList.remove('speech-guide','speech-guided');entry.element.style.removeProperty('--speech-fill');}
   }
   function advanceGuide(ticket){
-    guideFrame=null;
     if(!stillCurrent(ticket)||state!=='recording')return;
+    guideFrame=null;
     const elapsed=Math.max(0,(performance.now()-started)/1000);
-    if(elapsed>=snapshot.guideDuration){clearGuide();clearReadyMarker();return;}
-    const active=snapshot.guide.find(cue=>elapsed>=cue.start&&elapsed<cue.end)?.unit;
-    for(const entry of tokenNodes)entry.element.classList.toggle('speech-guide',entry.index===active);
-    if(active!==undefined)clearReadyMarker();
-    guideFrame=requestAnimationFrame(()=>advanceGuide(ticket));
+    const cues=new Map(snapshot.guide.map(cue=>[cue.unit,cue]));
+    for(const entry of tokenNodes){
+      const cue=cues.get(entry.index),complete=!!cue&&elapsed>=cue.end,active=!!cue&&elapsed>=cue.start&&elapsed<cue.end;
+      entry.element.classList.toggle('speech-guide',active);entry.element.classList.toggle('speech-guided',complete);
+      if(cue&&(active||complete))entry.element.style.setProperty('--speech-fill',(complete?100:Math.min(100,Math.max(0,(elapsed-cue.start)/(cue.end-cue.start)*100))).toFixed(2)+'%');
+      else entry.element.style.removeProperty('--speech-fill');
+    }
+    // Keep completed fills through the two-second reading buffer; stop/cancel owns cleanup.
+    if(elapsed<snapshot.guideDuration)guideFrame=requestAnimationFrame(()=>advanceGuide(ticket));
   }
   function clearReadyCue({marker=true}={}){
     clearTimeout(cueTimer);cueTimer=null;
@@ -2541,16 +2631,16 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   function readyCue(ticket){
     clearReadyCue();
     const first=snapshot?.unitSpans.find(span=>span.spoken);
-    const han=tokenNodes.find(entry=>entry.index===first?.unit)?.element.querySelector('.han');
-    if(han){readyMarker=document.createElement('span');readyMarker.className='speech-ready-caret';readyMarker.setAttribute('aria-hidden','true');han.append(readyMarker);}
-    state='ready';paint('Ready');announce('準備好，提示音後開始跟讀。');
-    // The capture callback ignores this stage; neither beep nor settle gap is sent.
+    readyMarker=tokenNodes.find(entry=>entry.index===first?.unit)?.element||null;
+    readyMarker?.classList.add('speech-preparing');
+    state='ready';paint('Ready');announce('準備好，提示音和兩次閃動後開始跟讀。');
+    // CSS delays the two 500 ms pulses by 300 ms. Capture ignores the complete 1350 ms lead-in.
     try{
       if(soundEnabled&&!muted&&volume>0&&!audio.muted){
         const now=context.currentTime;cueOscillator=context.createOscillator();cueGain=context.createGain();
         cueOscillator.type='sine';cueOscillator.frequency.value=660;
-        cueGain.gain.setValueAtTime(0,now);cueGain.gain.linearRampToValueAtTime(Math.min(1,volume)*.055,now+.008);cueGain.gain.linearRampToValueAtTime(0,now+.08);
-        cueOscillator.connect(cueGain);cueGain.connect(context.destination);cueOscillator.start(now);cueOscillator.stop(now+.08);
+        cueGain.gain.setValueAtTime(0,now);cueGain.gain.linearRampToValueAtTime(Math.min(1,volume)*.055,now+.025);cueGain.gain.setValueAtTime(Math.min(1,volume)*.055,now+.16);cueGain.gain.linearRampToValueAtTime(0,now+.24);
+        cueOscillator.connect(cueGain);cueGain.connect(context.destination);cueOscillator.start(now);cueOscillator.stop(now+.24);
       }
     }catch{/* A blocked audio effect must not prevent microphone practice. */}
     return new Promise(resolve=>{
@@ -2559,8 +2649,8 @@ loadSession(defaultSession);requestAnimationFrame(frame);
         if(cueResolve!==resolve)return;
         const complete=cueResolve;cueResolve=null;
         const valid=stillCurrent(ticket)&&state==='ready';
-        clearReadyCue({marker:!valid});complete?.(valid);
-      },130);
+        clearReadyCue();complete?.(valid);
+      },1350);
     });
   }
 
@@ -2728,7 +2818,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     live?.finish();
     recording=wav;recordingURL=URL.createObjectURL(new Blob([wav.buffer],{type:'audio/wav'}));replay.src=recordingURL;state='review';paint('錄音已備妥 · '+wav.duration.toFixed(1)+' s');
     if(snapshot?.aiEnabled&&service?.configured&&consent===service.provider){submit();}
-    else{announce('錄音已備妥。按「我的錄音」回聽，按倒帶聽示範。');}
+    else{announce('錄音已備妥。按下方回聽鍵聽自己的錄音，按倒帶聽示範。');}
   }
   function paintResult(data){
     endLive();clearFeedback();result=data;const chars=Array.from(snapshot.text),allowed=['pass','close','retry','uncertain','omitted'],counts={pass:0,close:0,retry:0,uncertain:0,omitted:0};let total=0;
@@ -2818,7 +2908,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   function showDetails(){
     if(!recording)return;
     syncSettings();byId('speech-modes').hidden=true;byId('speech-config').hidden=true;byId('speech-consent').hidden=true;byId('speech-details').hidden=false;
-    if(!result){byId('speech-detail-text').textContent=`${recording.duration.toFixed(1)} s · ${snapshot?.aiEnabled?'我的錄音':'錄音對照'}`;byId('speech-recognized').textContent=!snapshot?.aiEnabled?'按「我的錄音」回聽自己的聲音，再按倒帶聽示範。這段對照錄音不會傳送或評分。':state==='submitting'?'正在取得 AI 回饋，仍可回聽自己的錄音。':service?.configured?'尚未取得回饋。可再錄一次，或重試評測此段。':'AI 連線暫不可用，仍可回聽這段錄音。';}
+    if(!result){byId('speech-detail-text').textContent=`${recording.duration.toFixed(1)} s · ${snapshot?.aiEnabled?'我的錄音':'錄音對照'}`;byId('speech-recognized').textContent=!snapshot?.aiEnabled?'按回聽鍵聽自己的聲音，再按倒帶聽示範。這段對照錄音不會傳送或評分。':state==='submitting'?'正在取得 AI 回饋，仍可回聽自己的錄音。':service?.configured?'尚未取得回饋。可再錄一次，或重試評測此段。':'AI 連線暫不可用，仍可回聽這段錄音。';}
     byId('speech-legend').hidden=!result;byId('speech-cloud-note').hidden=!result;
     rewindPanels.open('speech');paint();
   }
@@ -3052,6 +3142,92 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  window.addEventListener('resize',schedule);window.addEventListener('rewind:materialchange',schedule);
  window.RewindSelection=Object.freeze({position:paint});
  schedule();
+})();
+
+/* Fit the physical cassette to a landscape screen without rotating its contents. */
+(()=>{
+  const body=document.body,root=document.documentElement,cassette=document.getElementById('cassette');
+  const button=document.getElementById('display-toggle'),status=document.getElementById('display-status');
+  const tip=document.getElementById('display-tip'),tipText=document.getElementById('display-tip-text'),tipClose=document.getElementById('display-tip-close');
+  if(!button||!cassette)return;
+  const enterIcon='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const exitIcon='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none"><path d="M4 8h4V4m12 4h-4V4M8 20v-4H4m12 4v-4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  let pending=false,frame=null,lastCompact=null,orientationOwned=false,lastIcon=null,pageActive=true;
+  const full=()=>document.fullscreenElement===root||document.webkitFullscreenElement===root;
+  const request=()=>root.requestFullscreen||root.webkitRequestFullscreen;
+  const supported=()=>!!request()&&(document.fullscreenEnabled!==false||!!root.webkitRequestFullscreen);
+  function hideTip(){if(tip)tip.hidden=true;button.removeAttribute('aria-describedby');}
+  function showTip(message){
+    const tutorial=document.getElementById('practice-tip');
+    if(tutorial&&!tutorial.hidden)document.getElementById('dismiss-tip')?.click();
+    if(status)status.textContent=message;
+    if(tip&&tipText){tipText.textContent=message;tip.hidden=false;button.setAttribute('aria-describedby','display-tip-text');}
+  }
+  function paint(){
+    const active=full();if(active!==lastIcon){button.innerHTML=active?exitIcon:enterIcon;lastIcon=active;}
+    button.setAttribute('aria-pressed',String(active));button.setAttribute('aria-label',active?'退出全螢幕':supported()?'全螢幕練習':'橫屏練習');
+    button.title=active?'Exit fullscreen':supported()?'Fullscreen':'Landscape view';
+    button.disabled=pending;
+  }
+  function measure(){
+    frame=null;
+    const vv=window.visualViewport,useVisual=vv&&Math.abs((vv.scale||1)-1)<.01;
+    const width=Math.max(1,useVisual?vv.width:innerWidth),height=Math.max(1,useVisual?vv.height:innerHeight);
+    body.style.setProperty('--display-width',width+'px');body.style.setProperty('--display-height',height+'px');
+    const immersive=full()||(width>height&&height<=600);
+    body.classList.toggle('display-immersive',immersive);
+    const compact=cassette.getBoundingClientRect().width<=600;
+    body.classList.toggle('compact-tape',compact);
+    if(compact!==lastCompact){lastCompact=compact;window.rewindTheme?.fit();}
+    paint();
+  }
+  function schedule(){if(frame===null)frame=requestAnimationFrame(measure);}
+  function unlockOrientation(){try{screen.orientation?.unlock?.();}catch{}orientationOwned=false;}
+  function lockOrientation(){
+    if(!full()||!matchMedia('(pointer: coarse)').matches||!screen.orientation?.lock)return;
+    try{
+      Promise.resolve(screen.orientation.lock('landscape')).then(()=>{
+        if(full()&&pageActive)orientationOwned=true;
+        else unlockOrientation();
+      },()=>{/* Physical rotation remains available. */});
+    }catch{/* Some browsers expose the API but do not allow locking. */}
+  }
+  async function toggle(){
+    if(pending)return;
+    hideTip();
+    if(full()){
+      const exit=document.exitFullscreen||document.webkitExitFullscreen;
+      if(!exit)return;
+      pending=true;paint();
+      try{await exit.call(document);}catch{showTip('未能退出全螢幕，請使用瀏覽器的退出鍵。');}
+      finally{pending=false;paint();schedule();}
+      return;
+    }
+    if(!supported()){
+      showTip(innerWidth>innerHeight?'已按橫屏放大。可從瀏覽器選單「加入主畫面」，以獨立視窗開啟。':'請將手機橫放。也可從瀏覽器選單「加入主畫面」，以獨立視窗開啟。');
+      return;
+    }
+    pending=true;paint();
+    try{
+      await request().call(root,{navigationUI:'hide'});
+      lockOrientation();
+      if(status&&full())status.textContent='已進入全螢幕。再次按角落圖示可退出。';
+    }catch{showTip('瀏覽器未能開啟全螢幕。將手機橫放，仍可放大練習。');}
+    finally{pending=false;paint();schedule();}
+  }
+  function changed(){
+    if(!full()&&orientationOwned)unlockOrientation();
+    hideTip();paint();schedule();
+  }
+  button.addEventListener('click',toggle);tipClose?.addEventListener('click',hideTip);
+  document.addEventListener('fullscreenchange',changed);document.addEventListener('webkitfullscreenchange',changed);
+  window.addEventListener('resize',schedule);window.visualViewport?.addEventListener('resize',schedule);
+  screen.orientation?.addEventListener?.('change',()=>{hideTip();schedule();});
+  new ResizeObserver(schedule).observe(cassette);
+  document.addEventListener('keydown',event=>{if(event.key==='Escape')hideTip();});
+  window.addEventListener('pagehide',()=>{pageActive=false;if(orientationOwned)unlockOrientation();});
+  window.addEventListener('pageshow',()=>{pageActive=true;schedule();});
+  measure();
 })();
 </script>
 </body></html>
