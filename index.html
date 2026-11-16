@@ -549,14 +549,14 @@ body{--tape-w:min(960px,calc(100vw - 48px),calc((100dvh - 56px)*1.58));display:b
  #app .play-control #speech-listen svg{width:12px;height:12px}
 }
 
-/* Three heartbeats on the new recording key. Only the glyph moves, never its touch target. */
+/* The new recording key keeps expanding until that recording is replaced. Only the glyph moves. */
 #app .play-control #speech-listen .speech-listen-icon{transform-origin:50% 50%;transform:scale(1)}
-#app .play-control #speech-listen.recording-fresh .speech-listen-icon{animation:recording-ready 1.15s cubic-bezier(.3,.7,.3,1) 3}
+#app .play-control #speech-listen.recording-fresh .speech-listen-icon{animation:recording-ready 1.15s ease-in-out infinite}
 #app #speech-replay{color:var(--controlInk)}
-@keyframes recording-ready{0%,56%,100%{transform:scale(1)}12%{transform:scale(1.48)}24%{transform:scale(1)}38%{transform:scale(1.28)}}
-@keyframes recording-ready-reduced{0%,100%{opacity:1}50%{opacity:.55}}
+@keyframes recording-ready{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 transparent)}42%{transform:scale(2.05);filter:drop-shadow(0 0 6px color-mix(in srgb,currentColor 65%,white))}}
+@keyframes recording-ready-reduced{0%,100%{opacity:1}50%{opacity:.45}}
 @media(prefers-reduced-motion:reduce){
- #app .play-control #speech-listen.recording-fresh .speech-listen-icon{animation:recording-ready-reduced 1.15s ease 3}
+ #app .play-control #speech-listen.recording-fresh .speech-listen-icon{animation:recording-ready-reduced 1.15s ease-in-out infinite}
 }
 
 /* A draft on the same paper label; it never changes the cassette's footprint. */
@@ -995,7 +995,7 @@ SOFTWARE.
 <p>Skin 可分別調整塑料材質、外殼及貼紙顏色。Plain 使用單一貼紙色；Regions 可分別設定 Top、Middle、Bottom 三個完整區域的純色，不再使用裝飾細條。Matte 隱藏內部結構，Smoked 和 Clear 顯示不同程度的帶輪、導帶和支架。Presets 保留 24 款配色。調整後點 × 返回練習，卡帶比例與帶輪位置保持不變。Settings 可調整音量、語速、字體、按鍵音效及循環間隔。點選數值後返回；拖動滑桿時可先調整，放開後返回。鍵盤可用方向鍵調整滑桿，再按 Enter 完成。</p>
 <p>選項內容較多時，只在貼紙內捲動。左上角的小箭頭回到選項目錄；右上角的 × 或 Esc 關閉。沒有自動消失的倒數計時。需要點字練習提示時，可在 Help 選 Selection tips。</p>
 <h2>錄音跟讀 · 試驗功能</h2>
-<p>錄音備妥後，主播放鍵下方會出現同色的實心小箭頭，輕柔縮放三次。按它回聽自己的錄音，提示動畫便會停止。</p>
+<p>錄音備妥後，主播放鍵下方會出現同色的實心小箭頭，並持續放大縮小。按它回聽自己的錄音。換到下一句，或再錄一次，這個箭頭會消失；新的錄音完成後會再出現。</p>
 <p>播放鍵旁的圓點是錄音鍵。按一下開始，再按變成方形的同一個鍵停止；錄音時間按所選示範長度加 2 s 設定，上限為 25 s。麥克風就緒後先發出較長的輕聲提示音，第一個字再閃兩次；準備共 1.35 秒，之後才開始倒數及保留錄音。停止後錄音鍵會改為處理中狀態，動畫圓點表示仍在等待回饋。預設練習目前短句；選取部分字詞後，也可以只練那一部分。播放示範會停止尚在收音的練習，但不會中斷已在處理的 AI 評測。切換內容、離開頁面或按 Esc，會取消目前練習。</p>
 <p>首次按錄音鍵，選擇「AI 回饋」或「只錄音對照」。選擇會記在這個瀏覽器，之後按錄音鍵就沿用；可在 ⋯ → Settings → Speech 更改。選 AI 而尚未連接時，直接輸入分享者提供的存取碼；本機配套版則輸入服務密鑰。選錄音對照便可直接錄音，不需要 AI 連線，即使已連接服務也不會傳送這次錄音。</p>
 <p>分享網頁若已啟用 AI，可使用分享者提供的邀請連結，或在 ⋯ → Settings → Speech → AI 回饋 輸入 access code，無需自己的 API key。連線只保留在這個分頁；到期後可重新連接。本機配套版本仍可在 Speech 設定自己的 OpenAI 或 Azure 服務，密鑰只保留在本機服務記憶體。</p>
@@ -2943,7 +2943,6 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   }
   function syncReplayControls(){
     const playing=!replay.paused&&!replay.ended,next=playing?'pause':'play-filled';
-    if(playing)replayNeedsAttention=false;
     syncReplayAttention();
     if(next!==paintedReplayIcon){byId('speech-replay').innerHTML=icon(next);byId('speech-listen').querySelector('.speech-listen-icon').innerHTML=icon(next);paintedReplayIcon=next;}
     for(const id of ['speech-replay','speech-listen']){const button=byId(id);button.setAttribute('aria-label',playing?'暫停我的錄音':'回聽我的錄音');button.setAttribute('aria-pressed',String(playing));button.title=playing?'Pause my recording':'Listen to my recording';}
@@ -2952,7 +2951,6 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   function pauseOwnRecording(){replayTicket++;replay.pause();syncReplayControls();}
   async function toggleOwnRecording(){
     if(!recording||['requesting','ready','recording','stopping'].includes(state))return;
-    replayNeedsAttention=false;syncReplayAttention();
     if(!replay.paused){pauseOwnRecording();return;}
     pauseForOptions();stopAction();setFocus(true);syncReplayVolume();replay.playbackRate=1;replay.currentTime=0;
     const ticket=++replayTicket;
@@ -2961,7 +2959,6 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     syncReplayControls();
   }
   byId('speech-replay').onclick=toggleOwnRecording;byId('speech-listen').onclick=toggleOwnRecording;
-  byId('speech-listen').addEventListener('animationend',event=>{if(['recording-ready','recording-ready-reduced'].includes(event.animationName)){replayNeedsAttention=false;syncReplayAttention();}});
   replay.addEventListener('play',syncReplayControls);replay.addEventListener('pause',syncReplayControls);replay.addEventListener('ended',syncReplayControls);
   audio.addEventListener('volumechange',syncReplayVolume);
   function choosePracticeMode(next){if(!['ai','compare'].includes(next))return;closeConsent();panelError();practiceMode=next;try{localStorage.setItem('rewind-practice-mode',next);}catch{}syncSettings();}
