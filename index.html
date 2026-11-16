@@ -2586,7 +2586,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   let state='idle', generation=0, service=null, consent='', snapshot=null, result=null;
   let stream=null, context=null, source=null, processor=null, muteNode=null, chunks=[],samples=0,sampleRate=0;
   let started=0, timer=null, limitTimer=null, recording=null, recordingURL=null, requestAbort=null, recordingLimit=25;
-  let live=null,liveText='',liveState='off',consentAction=null,connectionFromRecord=false,practiceMode=null;
+  let live=null,liveText='',liveState='off',consentAction=null,connectionFromRecord=false,practiceMode=null,holdConnectionUi=false;
   try{const saved=localStorage.getItem('rewind-practice-mode');if(['ai','compare'].includes(saved))practiceMode=saved;}catch{}
   let replayTicket=0,paintedReplayIcon='',guideFrame=null,replayNeedsAttention=false;
   const originalLabels=new Map();
@@ -2753,12 +2753,17 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     const azure=local&&byId('speech-provider').value==='azure';
     byId('speech-provider').hidden=!local&&!chooseProvider;document.querySelector('label[for="speech-provider"]').hidden=!local&&!chooseProvider;
     byId('speech-region').hidden=!azure;byId('speech-region-label').hidden=!azure;byId('speech-region').required=azure;
+    const key=byId('speech-key');
     byId('speech-key-label').textContent=local?(azure?'Speech key':'API key'):'存取碼 · Access code';
-    byId('speech-key').placeholder=local?(azure?'Azure Speech resource key':'OpenAI API key'):'分享者提供的存取碼';
-    byId('speech-key').maxLength=local?1024:512;
-    byId('speech-key').hidden=byId('speech-key-label').hidden=chooseProvider;byId('speech-key').required=!chooseProvider;
-    byId('speech-config').querySelector('button').textContent=chooseProvider?'Use provider':'Connect';
-    byId('speech-config').querySelector('.speech-footnote').textContent=local?'密鑰只保留在本機服務的記憶體，關閉服務後清除。':chooseProvider?'由分享者提供。切換後需重新同意傳送錄音。':'AI 服務由分享者提供，無需自己的 API key。連線只保留在這個分頁。';
+    key.placeholder=local?(azure?'Azure Speech resource key':'OpenAI API key'):'分享者提供的存取碼';
+    key.maxLength=local?1024:512;
+    key.type=local?'password':'text';
+    key.autocomplete='off';key.spellcheck=false;key.autocapitalize='none';
+    if(local){key.name='speech-key';key.removeAttribute('data-1p-ignore');key.removeAttribute('data-lpignore');}
+    else{key.name='rewind-access-code';key.setAttribute('data-1p-ignore','true');key.setAttribute('data-lpignore','true');}
+    key.hidden=byId('speech-key-label').hidden=chooseProvider;key.required=!chooseProvider;
+    byId('speech-config').querySelector('button').textContent=chooseProvider?'Use provider':!local&&connectionFromRecord?'連接並開始':'Connect';
+    byId('speech-config').querySelector('.speech-footnote').textContent=local?'密鑰只保留在本機服務的記憶體，關閉服務後清除。':chooseProvider?'由分享者提供。切換後需重新同意傳送錄音。':connectionFromRecord?'輸入一次即可。連接後開始錄音；停止時這段錄音會送到 AI 取得回饋。':'AI 服務由分享者提供，無需自己的 API key。連線只保留在這個分頁。';
   }
   async function checkService(){
     try{service=await connection.status();}
@@ -2777,7 +2782,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     byId('speech-popover-start').textContent=local||!connection.getInfo().available?'開啟設定':'輸入存取碼';byId('speech-popover').hidden=false;record.setAttribute('aria-expanded','true');positionConsent();byId('speech-popover-start').focus({preventScroll:true});
   }
   function openConsent(action=startRecording){
-    if(!service?.configured){openConnectionPrompt();return;}
+    if(!service?.configured){if(!local&&connection.getInfo().available){openSettings({fromRecord:true});return;}openConnectionPrompt();return;}
     pauseForOptions();stopAction();setFocus(true);dismissTip();consentAction=action;
     const existing=action===submit;
     byId('speech-mode-choice-compare').hidden=true;
@@ -2794,7 +2799,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
     if(practiceMode==='compare'){await startRecording();return;}
     await checkService();
     if(service?.configured&&consent!==service.provider){if(!byId('speech-popover').hidden){closeConsent();return;}openConsent();return;}
-    if(!service?.configured){openConnectionPrompt();return;}
+    if(!service?.configured){if(!local&&connection.getInfo().available){openSettings({fromRecord:true});return;}openConnectionPrompt();return;}
     await startRecording();
   }
   async function startRecording(){
@@ -2929,7 +2934,7 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   byId('speech-send').onclick=submit;
   byId('speech-settings').onclick=openSettings;
   byId('speech-start').onclick=prepare;
-  byId('speech-popover-start').onclick=()=>{const action=consentAction;if(!action)return;if(action===startRecording||action===submit){if(!service?.configured){openConnectionPrompt();return;}consent=service.provider;}closeConsent();return action();};
+  byId('speech-popover-start').onclick=()=>{const action=consentAction;if(!action)return;if(action===startRecording||action===submit){if(!service?.configured){if(!local&&connection.getInfo().available){openSettings({fromRecord:true});return;}openConnectionPrompt();return;}consent=service.provider;}closeConsent();return action();};
   byId('speech-popover-close').onclick=()=>{closeConsent();record.focus({preventScroll:true});};
   window.addEventListener('resize',positionConsent);
   window.addEventListener('rewind:displaychange',positionConsent);
@@ -2947,11 +2952,24 @@ loadSession(defaultSession);requestAnimationFrame(frame);
   byId('speech-provider').onchange=syncProviderForm;
   byId('speech-config').onsubmit=async e=>{
     e.preventDefault();panelError();const button=byId('speech-config').querySelector('button');button.disabled=true;
-    const key=byId('speech-key').value.trim(),region=byId('speech-region').value.trim(),provider=byId('speech-provider').value;byId('speech-key').value='';
-    try{cancel({quiet:true});if(local)await api('/api/config',{provider,key,...(provider==='azure'?{region}:{})});else if(cloudProviders().length>1)await api('/api/session/provider',{provider});else await connection.connectAccessCode(key);consent='';await checkService();if(!service?.configured)throw Error(connection.getInfo().message||'尚未確認 AI 連線，請再試一次。');if(connectionFromRecord){connectionFromRecord=false;rewindPanels.close();record.focus({preventScroll:true});}announce('已連接。按錄音鍵開始練習。');}catch(err){panelError(err.message);if(!byId('speech-config').hidden&&!byId('speech-key').hidden)byId('speech-key').focus({preventScroll:true});}finally{button.disabled=false;}
+    const key=byId('speech-key').value.trim(),region=byId('speech-region').value.trim(),provider=byId('speech-provider').value,fromRecord=connectionFromRecord;
+    holdConnectionUi=true;
+    try{
+      cancel({quiet:true});
+      if(local)await api('/api/config',{provider,key,...(provider==='azure'?{region}:{})});
+      else if(cloudProviders().length>1)await api('/api/session/provider',{provider});
+      else await connection.connectAccessCode(key);
+      byId('speech-key').value='';
+      await checkService();
+      if(!service?.configured)throw Error(connection.getInfo().message||'尚未確認 AI 連線，請再試一次。');
+      consent=service.provider;
+      if(fromRecord){connectionFromRecord=false;rewindPanels.close();await startRecording();}
+      else announce('已連接。按錄音鍵開始練習。');
+    }catch(err){panelError(err.message);if(!byId('speech-config').hidden&&!byId('speech-key').hidden)byId('speech-key').focus({preventScroll:true});}
+    finally{holdConnectionUi=false;button.disabled=false;syncSettings();}
   };
   byId('speech-disconnect').onclick=async()=>{cancel({quiet:true});try{await connection.disconnect();consent='';await checkService();announce('已斷開評測服務。');}catch(e){panelError(e.message);}};
-  connection.subscribe(link=>{service=link.status;if(!service?.configured&&link.mode==='cloud')consent='';syncSettings();});
+  connection.subscribe(link=>{if(holdConnectionUi||link.connecting)return;service=link.status;if(!service?.configured&&link.mode==='cloud')consent='';syncSettings();});
   window.addEventListener('rewind:cuechange',()=>cancel({quiet:true}));
   window.addEventListener('rewind:playrequest',()=>{pauseOwnRecording();if(['requesting','ready','recording'].includes(state))cancel({quiet:true});});
   window.addEventListener('rewind:panel',()=>{closeConsent();dismissTip();pauseOwnRecording();if(['requesting','ready','recording'].includes(state))cancel({quiet:true});});
