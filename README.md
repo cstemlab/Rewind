@@ -61,6 +61,10 @@ After connecting, choose **⋯ → Library → New**. Paste/type Chinese or Engl
 
 Cancelled or failed creation leaves the draft and current tape intact. Review the generated wording, Jyutping and voice before relying on them. Whole-sentence audio lengths are measured; **within-sentence character and phrase boundaries are estimated**, so selecting one character can include a little adjacent sound.
 
+## Tape position
+
+The two tape packs and the centre window follow elapsed time across the **whole practice**, from the first cue to the last. Every document starts with a full right reel and an almost empty left reel; the tape transfers left as playback advances. Short recordings transfer faster while keeping the same starting capacity. Pause holds the tape, and section jumps, word selections, looping and rewind follow the matching document position. Loading a new practice resets its tape. The hubs and cassette proportions stay fixed.
+
 ## Materials and labels
 
 The default **Rewind yellow** skin matches the owner-selected smoked grey case and warm yellow sticker. Other saved custom appearances remain available.

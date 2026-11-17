@@ -869,6 +869,15 @@ body.compact-tape #app #display-tip{font-size:9px;line-height:1.3;padding:4px 18
 #app #creator-file[hidden]{display:none!important}
 #creator-source-view.file-dragging,#library-panel.file-dragging{outline:2px dashed var(--accent);outline-offset:3px;border-radius:7px}
 @media(pointer:coarse){#app .creator-file-button{min-height:44px}}
+/* The hubs and their centres stay fixed. Only the wound tape changes size. */
+#app .mechanics{--left-pack:.58;--right-pack:1;--tape-left-shift:0%;--tape-right-shift:-46.875%}
+#app .coil{background:none;isolation:isolate}
+#app .coil::before{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle,#3c352c 0 2px,#2b2923 2px 3px,#343128 3px 4px);transform:scale(var(--pack-size));transform-origin:center;z-index:-1}
+#app .left-coil{--pack-size:var(--left-pack)}
+#app .right-coil{--pack-size:var(--right-pack)}
+#app .tape-window::before,#app .tape-window::after{top:-75%;width:160%;height:250%;border-radius:50%;transform-origin:center}
+#app .tape-window::before{left:-160%;transform:translateX(var(--tape-left-shift))}
+#app .tape-window::after{right:-160%;transform:translateX(var(--tape-right-shift))}
 </style><!-- Phosphor Icons license
 MIT License
 
@@ -2648,10 +2657,39 @@ $('caption').addEventListener('keydown',e=>{
 
 function clearSelection(){selection=null;activate(index);}
 
+/* Rewind tape inventory: the whole recording owns the amount, never a cue's local time. */
+const RewindTapeProgress=(()=>{
+  'use strict';
+  const core=.58,capacity=1-core*core;
+  function measure(cursor,start,end){
+    const span=end-start;
+    const progress=Number.isFinite(cursor)&&Number.isFinite(span)&&span>0?Math.max(0,Math.min(1,(cursor-start)/span)):0;
+    const left=Math.sqrt(core*core+capacity*progress);
+    const right=Math.sqrt(core*core+capacity*(1-progress));
+    return {progress,left,right,leftShift:46.875*(left-core)/(1-core),rightShift:-46.875*(right-core)/(1-core)};
+  }
+  function create(element){
+    let previous=null;
+    return (cursor,start,end)=>{
+      const value=measure(cursor,start,end),key=Math.round(value.progress*100000);
+      if(key===previous)return;
+      previous=key;
+      element.style.setProperty('--left-pack',value.left.toFixed(6));
+      element.style.setProperty('--right-pack',value.right.toFixed(6));
+      element.style.setProperty('--tape-left-shift',value.leftShift.toFixed(5)+'%');
+      element.style.setProperty('--tape-right-shift',value.rightShift.toFixed(5)+'%');
+      element.dataset.tapeProgress=value.progress.toFixed(6);
+    };
+  }
+  return Object.freeze({measure,create});
+})();
+const updateTapeProgress=RewindTapeProgress.create(document.querySelector('#cassette .mechanics'));
+
 function updateFrame(){
   if(!session||!track)return;
   const speechOwnsText=$('cassette').classList.contains('speech-status')&&phase!=='playing';
   const pos=audio.currentTime||0,global=track.start+Math.min(pos,track.end-track.start);
+  updateTapeProgress(global,session.phrases[0].start,session.phrases[session.phrases.length-1].end);
   if(continuous)cueAtTime(global);
   for(const {element,unit,index:i} of tokenNodes){
     const active=!speechOwnsText&&phase==='playing'&&pos<track.end-track.start&&global>=unit.start&&global<unit.end;

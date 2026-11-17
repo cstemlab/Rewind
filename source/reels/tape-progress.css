@@ -1,0 +1,9 @@
+/* The hubs and their centres stay fixed. Only the wound tape changes size. */
+#app .mechanics{--left-pack:.58;--right-pack:1;--tape-left-shift:0%;--tape-right-shift:-46.875%}
+#app .coil{background:none;isolation:isolate}
+#app .coil::before{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle,#3c352c 0 2px,#2b2923 2px 3px,#343128 3px 4px);transform:scale(var(--pack-size));transform-origin:center;z-index:-1}
+#app .left-coil{--pack-size:var(--left-pack)}
+#app .right-coil{--pack-size:var(--right-pack)}
+#app .tape-window::before,#app .tape-window::after{top:-75%;width:160%;height:250%;border-radius:50%;transform-origin:center}
+#app .tape-window::before{left:-160%;transform:translateX(var(--tape-left-shift))}
+#app .tape-window::after{right:-160%;transform:translateX(var(--tape-right-shift))}
