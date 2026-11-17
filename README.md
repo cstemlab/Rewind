@@ -63,7 +63,9 @@ Cancelled or failed creation leaves the draft and current tape intact. Review th
 
 ## Materials and labels
 
-**⋯ → Skin** provides independent material, case and sticker colours. Choose **Plain** for one sticker colour, or **Regions** for solid **Top / Middle / Bottom** sections. Decorative thin stripes are removed across all 24 presets, including saved styles. Choose Matte, Smoked or Clear plastic; transparent materials expose interior supports and the tape path while the sticker stays opaque. Changing appearance preserves the cassette proportions and reel positions.
+The default **Rewind yellow** skin matches the owner-selected smoked grey case and warm yellow sticker. Other saved custom appearances remain available.
+
+**⋯ → Skin** provides independent material, case and sticker colours. Choose **Plain** for one sticker colour, or **Regions** for solid **Top / Middle / Bottom** sections. Decorative thin stripes are removed across all 25 presets, including saved styles. Choose Matte, Smoked or Clear plastic; transparent materials expose interior supports and the tape path while the sticker stays opaque. Changing appearance preserves the cassette proportions and reel positions.
 
 ## What is sent and saved
 

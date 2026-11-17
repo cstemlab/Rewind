@@ -1477,6 +1477,7 @@ const REWIND_IMPORT_ASSETS={"mammoth":"IWZ1bmN0aW9uKGYpe2lmKCJvYmplY3QiPT10eXBlb
  * The user's thirteen supplied cassette examples govern this revision.
  * Never draw artwork patterns across the caption writing field or on the shell.
  * See Skin references.md for layout geometry, provenance and contrast checks. */
+const REWIND_DEFAULT_SKIN='rewind-yellow';
 const REWIND_SKINS = [
   {
     "id": "archive-orange",
@@ -2221,6 +2222,38 @@ const REWIND_SKINS = [
       "frame": "#77B4A5",
       "edition": "STUDY / A"
     }
+  },
+  {
+    "id": "rewind-yellow",
+    "name": "Rewind yellow",
+    "era": "現代",
+    "pattern": "none",
+    "transparent": true,
+    "colors": {
+      "page": "#e4e1d9",
+      "panel": "#ffdd80",
+      "panelText": "#252b29",
+      "shell": "#424847",
+      "shellDark": "#181A19",
+      "label": "#ffdd80",
+      "ink": "#252B29",
+      "muted": "#60615A",
+      "accent": "#59624b",
+      "accentInk": "#FFFFFF",
+      "line": "#D6DEDB",
+      "coil": "#292B27",
+      "hub": "#E8E7DC"
+    },
+    "artwork": {
+      "layout": "ruled",
+      "variant": "single",
+      "band1": "#98a573",
+      "band2": "#ffffff",
+      "band3": "#73a1de",
+      "frame": "#98a573",
+      "edition": "RECORD / A"
+    },
+    "material": "smoke"
   }
 ];
 
@@ -2788,11 +2821,11 @@ loadSession(defaultSession);requestAnimationFrame(frame);
  const point=event=>window.rewindDisplay?.point(event.clientX,event.clientY)||{x:event.clientX,y:event.clientY};
  const anchorCassette=()=>document.body.style.setProperty('--cassette-top',Math.max(28,(innerHeight-cassette.offsetHeight)/2)+'px');
  new ResizeObserver(anchorCassette).observe(cassette);window.addEventListener('resize',anchorCassette);anchorCassette();
- let currentSkin=REWIND_SKINS[0],filter='All',fitPending=false;
+ let currentSkin=REWIND_SKINS.find(s=>s.id===REWIND_DEFAULT_SKIN),filter='All',fitPending=false;
  const skinNames=['Archive orange','Navy','Sunset','Marine blue','Studio yellow','Red','Mint','Blue','Warm orange','Plum','School blue','Notebook red','Forest','Wine','Ivory','Monochrome','Varsity navy','Varsity cream','Teal','Coral','Clear blue','Clear graphite','Clear amber','Clear mint'];
  const skinName=s=>skinNames[REWIND_SKINS.indexOf(s)]||s.name;
  function paintLabel(el,s){el.dataset.layout=s.artwork.layout;el.dataset.variant=s.artwork.variant;el.dataset.labelLayout=s.artwork.layout;el.dataset.labelVariant=s.artwork.variant;Object.entries({band1:'band1',band2:'band2',band3:'band3',labelFrame:'frame'}).forEach(([k,v])=>el.style.setProperty('--'+k,s.artwork[v]));}
- function applySkin(id){currentSkin=REWIND_SKINS.find(s=>s.id===id)||REWIND_SKINS[0];Object.entries(currentSkin.colors).forEach(([k,v])=>root.style.setProperty('--'+k,v));
+ function applySkin(id){currentSkin=REWIND_SKINS.find(s=>s.id===id)||REWIND_SKINS.find(s=>s.id===REWIND_DEFAULT_SKIN);Object.entries(currentSkin.colors).forEach(([k,v])=>root.style.setProperty('--'+k,v));
  Object.entries({band1:'band1',band2:'band2',band3:'band3',labelFrame:'frame'}).forEach(([k,v])=>root.style.setProperty('--'+k,currentSkin.artwork[v]));
  const c=currentSkin.colors.shell.slice(1).match(/../g).map(x=>parseInt(x,16)),lightShell=c.reduce((a,v)=>a+v,0)>480;root.style.setProperty('--controlInk',lightShell?'#313832':'#e7e9e3');root.style.setProperty('--recordInk',lightShell?'#a32624':'#f18b77');
  document.body.dataset.skin=currentSkin.id;document.body.dataset.transparent=String(currentSkin.transparent);cassette.dataset.labelLayout=currentSkin.artwork.layout;cassette.dataset.labelVariant=currentSkin.artwork.variant;paintLabel(document.querySelector('#cassette .label-surface'),currentSkin);
@@ -3553,9 +3586,18 @@ loadSession(defaultSession);requestAnimationFrame(frame);
    if(!input||input.version!==1||!materials.includes(input.material)||!patterns.includes(pattern)||!hex(input.caseColor)||!hex(input.stickerColor)||!Array.isArray(input.bands)||input.bands.length!==3||!input.bands.every(hex)||!REWIND_SKINS.some(s=>s.id===input.presetId))return null;
    return {version:1,material:input.material,caseColor:input.caseColor.toLowerCase(),stickerColor:input.stickerColor.toLowerCase(),pattern,bands:input.bands.map(x=>x.toLowerCase()),presetId:input.presetId};
  }
- function fromPreset(id){const s=REWIND_SKINS.find(s=>s.id===id)||REWIND_SKINS[0];return {version:1,material:s.transparent?'clear':'matte',caseColor:s.colors.shell.toLowerCase(),stickerColor:s.colors.label.toLowerCase(),pattern:'plain',bands:[s.artwork.band1,s.artwork.band2,s.artwork.band3].map(x=>x.toLowerCase()),presetId:s.id};}
- let state=fromPreset(window.rewindTheme.get());
- try{const saved=validate(JSON.parse(localStorage.getItem(STORAGE)));if(saved){window.rewindTheme.apply(saved.presetId);state=saved;}}catch{}
+ function fromPreset(id){const s=REWIND_SKINS.find(s=>s.id===id)||REWIND_SKINS.find(s=>s.id===REWIND_DEFAULT_SKIN);return {version:1,material:s.material||(s.transparent?'clear':'matte'),caseColor:s.colors.shell.toLowerCase(),stickerColor:s.colors.label.toLowerCase(),pattern:'plain',bands:[s.artwork.band1,s.artwork.band2,s.artwork.band3].map(x=>x.toLowerCase()),presetId:s.id};}
+  function initialAppearance(saved,currentPreset,migrateLegacy){
+    const candidate=validate(saved)||fromPreset(currentPreset);
+    const oldDefault=validate(fromPreset('archive-orange'));
+    return migrateLegacy&&JSON.stringify(validate(candidate))===JSON.stringify(oldDefault)?fromPreset(REWIND_DEFAULT_SKIN):candidate;
+  }
+  let savedAppearance=null,migrateLegacy=true;
+  try{savedAppearance=JSON.parse(localStorage.getItem(STORAGE));}catch{}
+  try{migrateLegacy=localStorage.getItem('rewind-default-appearance-v1')!=='yellow-smoke';}catch{}
+  let state=initialAppearance(savedAppearance,window.rewindTheme.get(),migrateLegacy);
+  if(window.rewindTheme.get()!==state.presetId)window.rewindTheme.apply(state.presetId);
+  try{localStorage.setItem('rewind-default-appearance-v1','yellow-smoke');}catch{}
 
  const internals=document.createElement('div');internals.className='cassette-internals';internals.setAttribute('aria-hidden','true');
  // Physical reference: NAC shell chart + opened Memorex photograph (see Material references r11.md).

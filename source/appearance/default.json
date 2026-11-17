@@ -1,0 +1,19 @@
+{
+  "source": "User-selected open Chrome Rewind page, read 17 November 2026",
+  "material": "smoke",
+  "caseColor": "#424847",
+  "stickerColor": "#ffdd80",
+  "pattern": "plain",
+  "bands": [
+    "#98a573",
+    "#ffffff",
+    "#73a1de"
+  ],
+  "original_preset_id": "school-blue",
+  "default_preset_id": "rewind-yellow",
+  "pageColor": "#e4e1d9",
+  "materialSurface": "#696d6a",
+  "ink": "#252b29",
+  "controlInk": "#fbfaf4",
+  "accent": "#59624b"
+}
