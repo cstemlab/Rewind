@@ -7,15 +7,28 @@ test('all tape starts on the right and ends on the left, with fixed standard cap
  for(const duration of [2,8,300,3600]){
   const first=measure(0,0,duration),last=measure(duration,0,duration);
   near(first.left,.58);near(first.right,1);near(last.left,1);near(last.right,.58);
-  near(first.leftShift,0);near(last.rightShift,0);
+  near(first.windowLeft,.5);near(first.windowRight,.94);
+  near(last.windowLeft,.94);near(last.windowRight,.5);
  }
 });
 test('equal fractions of different recordings look identical; short recordings transfer faster',()=>{
  for(const progress of [.1,.25,.5,.9]){
   const short=measure(progress*6,0,6),long=measure(progress*600,0,600);
-  near(short.left,long.left);near(short.right,long.right);near(short.leftShift,long.leftShift);
+  near(short.left,long.left);near(short.right,long.right);near(short.windowLeft,long.windowLeft);
  }
  assert.ok(measure(3,0,6).left>measure(3,0,600).left);
+});
+test('window packs stay behind symmetrical plastic rims and never cross the midpoint',()=>{
+ for(let p=0;p<=100;p++){
+  const value=measure(p,0,100),mirror=measure(100-p,0,100);
+  near(value.windowLeft,mirror.windowRight);
+  for(const scale of [value.windowLeft,value.windowRight]){
+   const intrusion=-40+70*scale;
+   assert.ok(intrusion<=25.800001);
+   assert.ok(intrusion<30); // The plastic rim reaches 30% on each side.
+   assert.ok(intrusion<50);
+  }
+ }
 });
 test('wound tape area is conserved; halfway gives two equal packs',()=>{
  for(let p=0;p<=100;p++){
@@ -42,5 +55,6 @@ test('rendering follows the cursor and does no repeated work while paused',()=>{
 test('production embeds the reviewed source and uses full-session bounds',()=>{
  const html=fs.readFileSync(path.resolve(dir,'../../index.html'),'utf8');
  assert.ok(html.includes(source.trim()));assert.ok(html.includes(fs.readFileSync(path.join(dir,'tape-progress.css'),'utf8').trim()));
+ assert.ok(html.includes('<span class="window-reel window-reel-left"></span><span class="window-reel window-reel-right"></span>'));
  assert.match(html,/updateTapeProgress\(global,session\.phrases\[0\]\.start,session\.phrases\[session\.phrases\.length-1\]\.end\)/);
 });
