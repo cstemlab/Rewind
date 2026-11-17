@@ -6,6 +6,8 @@ A cassette-inspired app for listening, repeating and practising spoken language.
 
 The included IN-SMART Cantonese practice has Traditional Chinese, Jyutping above the text, short phrases and complete sentences. Playback, captions and temporary options stay inside the cassette. The hosted preview adds AI practice and script creation while keeping the existing cassette design and controls.
 
+The built-in tape now follows Logan's revised **1 December 2026 QEF presentation script**: six sections (1, 2a, 2b, 2c, 3 and 4), 157 short phrases and 35 full sentences. It replaces the earlier default and keeps the original **WanLung** Cantonese male voice at **-12%**. [Source and verification](source/default/README.md).
+
 ## Start practising
 
 Open the link in your browser. The included practice works without an AI connection. To use AI features, open **⋯ → Settings → Speech → AI 回饋**, enter the private tester phrase supplied by the organiser in **Access code**, then press **Connect**. An invitation link can connect the same way.
