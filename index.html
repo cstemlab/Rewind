@@ -870,18 +870,20 @@ body.compact-tape #app #display-tip{font-size:9px;line-height:1.3;padding:4px 18
 #creator-source-view.file-dragging,#library-panel.file-dragging{outline:2px dashed var(--accent);outline-offset:3px;border-radius:7px}
 @media(pointer:coarse){#app .creator-file-button{min-height:44px}}
 /* The hubs and their centres stay fixed. Only the wound tape changes size. */
-#app .mechanics{--left-pack:.58;--right-pack:1;--window-left-tape:.5;--window-right-tape:.94}
+#app .mechanics{--left-pack:.58;--right-pack:1;--window-left-amount:0;--window-right-amount:1}
 #app .coil{background:none;isolation:isolate}
 #app .coil::before{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle,#3c352c 0 2px,#2b2923 2px 3px,#343128 3px 4px);transform:scale(var(--pack-size));transform-origin:center;z-index:-1}
 #app .left-coil{--pack-size:var(--left-pack)}
 #app .right-coil{--pack-size:var(--right-pack)}
 #app .tape-window::before,#app .tape-window::after{display:none}
-/* Two fixed translucent flanges remain visible when their tape pack is empty. */
-#app .window-reel{position:absolute;top:-40%;width:140%;height:180%;border-radius:50%;background:rgba(78,89,82,.14);box-shadow:inset 0 0 0 1px rgba(246,247,236,.65),inset 0 0 0 3px rgba(55,66,58,.1);isolation:isolate}
-#app .window-reel-left{left:-110%;--window-tape:var(--window-left-tape)}
-#app .window-reel-right{right:-110%;--window-tape:var(--window-right-tape)}
-#app .window-reel::before{content:"";position:absolute;inset:0;border-radius:50%;background:#50483c;box-shadow:inset 0 0 0 1px rgba(38,34,28,.42),inset 0 0 0 3px rgba(158,140,114,.16);transform:scale(var(--window-tape));transform-origin:center}
-#app .window-reel::after{content:"";position:absolute;inset:0;border-radius:50%;background:rgba(216,224,211,.06);pointer-events:none}
+#app .window-metric{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#app .tape-guide{top:var(--window-axis-y,50%)}
+/* Tape is an annulus OUTSIDE the smaller translucent plastic core. */
+#app .window-reel{position:absolute;border-radius:50%;isolation:isolate;--tape-radius:calc(var(--core-radius) + (var(--full-radius) - var(--core-radius))*var(--window-amount))}
+#app .window-reel-left{--window-amount:var(--window-left-amount)}
+#app .window-reel-right{--window-amount:var(--window-right-amount)}
+#app .window-reel::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle closest-side,transparent var(--core-radius),#50483c var(--core-radius),#50483c var(--tape-radius),transparent var(--tape-radius));pointer-events:none}
+#app .window-reel::after{content:"";position:absolute;left:50%;top:50%;width:calc(var(--core-radius)*2);height:calc(var(--core-radius)*2);border-radius:50%;background:rgba(78,89,82,.14);box-shadow:inset 0 0 0 1px rgba(246,247,236,.65),inset 0 0 0 3px rgba(55,66,58,.1);transform:translate(-50%,-50%);pointer-events:none}
 </style><!-- Phosphor Icons license
 MIT License
 
@@ -1232,7 +1234,7 @@ const REWIND_IMPORT_ASSETS={"mammoth":"IWZ1bmN0aW9uKGYpe2lmKCJvYmplY3QiPT10eXBlb
 </div><div class="tape-edition"><span></span></div><div class="cassette-tools"><button id="scope-toggle" class="scope-toggle" role="switch" aria-checked="false" aria-label="整句模式" title="Short / Long"><span class="scope-track" aria-hidden="true"><i></i><span id="scope-name">Short</span></span></button><button id="short-mode" hidden aria-hidden="true">短句</button><button id="sentence-mode" hidden aria-hidden="true">整句</button><button id="display-toggle" class="display-toggle" aria-label="全螢幕" title="Fullscreen" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button id="focus-toggle" class="quiet-more" aria-label="展開更多選項" title="Options"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div></div>
 <section class="reading-sheet" aria-label="跟讀文字"><h2 id="section-title" class="sr-only"></h2><span id="position" class="sr-only"></span><span id="within-sentence" class="sr-only"></span><div class="transcript" id="transcript"><div class="caption" id="caption" role="group" aria-label="點字播放，拖選範圍"></div><button id="clear-selection" class="selection-clear" aria-label="清除選取" title="Clear selection (Esc)" hidden><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></div></section>
 <div id="practice-tip" role="note" hidden><span>點字聽 · 拖選重聽</span><button id="dismiss-tip" aria-label="關閉提示" title="Close"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></div>
-<div class="mechanics" aria-hidden="true"><div class="coil left-coil"><div class="reel"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="var(--hub)" stroke="#888c86" stroke-width="1.2"/><circle cx="50" cy="50" r="39" fill="none" stroke="#aeb0a7" stroke-width=".8"/><circle cx="50" cy="50" r="18" fill="#343835"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(0 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(60 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(120 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(180 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(240 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(300 50 50)"/></svg></div></div><div class="tape-window"><span class="window-reel window-reel-left"></span><span class="window-reel window-reel-right"></span><span class="tape-guide"></span></div><div class="coil right-coil"><div class="reel"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="var(--hub)" stroke="#888c86" stroke-width="1.2"/><circle cx="50" cy="50" r="39" fill="none" stroke="#aeb0a7" stroke-width=".8"/><circle cx="50" cy="50" r="18" fill="#343835"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(0 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(60 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(120 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(180 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(240 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(300 50 50)"/></svg></div></div></div>
+<div class="mechanics" aria-hidden="true"><div class="coil left-coil"><div class="reel"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="var(--hub)" stroke="#888c86" stroke-width="1.2"/><circle cx="50" cy="50" r="39" fill="none" stroke="#aeb0a7" stroke-width=".8"/><circle cx="50" cy="50" r="18" fill="#343835"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(0 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(60 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(120 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(180 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(240 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(300 50 50)"/></svg></div></div><div class="tape-window"><svg class="window-metric" width="100%" height="100%" aria-hidden="true"></svg><span class="window-reel window-reel-left"></span><span class="window-reel window-reel-right"></span><span class="tape-guide"></span></div><div class="coil right-coil"><div class="reel"><svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="var(--hub)" stroke="#888c86" stroke-width="1.2"/><circle cx="50" cy="50" r="39" fill="none" stroke="#aeb0a7" stroke-width=".8"/><circle cx="50" cy="50" r="18" fill="#343835"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(0 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(60 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(120 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(180 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(240 50 50)"/><path d="M44 25h12l2 12H42z" fill="#343835" transform="rotate(300 50 50)"/></svg></div></div></div>
 <div class="moulded-foot" aria-hidden="true"><i></i><i></i></div><section class="player-controls" aria-label="播放控制">
         <span id="status" class="sr-only" role="status" aria-live="polite">準備好。每段讀一次，然後停下。</span>
         <div class="transport-row">
@@ -2671,10 +2673,44 @@ const RewindTapeProgress=(()=>{
     const left=Math.sqrt(core*core+capacity*progress);
     const right=Math.sqrt(core*core+capacity*(1-progress));
     // The window is a restrained glimpse: even a full pack stays inside its own half.
-    const windowScale=radius=>.5+.44*(radius-core)/(1-core);
+    const windowScale=radius=>(radius-core)/(1-core);
     return {progress,left,right,windowLeft:windowScale(left),windowRight:windowScale(right)};
   }
+  function windowGeometry(cx,cy,width){
+    const distance=cx<width/2?-cx:cx-width;
+    return {cx,cy,coreRadius:distance+width*.06,fullRadius:distance+width*.26};
+  }
+  function alignWindow(element){
+    const aperture=element.querySelector?.('.tape-window');
+    if(!aperture)return;
+    const metric=aperture.querySelector('.window-metric');
+    const pairs=['left','right'].map(side=>({hub:element.querySelector('.'+side+'-coil .reel'),window:aperture.querySelector('.window-reel-'+side)}));
+    // Convert the actual hub centres into the aperture's coordinates, including rotation.
+    const sync=()=>{
+      const matrix=metric.getScreenCTM(),width=parseFloat(getComputedStyle(metric).width);
+      if(!matrix||!width)return;
+      const inverse=matrix.inverse();
+      let axisY=0;
+      for(const pair of pairs){
+        const bounds=pair.hub.getBoundingClientRect(),point=metric.createSVGPoint();
+        point.x=bounds.x+bounds.width/2;point.y=bounds.y+bounds.height/2;
+        const hub=point.matrixTransform(inverse),shape=windowGeometry(hub.x,hub.y,width);
+        axisY+=shape.cy;
+        const style=pair.window.style,diameter=2*shape.fullRadius;
+        style.left=(shape.cx-shape.fullRadius)+'px';style.top=(shape.cy-shape.fullRadius)+'px';
+        style.width=diameter+'px';style.height=diameter+'px';
+        style.setProperty('--core-radius',shape.coreRadius+'px');style.setProperty('--full-radius',shape.fullRadius+'px');
+      }
+      aperture.style.setProperty('--window-axis-y',(axisY/pairs.length)+'px');
+    };
+    sync();
+    if(typeof ResizeObserver!=='undefined'){
+      const observer=new ResizeObserver(sync);
+      [element,aperture,...pairs.map(pair=>pair.hub)].forEach(node=>observer.observe(node));
+    }else window.addEventListener('resize',sync);
+  }
   function create(element){
+    alignWindow(element);
     let previous=null;
     return (cursor,start,end)=>{
       const value=measure(cursor,start,end),key=Math.round(value.progress*100000);
@@ -2682,12 +2718,12 @@ const RewindTapeProgress=(()=>{
       previous=key;
       element.style.setProperty('--left-pack',value.left.toFixed(6));
       element.style.setProperty('--right-pack',value.right.toFixed(6));
-      element.style.setProperty('--window-left-tape',value.windowLeft.toFixed(6));
-      element.style.setProperty('--window-right-tape',value.windowRight.toFixed(6));
+      element.style.setProperty('--window-left-amount',value.windowLeft.toFixed(6));
+      element.style.setProperty('--window-right-amount',value.windowRight.toFixed(6));
       element.dataset.tapeProgress=value.progress.toFixed(6);
     };
   }
-  return Object.freeze({measure,create});
+  return Object.freeze({measure,windowGeometry,create});
 })();
 const updateTapeProgress=RewindTapeProgress.create(document.querySelector('#cassette .mechanics'));
 

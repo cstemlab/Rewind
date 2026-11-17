@@ -63,7 +63,7 @@ Cancelled or failed creation leaves the draft and current tape intact. Review th
 
 ## Tape position
 
-The two tape packs and the centre window follow elapsed time across the **whole practice**, from the first cue to the last. Every document starts with a full right reel and an almost empty left reel; the tape transfers left as playback advances. Short recordings transfer faster while keeping the same starting capacity. Pause holds the tape, and section jumps, word selections, looping and rewind follow the matching document position. Loading a new practice resets its tape. The hubs and cassette proportions stay fixed. In the centre window, two matching translucent plastic rims remain visible at every position; the tape is a subtle crescent that stays inside its own half of the window.
+The two tape packs and the centre window follow elapsed time across the **whole practice**, from the first cue to the last. Every document starts with a full right reel and an almost empty left reel; the tape transfers left as playback advances. Short recordings transfer faster while keeping the same starting capacity. Pause holds the tape, and section jumps, word selections, looping and rewind follow the matching document position. Loading a new practice resets its tape. The hubs and cassette proportions stay fixed. The centre-window arcs are true circles centred on the visible gear hubs, recalculated when the layout changes. Each smaller translucent plastic core sits inside the tape wound around it. The tape stays within its half of the window, including in rotated mobile layouts.
 
 ## Materials and labels
 

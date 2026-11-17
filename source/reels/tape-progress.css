@@ -1,13 +1,15 @@
 /* The hubs and their centres stay fixed. Only the wound tape changes size. */
-#app .mechanics{--left-pack:.58;--right-pack:1;--window-left-tape:.5;--window-right-tape:.94}
+#app .mechanics{--left-pack:.58;--right-pack:1;--window-left-amount:0;--window-right-amount:1}
 #app .coil{background:none;isolation:isolate}
 #app .coil::before{content:"";position:absolute;inset:0;border-radius:50%;background:repeating-radial-gradient(circle,#3c352c 0 2px,#2b2923 2px 3px,#343128 3px 4px);transform:scale(var(--pack-size));transform-origin:center;z-index:-1}
 #app .left-coil{--pack-size:var(--left-pack)}
 #app .right-coil{--pack-size:var(--right-pack)}
 #app .tape-window::before,#app .tape-window::after{display:none}
-/* Two fixed translucent flanges remain visible when their tape pack is empty. */
-#app .window-reel{position:absolute;top:-40%;width:140%;height:180%;border-radius:50%;background:rgba(78,89,82,.14);box-shadow:inset 0 0 0 1px rgba(246,247,236,.65),inset 0 0 0 3px rgba(55,66,58,.1);isolation:isolate}
-#app .window-reel-left{left:-110%;--window-tape:var(--window-left-tape)}
-#app .window-reel-right{right:-110%;--window-tape:var(--window-right-tape)}
-#app .window-reel::before{content:"";position:absolute;inset:0;border-radius:50%;background:#50483c;box-shadow:inset 0 0 0 1px rgba(38,34,28,.42),inset 0 0 0 3px rgba(158,140,114,.16);transform:scale(var(--window-tape));transform-origin:center}
-#app .window-reel::after{content:"";position:absolute;inset:0;border-radius:50%;background:rgba(216,224,211,.06);pointer-events:none}
+#app .window-metric{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#app .tape-guide{top:var(--window-axis-y,50%)}
+/* Tape is an annulus OUTSIDE the smaller translucent plastic core. */
+#app .window-reel{position:absolute;border-radius:50%;isolation:isolate;--tape-radius:calc(var(--core-radius) + (var(--full-radius) - var(--core-radius))*var(--window-amount))}
+#app .window-reel-left{--window-amount:var(--window-left-amount)}
+#app .window-reel-right{--window-amount:var(--window-right-amount)}
+#app .window-reel::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle closest-side,transparent var(--core-radius),#50483c var(--core-radius),#50483c var(--tape-radius),transparent var(--tape-radius));pointer-events:none}
+#app .window-reel::after{content:"";position:absolute;left:50%;top:50%;width:calc(var(--core-radius)*2);height:calc(var(--core-radius)*2);border-radius:50%;background:rgba(78,89,82,.14);box-shadow:inset 0 0 0 1px rgba(246,247,236,.65),inset 0 0 0 3px rgba(55,66,58,.1);transform:translate(-50%,-50%);pointer-events:none}

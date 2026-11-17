@@ -7,8 +7,8 @@ test('all tape starts on the right and ends on the left, with fixed standard cap
  for(const duration of [2,8,300,3600]){
   const first=measure(0,0,duration),last=measure(duration,0,duration);
   near(first.left,.58);near(first.right,1);near(last.left,1);near(last.right,.58);
-  near(first.windowLeft,.5);near(first.windowRight,.94);
-  near(last.windowLeft,.94);near(last.windowRight,.5);
+  near(first.windowLeft,0);near(first.windowRight,1);
+  near(last.windowLeft,1);near(last.windowRight,0);
  }
 });
 test('equal fractions of different recordings look identical; short recordings transfer faster',()=>{
@@ -18,15 +18,24 @@ test('equal fractions of different recordings look identical; short recordings t
  }
  assert.ok(measure(3,0,6).left>measure(3,0,600).left);
 });
-test('window packs stay behind symmetrical plastic rims and never cross the midpoint',()=>{
- for(let p=0;p<=100;p++){
-  const value=measure(p,0,100),mirror=measure(100-p,0,100);
-  near(value.windowLeft,mirror.windowRight);
-  for(const scale of [value.windowLeft,value.windowRight]){
-   const intrusion=-40+70*scale;
-   assert.ok(intrusion<=25.800001);
-   assert.ok(intrusion<30); // The plastic rim reaches 30% on each side.
-   assert.ok(intrusion<50);
+test('window circles use actual gear centres and tape wraps outside a fixed smaller core',()=>{
+ for(const width of [72,156,350]){
+  const distance=width*.74;
+  for(const cx of [-distance,width+distance]){
+   const shape=ctx.tape.windowGeometry(cx,width*.35,width);
+   near(shape.cx,cx);near(shape.cy,width*.35);
+   near(shape.coreRadius-distance,width*.06);
+   near(shape.fullRadius-distance,width*.26);
+   for(let p=0;p<=100;p++){
+    const value=measure(p,0,100),mirror=measure(100-p,0,100);
+    near(value.windowLeft,mirror.windowRight);
+    for(const amount of [value.windowLeft,value.windowRight]){
+     const radius=shape.coreRadius+(shape.fullRadius-shape.coreRadius)*amount;
+     assert.ok(radius>=shape.coreRadius-1e-9);
+     assert.ok(radius-distance<width/2);
+     near(Math.hypot(radius*Math.cos(.4),radius*Math.sin(.4)),radius);
+    }
+   }
   }
  }
 });
