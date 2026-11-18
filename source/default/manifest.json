@@ -1,9 +1,9 @@
 {
-  "source_sha256": "20786abbb75d5eec0e5f433c840841bb3c7ffd73c86a7e8a06290f0ccdf78186",
+  "source_sha256": "c47d3c1e983c510769670589e4c8fcc587593816ce2bc70099c1747ed02196b2",
   "voice": "zh-HK-WanLungNeural",
   "rate": "-12%",
-  "duration_seconds": 297.656,
-  "audio_sha256": "c536c7de7ada2e84e78a219e66351266b6c0bf98ba6c9918c0199b024b70f82b",
+  "duration_seconds": 295.04,
+  "audio_sha256": "990018a6a2de648c029bb3a2c943e4de2d018909e3929578a780e5bc31142da9",
   "sections": [
     {
       "title": "1 · 介紹 IN-SMART",
@@ -16,48 +16,49 @@
       "title": "2a · 學校一齊學習",
       "label": "2a",
       "start": 9.502,
-      "duration": 20.4,
+      "duration": 21.192,
       "audioFile": "Section 2a - 學校一齊學習.mp3"
     },
     {
       "title": "2b · 做好 STEAM 學習",
       "label": "2b",
-      "start": 31.152,
-      "duration": 25.546,
+      "start": 31.944,
+      "duration": 24.49,
       "audioFile": "Section 2b - 做好 STEAM 學習.mp3"
     },
     {
       "title": "2c · 了解 AI，用好 AI",
       "label": "2c",
-      "start": 57.948,
-      "duration": 17.266,
+      "start": 57.684,
+      "duration": 17.89,
       "audioFile": "Section 2c - 了解 AI，用好 AI.mp3"
     },
     {
       "title": "3 · 上年、今年、下一年",
       "label": "3",
-      "start": 76.464,
-      "duration": 156.324,
+      "start": 76.824,
+      "duration": 151.5,
       "audioFile": "Section 3 - 上年、今年、下一年.mp3"
     },
     {
       "title": "4 · 計劃實施模式",
       "label": "4",
-      "start": 234.038,
-      "duration": 63.618,
+      "start": 229.574,
+      "duration": 65.466,
       "audioFile": "Section 4 - 計劃實施模式.mp3"
     }
   ],
   "paragraphs": 23,
-  "phrase_count": 157,
-  "sentence_count": 35,
-  "spoken_units": 1017,
+  "phrase_count": 154,
+  "sentence_count": 34,
+  "spoken_units": 961,
   "unknown_jyutping": [],
   "max_phrase_spoken_units": 12,
-  "session_id": "insmart-qef-20261201-logan-r-20261117",
-  "source_file": "IN-SMART_20261201_QEF_presentation script_Logan_R.docx",
-  "previous_session": "insmart-simple-cantonese-r02",
-  "previous_audio_sha256": "9c2ff8f20e59189082138b98e5312d0be30f1f158f26ec38c76fce9bb2d72ca6",
-  "app_baseline": "5c74aec",
-  "changes": "Default script, narration, word timings, segmentation, Jyutping and Help description only. All app logic, CSS, local import assets and voice choices are byte-identical outside the default JSON and Help description."
+  "session_id": "insmart-qef-20261201-logan-r-c-20261119",
+  "source_file": "IN-SMART_20261201_QEF_presentation script_Logan_R_C.docx",
+  "previous_session": "insmart-qef-20261201-logan-r-20261117",
+  "previous_audio_sha256": "c536c7de7ada2e84e78a219e66351266b6c0bf98ba6c9918c0199b024b70f82b",
+  "app_baseline": "5bbd5846adeebbae7dd3c6a7ab1e6e81044f94f6",
+  "changes": "Default script, narration, word timings, segmentation, Jyutping and Help description only. All app logic, CSS, local import assets, appearance and voice choices are byte-identical outside the default JSON and Help description.",
+  "source_view": "Final tracked-change text, excluding deleted and moved-from wording."
 }
